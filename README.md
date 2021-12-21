@@ -1,12 +1,29 @@
-# Internet-Draft Template Repository
+# EdDSA Key Blinding
 
-Use this repository as a template if you want to start working on
-[IETF](https://www.ietf.org/) documents.
+This is the working area for the Internet-Draft, "EdDSA Key Blinding".
 
-[Read the
-instructions](https://github.com/martinthomson/i-d-template/blob/main/doc/TEMPLATE.md)
-for more information.
+* [Editor's Copy](https://chris-wood.github.io/draft-wood-cfrg-eddsa-blinding/#go.draft-wood-cfrg-eddsa-blinding.html)
+* [Datatracker Page](https://datatracker.ietf.org/doc/draft-wood-cfrg-eddsa-blinding)
+* [Individual Draft](https://datatracker.ietf.org/doc/html/draft-wood-cfrg-eddsa-blinding)
+* [Compare Editor's Copy to Individual Draft](https://chris-wood.github.io/draft-wood-cfrg-eddsa-blinding/#go.draft-wood-cfrg-eddsa-blinding.diff)
 
-Once you have created your own repository, start work by renaming the
-`draft-todo-yourname-protocol.md` file
-[here](../../edit/main/draft-todo-yourname-protocol.md).
+
+## Contributing
+
+See the
+[guidelines for contributions](https://github.com/chris-wood/draft-wood-cfrg-eddsa-blinding/blob/main/CONTRIBUTING.md).
+
+Contributions can be made by editing markdown through the GitHub interface.
+
+
+## Command Line Usage
+
+Formatted text and HTML versions of the draft can be built using `make`.
+
+```sh
+$ make
+```
+
+This requires that you have the necessary software installed.  See
+[the instructions](https://github.com/martinthomson/i-d-template/blob/main/doc/SETUP.md).
+
