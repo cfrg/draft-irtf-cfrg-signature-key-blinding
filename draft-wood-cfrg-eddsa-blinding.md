@@ -97,7 +97,8 @@ is denoted as `x * y`.
 At a high level, key blinding allows signers to use private keys to blind their signing
 key such that any signature produced under the blinded key pair is unlinkable to the
 original signing key pair. Similar to the EdDSA private key used for signing, the blind 
-is also an EdDSA private key.
+is also an EdDSA private key. That is, the blind is a 32-byte or 57-byte random seed for
+Ed25519 or Ed448 variants, respectively.
 
 Key blinding extends the base EdDSA specification with three routines:
 
@@ -204,11 +205,35 @@ Tor's Hidden Service feature. Security analysis for that feature is contained
 {{TORBLINDING}}. Further analysis is needed to ensure this is compliant with
 the signature algorithm described in {{RFC8032}}.
 
-
 # IANA Considerations
 
 This document has no IANA actions.
 
+# Test Vectors
+
+This section contains test vectors for Ed25519 as described in {{RFC8032}}.
+Each test vector lists the private key and blind seeds, denoted skS and skB
+and encoded as hexadecimal strings, the unblinded and blinded public keys,
+denoted pkS and pkB and encoded according to {{RFC8032, Section 5.1.2}},
+and the message and signature values, each encoded as hexadecimal strings.
+
+~~~
+skS: 7757648a9be012e16fdbd9eecf8c46dc55118dbb1d33537393cf0ca1882dcc34
+pkS: e47585e020dd4dc1bc2ae180d388dce87bbc02e63549850ffeda7f254de75b46
+skB: f05749b277d523951b91598200c45e08c3c32d068865f6d824d4c9a84ba80119
+pkB: 373108f6fcb5512323e3b547b3ba19ab09f2a4f162f86395208ba0e97c300e62
+message: 68656c6c6f20776f726c64
+signature: a6d2f5df8664115bf071a5c6875417c83c76d1d3a39c202b318a1092a6b4c
+504cc6dcd3cbbc8ae64133eb4eb56fd6382c1c9a3a368523baa59c1b281bf9be70c
+
+skS: 04de9ba8ba552c0379d23c2df30fc7885e96bf06f16f358b15f9cfa3d3883de7
+pkS: d57b9110cea129c936e8e04e059dfce9b27f7f86c09f16eb4867a63975cf78df
+skB: 0000000000000000000000000000000000000000000000000000000000000000
+pkB: bf9ed30201648d1d7305ad286942f474fddb8d8e0b43e80119faa7e7d9e5c3f0
+message: 68656c6c6f20776f726c64
+signature: 273747fae89912932dd1831cdf91ede33474a9f31c4c486fe794c700ddf91
+a68fcfd02c832363f84e496258b3e467747a14a4656dda6f04103780141641fda0f
+~~~
 
 --- back
 
@@ -218,8 +243,4 @@ This document has no IANA actions.
 The authors would like to thank Frank Denis and Dennis Jackson for helpful discussions 
 that informed the development of this draft.
 
-# Test Vectors
-{:numbered="false"}
-
-TBD
 
