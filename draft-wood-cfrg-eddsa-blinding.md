@@ -82,7 +82,7 @@ The following terms are used throughout this document to describe the blinding m
   seed of length 32 bytes or 57 bytes according to {{RFC8032, Section 5.1.5}}
   or {{RFC8032, Section 5.2.5}}, respectively.
 - `pk(sk)`: The public key corresponding to the private key `sk`.
-- `XOR(a,b)`: XOR of byte strings; `xor(0xF0F0, 0x1234) = 0xE2C4`.
+- `XOR(a,b)`: XOR of byte strings; `XOR(0xF0F0, 0x1234) = 0xE2C4`.
   It is an error to call this function with two arguments of unequal
   length.
 - ScalarMult(pk, k): Multiply the EdDSA public key pk by scalar k, producing a new
