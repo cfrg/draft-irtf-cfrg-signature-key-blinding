@@ -136,14 +136,14 @@ More specifically, BlindPublicKey(pk, skB) works as follows.
 1. Prune the buffer: The lowest three bits of the first octet are cleared, the highest 
    bit of the last octet is cleared, and the second highest bit of the last octet is set.
 1. Interpret the buffer as the little-endian integer, forming a secret scalar s. Perform a 
-   fixed-base scalar multiplication ScalarMult(pk, s), and output the encoding of the 
+   scalar multiplication ScalarMult(pk, s), and output the encoding of the 
    resulting point as the public key.
 
 UnblindPublicKey(pkM, skB) works as follows.
 
 1. Compute the secret scalar s from skB as in BlindPublicKey.
 1. Compute the multiplicative inverse of s, denoted sInv, modulo L as defined in {{RFC8032, Section 5.1}}.
-1. Perform a fixed-base scalar multiplication ScalarMult(pk, s), and output the encoding 
+1. Perform a scalar multiplication ScalarMult(pk, sInv), and output the encoding 
    of the resulting point as the public key.
 
 ## BlindSign
