@@ -82,9 +82,8 @@ The following terms are used throughout this document to describe the blinding m
   seed of length 32 bytes or 57 bytes according to {{RFC8032, Section 5.1.5}}
   or {{RFC8032, Section 5.2.5}}, respectively.
 - `pk(sk)`: The public key corresponding to the private key `sk`.
-- `XOR(a,b)`: XOR of byte strings; `XOR(0xF0F0, 0x1234) = 0xE2C4`.
-  It is an error to call this function with two arguments of unequal
-  length.
+- `concat(x0, ..., xN)`: Concatenation of byte strings.
+  `concat(0x01, 0x0203, 0x040506) = 0x010203040506`.
 - ScalarMult(pk, k): Multiply the EdDSA public key pk by scalar k, producing a new
   public key as a result.
 
@@ -162,7 +161,7 @@ More specifically, BlindSign(skS, skB, msg) works as follows:
 1. Perform the same routine to transform the secret blind skB into a secret
    scalar s2, public key A2, and prefix2. 
 1. Compute the signing scalar s = s1 \* s2 (mod L) and the signing public key A = ScalarMult(A1, s2). 
-1. Compute the signing prefix as XOR(prefix1, prefix2).
+1. Compute the signing prefix as concat(prefix1, prefix2).
 1. Run the rest of the Sign procedure in {{RFC8032, Section 5.1.6}} from step (2) onwards
    using the modified scalar s, public key A, and string prefix.
 
@@ -194,7 +193,7 @@ BlindSign(skS, skB, msg) works as follows:
 1. Perform the same routine to transform the secret blind skB into a secret
    scalar s2, public key A2, and prefix2. 
 1. Compute the signing scalar s = s1 \* s2 (mod L) and the signing public key A = ScalarMult(A1, s2). 
-1. Compute the signing prefix as XOR(prefix1, prefix2).
+1. Compute the signing prefix as concat(prefix1, prefix2).
 1. Run the rest of the Sign procedure in {{RFC8032, Section 5.2.6}} from step (2) onwards
    using the modified scalar s, public key A, and string prefix.
 
@@ -218,21 +217,23 @@ denoted pkS and pkB and encoded according to {{RFC8032, Section 5.1.2}},
 and the message and signature values, each encoded as hexadecimal strings.
 
 ~~~
-skS: 7757648a9be012e16fdbd9eecf8c46dc55118dbb1d33537393cf0ca1882dcc34
-pkS: e47585e020dd4dc1bc2ae180d388dce87bbc02e63549850ffeda7f254de75b46
-skB: f05749b277d523951b91598200c45e08c3c32d068865f6d824d4c9a84ba80119
-pkB: 373108f6fcb5512323e3b547b3ba19ab09f2a4f162f86395208ba0e97c300e62
+skS: 8c21b65abb8413cf12e5e723bde5337b07a257b5cc8893128a9b6837d3c92168
+pkS: 93f512c1fdc4bd2c35b42c5173822f1dc792dfda4df04518dbe8f6b4391ab612
+skB: e3e75045e670bbcd958401a9f892d963f0413a3594ee2b918be5d671701dc635
+pkB: 0f74d46e69d418d95ae190ddf0526643feac97f53a84cd7efc4c3f89a5a426eb
+pkM: becee23eba2f4eb01fd743f2ee5983cc0098f33ba54ea72bf40dcc218e8e3d96
 message: 68656c6c6f20776f726c64
-signature: a6d2f5df8664115bf071a5c6875417c83c76d1d3a39c202b318a1092a6b4c
-504cc6dcd3cbbc8ae64133eb4eb56fd6382c1c9a3a368523baa59c1b281bf9be70c
+signature: 895a390a5de23f821b1379aacee8fc8fb5ced73c7482fac61d0b2859cc957
+a0f68a887e7539aa9d1d463f10ca119cab70a8c1763fd93fa425fe4da6976a8ae02
 
-skS: 04de9ba8ba552c0379d23c2df30fc7885e96bf06f16f358b15f9cfa3d3883de7
-pkS: d57b9110cea129c936e8e04e059dfce9b27f7f86c09f16eb4867a63975cf78df
+skS: aea7dd1f6342f591ae9ac0dfcbbc8cedf82ee16c76cea1d1d1d2a5362a94618d
+pkS: b5b0e225b0ada4a00a56cac1c4c61a038e866163128f3260cbba96411bc70d30
 skB: 0000000000000000000000000000000000000000000000000000000000000000
-pkB: bf9ed30201648d1d7305ad286942f474fddb8d8e0b43e80119faa7e7d9e5c3f0
+pkB: 3b6a27bcceb6a42d62a3a8d02a6f0d73653215771de243a63ac048a18b59da29
+pkM: b0f1cde5afa4022b7a2ca93839ed66375e1d6c318b44d644d7e78a66ac2ad771
 message: 68656c6c6f20776f726c64
-signature: 273747fae89912932dd1831cdf91ede33474a9f31c4c486fe794c700ddf91
-a68fcfd02c832363f84e496258b3e467747a14a4656dda6f04103780141641fda0f
+signature: 2f89287ba7e5df0efab4d736befc635368c026c6419f53955ed12e0a0d3ab
+35dc5a6c51aad14792be1dfa1356574d089c36a9eff80887f611a2f8a2161cee000
 ~~~
 
 --- back
