@@ -78,6 +78,7 @@ blinding.
 
 The following terms are used throughout this document to describe the blinding modification.
 
+- `G`: The standard base point.
 - `sk`: An EdDSA private key, which is a randomly generated private 
   seed of length 32 bytes or 57 bytes according to {{RFC8032, Section 5.1.5}}
   or {{RFC8032, Section 5.2.5}}, respectively.
@@ -160,7 +161,7 @@ More specifically, BlindSign(skS, skB, msg) works as follows:
    half of the hash digest, h[32],...,h[63]. 
 1. Perform the same routine to transform the secret blind skB into a secret
    scalar s2, public key A2, and prefix2. 
-1. Compute the signing scalar s = s1 \* s2 (mod L) and the signing public key A = ScalarMult(A1, s2). 
+1. Compute the signing scalar s = s1 \* s2 (mod L) and the signing public key A = ScalarMult(G, s). 
 1. Compute the signing prefix as concat(prefix1, prefix2).
 1. Run the rest of the Sign procedure in {{RFC8032, Section 5.1.6}} from step (2) onwards
    using the modified scalar s, public key A, and string prefix.
