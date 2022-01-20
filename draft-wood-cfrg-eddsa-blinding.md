@@ -112,7 +112,7 @@ Key blinding extends the base EdDSA specification with three routines:
 
 - BlindPublicKey(pkS, skB): Blind the public key pkS using the private key skB.
 - UnblindPublicKey(pkM, skB): Unblind the public key pkM using the private key skB.
-- BlindSign(skS, skB, msg): Sign a message msg using the private key skS with the private 
+- BlindKeySign(skS, skB, msg): Sign a message msg using the private key skS with the private 
   blind skB. 
 
 Correctness requires the following equivalence to hold:
@@ -121,12 +121,12 @@ Correctness requires the following equivalence to hold:
 UnblindPublicKey(BlindPublicKey(pkS, skB), skB) = pkS
 ~~~
 
-Security requires that signatures produced using BlindSign are unlinkable from
+Security requires that signatures produced using BlindKeySign are unlinkable from
 signatures produced using the standard EdDSA Sign function with the same private key.
 
 # Ed25519ph, Ed25519ctx, and Ed25519
 
-This section describes implementations of BlindPublicKey, UnblindPublicKey, and BlindSign as
+This section describes implementations of BlindPublicKey, UnblindPublicKey, and BlindKeySign as
 modifications of routines in {{RFC8032, Section 5.1}}.
 
 ## BlindPublicKey and UnblindPublicKey
@@ -154,13 +154,13 @@ UnblindPublicKey(pkM, skB) works as follows.
 1. Perform a scalar multiplication ScalarMult(pk, sInv), and output the encoding 
    of the resulting point as the public key.
 
-## BlindSign
+## BlindKeySign
 
-BlindSign transforms a private key skB into a scalar for the edwards25519 group and a
+BlindKeySign transforms a private key skB into a scalar for the edwards25519 group and a
 message prefix to blind both the signing scalar and the prefix of the message used 
 in the signature generation routine. 
 
-More specifically, BlindSign(skS, skB, msg) works as follows:
+More specifically, BlindKeySign(skS, skB, msg) works as follows:
 
 1. Hash the private key skS, 32 octets, using SHA-512.  Let h denote the
    resulting digest.  Construct the secret scalar s1 from the first
@@ -176,7 +176,7 @@ More specifically, BlindSign(skS, skB, msg) works as follows:
 
 # Ed448ph and Ed448
 
-This section describes implementations of BlindPublciKey, UnblindPublicKey, and BlindSign as 
+This section describes implementations of BlindPublicKey, UnblindPublicKey, and BlindKeySign as 
 modifications of routines in {{RFC8032, Section 5.2}}.
 
 ## BlindPublicKey and UnblindPublicKey
@@ -187,12 +187,12 @@ of SHA-512 for hashing the secret blind to a 114-byte buffer, (2) the buffer is 
 as described in {{RFC8032, Section 5.2.5}}, and the order of the edwards448 group L is
 as defined in {{RFC8032, Section 5.2.1}}.
 
-## BlindSign
+## BlindKeySign
 
-BlindSign for Ed448ph and Ed448 is implemented just as this routine for Ed25519ph,
+BlindKeySign for Ed448ph and Ed448 is implemented just as this routine for Ed25519ph,
 Ed25519ctx, and Ed25519, except in how the scalars (s1, s2), public keys (A1, A2),
 and message strings (prefix1, prefix2) are computed. More specifically, 
-BlindSign(skS, skB, msg) works as follows:
+BlindKeySign(skS, skB, msg) works as follows:
 
 1. Hash the private key skS, 57 octets, using SHAKE256(skS, 117).  Let h denote the
    resulting digest.  Construct the secret scalar s1 from the first
