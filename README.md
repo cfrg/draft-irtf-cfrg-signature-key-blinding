@@ -7,6 +7,14 @@ This is the working area for the Internet-Draft, "EdDSA Key Blinding".
 * [Individual Draft](https://datatracker.ietf.org/doc/html/draft-wood-cfrg-eddsa-blinding)
 * [Compare Editor's Copy to Individual Draft](https://chris-wood.github.io/draft-wood-cfrg-eddsa-blinding/#go.draft-wood-cfrg-eddsa-blinding.diff)
 
+# Existing implementations
+
+| Implementation                                                    | Language | Version  |
+| ----------------------------------------------------------------- |:---------|:---------|
+| [ed25519](https://github.com/cloudflare/pat-go/tree/main/ed25519) | Go       | main     |
+| [ed25519-compact](https://crates.io/crates/ed25519-compact)       | Rust     | main     |
+
+Submit a PR if you would like your implementation to be added!
 
 ## Contributing
 
