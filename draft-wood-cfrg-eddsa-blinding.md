@@ -27,6 +27,14 @@ author:
     city: San Francisco
     country: United States of America
     email: caw@heapingbits.net
+ -
+    ins: F. Denis
+    name: Frank Denis
+    org: Fastly Inc.
+    street: 475 Brannan St
+    city: San Francisco
+    country: United States of America
+    email: fde@00f.net
 
 normative:
 
@@ -241,7 +249,7 @@ signature: 2f89287ba7e5df0efab4d736befc635368c026c6419f53955ed12e0a0d3ab
 # Acknowledgments
 {:numbered="false"}
 
-The authors would like to thank Frank Denis and Dennis Jackson for helpful discussions 
+The authors would like to thank Dennis Jackson for helpful discussions 
 that informed the development of this draft.
 
 
