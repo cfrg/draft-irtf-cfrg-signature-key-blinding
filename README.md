@@ -9,11 +9,11 @@ This is the working area for the Internet-Draft, "EdDSA Key Blinding".
 
 # Existing implementations
 
-| Implementation                                                           | Language | Version |
-| ------------------------------------------------------------------------ | :------- | :------ |
-| [ed25519](https://github.com/cloudflare/pat-go/tree/main/ed25519)        | Go       | main    |
-| [ed25519-compact](https://crates.io/crates/ed25519-compact)              | Rust     | main    |
-| [eddsa-key-blinding](https://github.com/jedisct1/zig-eddsa-key-blinding) | Zig      | main    |
+| Implementation                                                           | Language | Algorithms                     | Version |
+| ------------------------------------------------------------------------ | :------- | :------------------------------| :------ |
+| [ed25519](https://github.com/cloudflare/pat-go/tree/main/ed25519)        | Go       | Ed25519, ECDSA(P-256, SHA-256) | main    |
+| [ed25519-compact](https://crates.io/crates/ed25519-compact)              | Rust     | Ed25519                        | main    |
+| [eddsa-key-blinding](https://github.com/jedisct1/zig-eddsa-key-blinding) | Zig      | Ed25519                        | main    |
 
 Submit a PR if you would like your implementation to be added!
 
