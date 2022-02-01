@@ -170,11 +170,10 @@ More specifically, BlindPublicKey(pk, skB) works as follows.
 
 1. Hash the 32-byte private key skB using SHA-512, storing the digest in a 64-octet 
    large buffer, denoted h. Only the lower 32 bytes are used for generating the public key.
-1. Prune the buffer: The lowest three bits of the first octet are cleared, the highest 
-   bit of the last octet is cleared, and the second highest bit of the last octet is set.
-1. Interpret the buffer as the little-endian integer, forming a secret scalar s. Perform a 
-   scalar multiplication ScalarMult(pk, s), and output the encoding of the 
-   resulting point as the public key.
+1. Interpret the buffer as a little-endian integer, forming a secret scalar s. Note that this
+   explicitly skips the buffer pruning step in {{RFC8032, Section 5.1}}. Perform a
+   scalar multiplication ScalarMult(pk, s), and output the encoding of the resulting point
+   as the public key.
 
 UnblindPublicKey(pkM, skB) works as follows.
 
@@ -196,8 +195,10 @@ More specifically, BlindKeySign(skS, skB, msg) works as follows:
    half of the digest, and the corresponding public key A1, as
    described in {{RFC8032, Section 5.1.5}}.  Let prefix1 denote the second
    half of the hash digest, h[32],...,h[63]. 
-1. Perform the same routine to transform the secret blind skB into a secret
-   scalar s2, public key A2, and prefix2. 
+1. Hash the 32-byte private key skB using SHA-512, storing the digest in a 64-octet
+   large buffer, denoted b. Interpret the lower 32 bytes buffer as a little-endian
+   integer, forming a secret scalar s2. Let prefix2 denote the second half of
+   the hash digest, b[32],...,b[63].
 1. Compute the signing scalar s = s1 \* s2 (mod L) and the signing public key A = ScalarMult(G, s). 
 1. Compute the signing prefix as concat(prefix1, prefix2).
 1. Run the rest of the Sign procedure in {{RFC8032, Section 5.1.6}} from step (2) onwards
@@ -211,10 +212,9 @@ modifications of routines in {{RFC8032, Section 5.2}}.
 ## BlindPublicKey and UnblindPublicKey
 
 BlindPublicKey and UnblindPublicKey for Ed448ph and Ed448 are implemented just as these
-routines are for Ed25519ph, Ed25519ctx, and Ed25519, except that (1) SHAKE256 is used instead
-of SHA-512 for hashing the secret blind to a 114-byte buffer, (2) the buffer is pruned
-as described in {{RFC8032, Section 5.2.5}}, and the order of the edwards448 group L is
-as defined in {{RFC8032, Section 5.2.1}}.
+routines are for Ed25519ph, Ed25519ctx, and Ed25519, except that SHAKE256 is used instead
+of SHA-512 for hashing the secret blind to a 114-byte buffer and the order of the edwards448
+group L is as defined in {{RFC8032, Section 5.2.1}}.
 
 ## BlindKeySign
 
@@ -290,26 +290,26 @@ the message and signature values, each encoded as hexadecimal strings.
 
 ~~~
 // Randomly generated private key and blind seed
-skS: 6c53f0ee8d6e83725640c428db929a12ce928fef8a0d7af7926acdd21b2b25af
-pkS: 9aa831f594eee30a4df5c3ffd14bc84ea38cb423e7bbe6541b24d4c8c18f77d1
-skB: da33d9519cd2f06e414189d114f52fc2c858b9e2192a1f7f799c2831d3e247f0
-pkB: ddb7e59b4b22f24bd55b64b2cdaf4ee5e389c0f90a7a990537cd722e1c97dc27
-pkR: c10e827c395487c4aad017e7bf66b46cd9ab09209012dc1920de9089c328e666
+skS: 875532ab039b0a154161c284e19c74afa28d5bf5454e99284bbcffaa71eebf45
+pkS: 3b5983605b277cd44918410eb246bb52d83adfc806ccaa91a60b5b2011bc5973
+skB: c461e8595f0ac41d374f878613206704978115a226f60470ffd566e9e6ae73bf
+pkB: 0de25ad2fc6c8d2fdacd2feb85d4f00cbe33a63a5b0939a608aeb5450990ccf6
+pkR: e52bbb204e72a816854ac82c7e244e13a8fcc3217cfdeb90c8a5a927e741a20f
 message: 68656c6c6f20776f726c64
-signature: e5b99ecfeabb64120a645fcf6a5bfadac302fe3430af3160aaf41aecab137
-00be8c96db23de4ab821ce60fcca07aab216a8bf73b14b674d4c40bb56a7c52c80b
+signature: f35d2027f14250c07b3b353359362ec31e13076a547c749a981d0135fce06
+7a361ad6522849e6ed9f61d93b0f76428129b9eb3f9c3cd0bfa1bc2a086a5eebd09
 ~~~
 
 ~~~
 // Randomly generated private key seed and zero blind seed
-skS: 63bf9226687f2354255c94862fef194520984dd8d16b6f3758c9069d379e66ea
-pkS: 491ce376748ccbc695f1dd969b166ccc4a939379e9173874d0e1e5927adc8c6f
+skS: f3348942e77a83943a6330d372e7531bb52203c2163a728038388ea110d1c871
+pkS: ada4f42be4b8fa93ddc7b41ca434239a940b4b18d314fe04d5be0b317a861ddf
 skB: 0000000000000000000000000000000000000000000000000000000000000000
 pkB: 3b6a27bcceb6a42d62a3a8d02a6f0d73653215771de243a63ac048a18b59da29
-pkR: e09e005ae1f3b40338dc76b02afb1b362b33f1eab7e35347ca0d9b59c07d9c02
+pkR: 7b8dcabbdfce4f8ad57f38f014abc4a51ac051a4b77b345da45ee2725d9327d0
 message: 68656c6c6f20776f726c64
-signature: 1214f35ffac3b9e09c45799f4a8fad2c1272cce0de63d4736b93e89c80cda
-d2ca5090bb7b576becfd34405dc3a329df9b36bb3c96acd75ea321ef4a2c9528c00
+signature: b38b9d67cb4182e91a86b2eb0591e04c10471c1866202dd1b3b076fb86a61
+c7c4ab5d626e5c5d547a584ca85d44839c13f6c976ece0dcba53d82601e6737a400
 ~~~
 
 ## ECDSA(P-256, SHA-256) Test Vectors
