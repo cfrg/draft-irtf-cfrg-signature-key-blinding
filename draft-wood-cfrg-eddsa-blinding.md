@@ -35,6 +35,14 @@ author:
     city: San Francisco
     country: United States of America
     email: caw@heapingbits.net
+ -
+    ins: E. Eaton
+    name: Edward Eaton
+    org: University of Waterloo
+    street: 200 University Av West
+    city: Waterloo
+    country: Canada
+    email: ted@eeaton.ca
 
 normative:
   ECDSA:
