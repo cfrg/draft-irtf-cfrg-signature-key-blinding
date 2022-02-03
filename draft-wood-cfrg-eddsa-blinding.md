@@ -28,6 +28,14 @@ author:
     country: United States of America
     email: fde@00f.net
  -
+    ins: E. Eaton
+    name: Edward Eaton
+    org: University of Waterloo
+    street: 200 University Av West
+    city: Waterloo
+    country: Canada
+    email: ted@eeaton.ca
+ -
     ins: C. A. Wood
     name: Christopher A. Wood
     org: Cloudflare, Inc.
