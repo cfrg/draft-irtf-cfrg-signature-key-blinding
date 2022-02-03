@@ -11,7 +11,8 @@ This is the working area for the Internet-Draft, "Key Blinding for Signature Sch
 
 | Implementation                                                           | Language | Algorithms                     | Version |
 | ------------------------------------------------------------------------ | :------- | :------------------------------| :------ |
-| [ed25519](https://github.com/cloudflare/pat-go/tree/main/ed25519)        | Go       | Ed25519, ECDSA(P-256, SHA-256) | main    |
+| [ed25519](https://github.com/cloudflare/pat-go/tree/main/ed25519)        | Go       | Ed25519                        | main    |
+| [ecdsa](https://github.com/cloudflare/pat-go/tree/main/ecdsa)            | Go       | ECDSA(P-256, SHA-256)          | main    |
 | [ed25519-compact](https://crates.io/crates/ed25519-compact)              | Rust     | Ed25519                        | main    |
 | [eddsa-key-blinding](https://github.com/jedisct1/zig-eddsa-key-blinding) | Zig      | Ed25519                        | main    |
 
