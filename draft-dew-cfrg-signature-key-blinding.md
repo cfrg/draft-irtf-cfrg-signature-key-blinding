@@ -2,7 +2,7 @@
 title: "Key Blinding for Signature Schemes"
 category: info
 
-docname: draft-wood-cfrg-eddsa-blinding-latest
+docname: draft-dew-cfrg-signature-key-blinding-latest
 ipr: trust200902
 area: AREA
 workgroup: WG Working Group
