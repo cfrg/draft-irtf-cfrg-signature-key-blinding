@@ -1,6 +1,6 @@
 # Key Blinding for Signature Schemes
 
-This is the working area for the Internet-Draft, "EdDSA Key Blinding".
+This is the working area for the Internet-Draft, "Key Blinding for Signature Schemes".
 
 * [Editor's Copy](https://chris-wood.github.io/draft-dew-cfrg-signature-key-blinding/#go.draft-dew-cfrg-signature-key-blinding.html)
 * [Datatracker Page](https://datatracker.ietf.org/doc/draft-dew-cfrg-signature-key-blinding)
