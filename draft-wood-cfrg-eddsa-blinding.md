@@ -28,14 +28,6 @@ author:
     country: United States of America
     email: fde@00f.net
  -
-    ins: C. A. Wood
-    name: Christopher A. Wood
-    org: Cloudflare, Inc.
-    street: 101 Townsend St
-    city: San Francisco
-    country: United States of America
-    email: caw@heapingbits.net
- -
     ins: E. Eaton
     name: Edward Eaton
     org: University of Waterloo
@@ -43,6 +35,14 @@ author:
     city: Waterloo
     country: Canada
     email: ted@eeaton.ca
+ -
+    ins: C. A. Wood
+    name: Christopher A. Wood
+    org: Cloudflare, Inc.
+    street: 101 Townsend St
+    city: San Francisco
+    country: United States of America
+    email: caw@heapingbits.net
 
 normative:
   ECDSA:
