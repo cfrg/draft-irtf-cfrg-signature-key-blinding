@@ -11,8 +11,8 @@ venue:
   group: CFRG
   type: Working Group
   mail: cfrg@irtf.org
-  github: USER/REPO
-  latest: https://example.com/LATEST
+  github: chris-wood/draft-dew-cfrg-signature-key-blinding
+  latest: https://chris-wood.github.io/draft-dew-cfrg-signature-key-blinding/draft-dew-cfrg-signature-key-blinding.html
 
 stand_alone: yes
 smart_quotes: no
