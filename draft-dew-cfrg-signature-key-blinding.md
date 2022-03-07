@@ -256,7 +256,7 @@ BlindKeySign(skS, skB, msg) works as follows:
 This section describes implementations of BlindPublicKey, UnblindPublicKey, and BlindKeySign as 
 functions implemented on top of an existing {{ECDSA}} implementation. In the descriptions below,
 let p be the order of the corresponding elliptic curve group used for ECDSA. For example, for 
-P-256, p = 2^256 - 2^224 + 2^192 + 2^96 - 1.
+P-256, p = 115792089210356248762697446949407573529996955224135760342422259061068512044369.
 
 ## BlindPublicKey and UnblindPublicKey
 
