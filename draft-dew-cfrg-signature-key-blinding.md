@@ -279,9 +279,9 @@ specifically, skR = skS \* skR (mod L).
 # Security Considerations {#sec-considerations}
 
 The signature scheme extensions in this document aim to achieve unforgeability
-and unlinkability. Informally, unforgeability means that one cannot produce a
-valid (message, signature) pair without access to both the private signing key
-and blinding key. Similarly, unlinkability means that one cannot distinguish
+and unlinkability. Informally, unforgeability means that one cannot produce a 
+valid (message, signature) pair for any blinding key without access to the 
+private signing key. Similarly, unlinkability means that one cannot distinguish
 between two signatures produced from two separate key signing keys, and two
 signatures produced from the same signing key but with different blinds. Security
 analysis of the extensions in this document with respect to these two properties
