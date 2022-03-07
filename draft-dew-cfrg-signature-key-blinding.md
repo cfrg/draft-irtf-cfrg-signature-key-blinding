@@ -114,6 +114,12 @@ procedures in {{RFC8032}} to support this blinding operation, referred to as key
 blinding. It also specifies an extension to {{ECDSA}} that enables the same 
 functionality.
 
+## DISCLAIMER
+
+This document is a work in progress and is still undergoing security analysis.
+As such, it MUST NOT be used for real world applications. See
+{{sec-considerations}} for additional information.
+
 # Conventions and Definitions
 
 {::boilerplate bcp14-tagged}
@@ -245,6 +251,8 @@ BlindKeySign(skS, skB, msg) works as follows:
 
 # ECDSA
 
+[[DISCLAIMNER: Multiplicative blinding for ECDSA is known to be NOT be SUF-CMA-secure in the presence of an adversary that controls the blinding value. {{?MSMHI15=DOI.10.1007/978-3-319-30840-1_2}} describes this in the context of related-key attacks. This variant may likely be removed in followup versions of this document based on further analysis.]]
+
 This section describes implementations of BlindPublicKey, UnblindPublicKey, and BlindKeySign as 
 functions implemented on top of an existing {{ECDSA}} implementation. In the descriptions below,
 let L be the order of the corresponding elliptic curve group used for ECDSA. For example, for 
@@ -268,12 +276,19 @@ BlindKeySign transforms the signing key skS by the private key skB into a new
 signing key, skR, and then invokes the existing ECDSA signing procedure. More
 specifically, skR = skS \* skR (mod L).
 
-# Security Considerations
+# Security Considerations {#sec-considerations}
 
 This document describes a variant of the identity key blinding routine used in
 Tor's Hidden Service feature. Security analysis for that feature is contained
 {{TORBLINDING}}. For EdDSA, further analysis is needed to ensure this is compliant 
 with the signature algorithm described in {{RFC8032}}.
+
+{{MSMHI15}} demonstrate that ECDSA with attacker-controlled multiplicative blinding
+for producing related keys can be abused to produce forgeries. In particular,
+if an attacker can control the private blinding key used in BlindKeySign, they
+can construct a forgery over a different message that validates under a different
+public key. Further analysis is needed to determine whether or not it is safe
+to keep this functionality in the specification given this problem.
 
 <!-- TODO(caw): compare to additive key blinding, which allows one to blind without private information -->
 
