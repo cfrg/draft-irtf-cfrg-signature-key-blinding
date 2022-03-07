@@ -255,26 +255,30 @@ BlindKeySign(skS, skB, msg) works as follows:
 
 This section describes implementations of BlindPublicKey, UnblindPublicKey, and BlindKeySign as 
 functions implemented on top of an existing {{ECDSA}} implementation. In the descriptions below,
-let L be the order of the corresponding elliptic curve group used for ECDSA. For example, for 
-P-256, L = 2^256 - 2^224 + 2^192 + 2^96 - 1.
+let p be the order of the corresponding elliptic curve group used for ECDSA. For example, for 
+P-256, p = 2^256 - 2^224 + 2^192 + 2^96 - 1.
 
 ## BlindPublicKey and UnblindPublicKey
 
-BlindPublicKey multiplies the public key pkS by the private key skB yielding a new 
-public key pkR. UnblindPublicKey inverts this process by multipling the input public
-key by the multiplicative inverse of skB. More specifically, both functions are 
-implemented as follows:
-
+BlindPublicKey multiplies the public key pkS by an augmented private key skB yielding a 
+new public key pkR. UnblindPublicKey inverts this process by multiplying the input public
+key by the multiplicative inverse of the augmented skB. Augmentation here maps the private
+key skB to another scalar using hash_to_field as defined in {{Section 5 of ?H2C=I-D.irtf-cfrg-hash-to-curve}},
+with DST set to "ECDSA Key Blind", L set to the value corresponding to the target curve,
+e.g., 48 for P-256 and 72 for P-384, expand_message_xmd with a hash function matching
+that used for the corresponding digital signature algorithm, and prime modulus equal to 
+the order p of the corresponding curve. Letting HashToScalar denote this augmentation
+process, BlindPublicKey and UnblindPublicKey are then implemented as follows:
 ~~~
-BlindPublicKey(pk, skB)   = ScalarMult(pk, skB)
-UnblindPublicKey(pk, skB) = ScalarMult(pk, ModInverse(skB, L))
+BlindPublicKey(pk, skB)   = ScalarMult(pk, HashToScalar(skB))
+UnblindPublicKey(pk, skB) = ScalarMult(pk, ModInverse(HashToScalar(skB), p))
 ~~~
 
 ## BlindKeySign
 
 BlindKeySign transforms the signing key skS by the private key skB into a new
 signing key, skR, and then invokes the existing ECDSA signing procedure. More
-specifically, skR = skS \* skR (mod L).
+specifically, skR = skS \* HashToScalar(skR) (mod L).
 
 # Security Considerations {#sec-considerations}
 
@@ -283,6 +287,8 @@ Tor's Hidden Service feature. Security analysis for that feature is contained
 {{TORBLINDING}}. For EdDSA, further analysis is needed to ensure this is compliant 
 with the signature algorithm described in {{RFC8032}}.
 
+The constructions in this document assume that both the signing and blinding keys
+are private, and, as such, not controlled by an attacker. 
 {{MSMHI15}} demonstrate that ECDSA with attacker-controlled multiplicative blinding
 for producing related keys can be abused to produce forgeries. In particular,
 if an attacker can control the private blinding key used in BlindKeySign, they
@@ -339,9 +345,9 @@ c7c4ab5d626e5c5d547a584ca85d44839c13f6c976ece0dcba53d82601e6737a400
 
 This section contains test vectors for ECDSA with P-256 and SHA-256, as 
 described in {{ECDSA}}. Each test vector lists the signing and blinding keys, 
-denoted skS and skB, each serialized as a big-endain integers and encoded 
+denoted skS and skB, each serialized as a big-endian integers and encoded 
 as hexadecimal strings. Each test vector also lists the unblinded and 
-blinded public keys, denoted pkS and pkB and encoded as uncompressed elliptic 
+blinded public keys, denoted pkS and pkB and encoded as compressed elliptic 
 curve points according to {{ECDSA}}. Finally, each vector lists message and 
 signature values, where the message is encoded as a hexadecimal string, and 
 the signature value is serialized as the concatenation of scalars (r, s) and 
@@ -349,17 +355,20 @@ encoded as a hexadecimal string.
 
 ~~~
 // Randomly generated signing and blind private keys
-skS: 4f8a91596336b1b4a05f3759e823327840132bd906d327854ac9dea41c6bcb86
-pkS: 04016660a5beb01204f1d168c2eca80ae377d0154071788cc6f554968b4965e6c7f
-531294c14408da7c813455fc1df83d578769098555eabb742ba21dfe93a037e
-skB: 6d4e5b11f7c5be252be39435e3be8aa5cf194a3cc12b9e23b04f7f7f0db01233
-pkB: 042e69cdf60f9f705da59dc457f2d8d64f74aa93117d16064c33b4afb76413533cd
-ad7637e3e628a400b04e2e6caabd14345a304de6f90db830a1bdcd3cc4b4d66
-pkR: 043c13ad160bef1472461ecafe013abbac28650f70c27f694d4a1e3d0efd913f756
-63c9dc34fe166f71103da5ef10d4e7d779790d2a8c760849f64ad1959061132
+skS: fb577883a7d5806392cc24433485716a663c3390050dd69f970340442ddfadf5f96
+9f96119b9674d717231b3440ee790
+pkS: 02c220ad8c512bb91ab8636c1d4ad8ad322d46786cb89c979335f871e017ced191c
+67cb94a584d866e9e24cfca90dd4a45
+skB: be45d7118e851486e201b720b1c101d4df4dc68a868a720397eb91428dcf2da4da4
+c50f8ae6b0885af4d2e1801f9348a
+pkB: 0313ae8964beca953c0db3c936a49de6c34ad198c2d5aaa7ada46b44a6742584587
+1a9f87554dcbb2a75a7b7af7b324b08
+pkR: 02f7741b9291001bd42f9aef9e99c010f1f69b1dfe115a95309fe81ca1f68e2ffaa
+3dfc131e47752023537be2c3526d331
 message: 68656c6c6f20776f726c64
-signature: 4a3565e3206dacd43a0fbea32af287af96f48e4ba942789ea6202b5b09441
-2ed7ab7f648fd17b12a43934e5b653659d158723fa5b34a7ae80089c1f1b492d41d
+signature: bd887d5e74742ce7e3ee42794b38f90afc8773bcdab84f8148f59a0b1006c
+ab6bd6111052f6ddd2e3c9ed5db6e46c5e9fbb850091cb30bf70e5e11412556d7c1265f0
+40ae1ff7c77a7196239058c51b311cc5a3038234c6bbba79bc9b53c148f
 ~~~
 
 --- back
