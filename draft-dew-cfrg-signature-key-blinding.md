@@ -269,6 +269,7 @@ e.g., 48 for P-256 and 72 for P-384, expand_message_xmd with a hash function mat
 that used for the corresponding digital signature algorithm, and prime modulus equal to 
 the order p of the corresponding curve. Letting HashToScalar denote this augmentation
 process, BlindPublicKey and UnblindPublicKey are then implemented as follows:
+
 ~~~
 BlindPublicKey(pk, skB)   = ScalarMult(pk, HashToScalar(skB))
 UnblindPublicKey(pk, skB) = ScalarMult(pk, ModInverse(HashToScalar(skB), p))
