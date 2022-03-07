@@ -278,10 +278,19 @@ specifically, skR = skS \* skR (mod L).
 
 # Security Considerations {#sec-considerations}
 
-This document describes a variant of the identity key blinding routine used in
-Tor's Hidden Service feature. Security analysis for that feature is contained
-{{TORBLINDING}}. For EdDSA, further analysis is needed to ensure this is compliant 
-with the signature algorithm described in {{RFC8032}}.
+The signature scheme extensions in this document aim to achieve unforgeability
+and unlinkability. Informally, unforgeability means that one cannot produce a
+valid (message, signature) pair without access to both the private signing key
+and blinding key. Similarly, unlinkability means that one cannot distinguish
+between two signatures produced from two separate key signing keys, and two
+signatures produced from the same signing key but with different blinds. Security
+analysis of the extensions in this document with respect to these two properties
+is currently underway.
+
+Preliminary analysis has been done for a variant of these extensions used for
+identity key blinding routine used in Tor's Hidden Service feature {{TORBLINDING}}.
+For EdDSA, further analysis is needed to ensure this is compliant with the signature
+algorithm described in {{RFC8032}}.
 
 {{MSMHI15}} demonstrate that ECDSA with attacker-controlled multiplicative blinding
 for producing related keys can be abused to produce forgeries. In particular,
