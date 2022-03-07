@@ -278,7 +278,7 @@ UnblindPublicKey(pk, skB) = ScalarMult(pk, ModInverse(HashToScalar(skB), p))
 
 BlindKeySign transforms the signing key skS by the private key skB into a new
 signing key, skR, and then invokes the existing ECDSA signing procedure. More
-specifically, skR = skS \* HashToScalar(skR) (mod L).
+specifically, skR = skS \* HashToScalar(skB) (mod p).
 
 # Security Considerations {#sec-considerations}
 
