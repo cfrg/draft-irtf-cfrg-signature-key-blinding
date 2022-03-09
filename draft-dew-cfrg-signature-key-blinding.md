@@ -351,9 +351,9 @@ signature: b38b9d67cb4182e91a86b2eb0591e04c10471c1866202dd1b3b076fb86a61
 c7c4ab5d626e5c5d547a584ca85d44839c13f6c976ece0dcba53d82601e6737a400
 ~~~
 
-## ECDSA(P-256, SHA-256) Test Vectors
+## ECDSA(P-384, SHA-384) Test Vectors
 
-This section contains test vectors for ECDSA with P-256 and SHA-256, as 
+This section contains test vectors for ECDSA with P-384 and SHA-384, as 
 described in {{ECDSA}}. Each test vector lists the signing and blinding keys, 
 denoted skS and skB, each serialized as a big-endian integers and encoded 
 as hexadecimal strings. Each test vector also lists the unblinded and 
