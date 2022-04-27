@@ -239,7 +239,7 @@ and message strings (prefix1, prefix2) are computed. More specifically,
 BlindKeySign(skS, skB, msg) works as follows:
 
 1. Hash the private key skS, 57 octets, using SHAKE256(skS, 117).  Let h denote the
-   resulting digest.  Construct the secret scalar s1 from the first
+   resulting digest. Construct the secret scalar s1 from the first
    half of the digest, and the corresponding public key A1, as
    described in {{RFC8032, Section 5.2.5}}.  Let prefix1 denote the second
    half of the hash digest, h[57],...,h[113].
@@ -250,7 +250,7 @@ BlindKeySign(skS, skB, msg) works as follows:
 1. Run the rest of the Sign procedure in {{RFC8032, Section 5.2.6}} from step (2) onwards
    using the modified scalar s, public key A, and string prefix.
 
-# ECDSA
+# ECDSA {#ecdsa}
 
 [[DISCLAIMER: Multiplicative blinding for ECDSA is known to be NOT be SUF-CMA-secure in the presence of an adversary that controls the blinding value. {{?MSMHI15=DOI.10.1007/978-3-319-30840-1_2}} describes this in the context of related-key attacks. This variant may likely be removed in followup versions of this document based on further analysis.]]
 
@@ -304,10 +304,12 @@ are private, and, as such, not controlled by an attacker.
 for producing related keys can be abused to produce forgeries. In particular,
 if an attacker can control the private blinding key used in BlindKeySign, they
 can construct a forgery over a different message that validates under a different
-public key. Further analysis is needed to determine whether or not it is safe
-to keep this functionality in the specification given this problem.
-
-<!-- TODO(caw): compare to additive key blinding, which allows one to blind without private information -->
+public key. One mitigation to this problem is to change BlindKeySign such that the
+signature is computed over the input message as well as the blind public key. 
+However, this would require verifiers to treat both the blind public key
+and message as input to their verification interface. The construction in
+{{ecdsa}} does not require this change. However, further analysis is needed to 
+determine whether or not this construction is safe. 
 
 # IANA Considerations
 
