@@ -381,8 +381,8 @@ covered in this document.
 
 This section contains test vectors for Ed25519 as described in {{RFC8032}}.
 Each test vector lists the private key and blind seeds, denoted skS and bk
-and encoded as hexadecimal strings, along with their corresponding public keys
-pkS and pkB encoded has hexadecimal strings according to {{RFC8032, Section 5.1.2}}.
+and encoded as hexadecimal strings, along with the public key pkS corresponding
+to skS encoded has hexadecimal strings according to {{RFC8032, Section 5.1.2}}.
 Each test vector also includes the blinded public key pkR computed from skS and bk,
 denoted pkR and encoded has a hexadecimal string. Finally, each vector includes
 the message and signature values, each encoded as hexadecimal strings.
@@ -414,12 +414,11 @@ c7c4ab5d626e5c5d547a584ca85d44839c13f6c976ece0dcba53d82601e6737a400
 This section contains test vectors for ECDSA with P-384 and SHA-384, as
 described in {{ECDSA}}. Each test vector lists the signing and blinding keys,
 denoted skS and bk, each serialized as a big-endian integers and encoded
-as hexadecimal strings. Each test vector also lists the unblinded and
-blinded public keys, denoted pkS and pkB and encoded as compressed elliptic
-curve points according to {{ECDSA}}. Finally, each vector lists message and
-signature values, where the message is encoded as a hexadecimal string, and
-the signature value is serialized as the concatenation of scalars (r, s) and
-encoded as a hexadecimal string.
+as hexadecimal strings. Each test vector also blinded public key pkR, 
+encoded as compressed elliptic curve points according to {{ECDSA}}. Finally, 
+each vector lists message and signature values, where the message is encoded 
+as a hexadecimal string, and the signature value is serialized as the 
+concatenation of scalars (r, s) and encoded as a hexadecimal string.
 
 ~~~
 // Randomly generated signing and blind private keys
@@ -429,8 +428,6 @@ pkS: 03c66e61f5e12c35568928d9a0ffbc145ee9679e17afea3fba899ed3f878f9e82a8
 859ce784d9ff43fea2bc8e726468dd3
 bk: 865b6b7fc146d0f488854932c93128c3ab3572b7137c4682cb28a2d55f7598df467
 e890984a687b22c8bc60a986f6a28
-pkB: 037a7073998ae07431a0d85876ce03670186ca8b4bbb95204affbed17d8a6e07f42
-de50df2c271a28a4a3cf6ad5c1ff7ab
 pkR: 038defb9b698b91ee7f3985e54b57b519be237ced2f6f79408558ff7485bf2d60a2
 4dc986b9145e422ea765b56de7c5956
 message: 68656c6c6f20776f726c64
