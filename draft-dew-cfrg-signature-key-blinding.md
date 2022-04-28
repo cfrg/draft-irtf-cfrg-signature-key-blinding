@@ -68,6 +68,26 @@ informative:
       -
         ins: R. Stracovsky
         name: Roy Stracovsky
+  TORDIRECTORY:
+    title: Tor directory protocol, version 3
+    target: https://gitweb.torproject.org/torspec.git/tree/dir-spec.txt
+
+  AIRDROP:
+    title: An airdrop that preserves recipient privacy
+    target: https://eprint.iacr.org/2020/676.pdf
+    author:
+      -
+        ins: R. S. Wahby
+        name: Riad S. Wahby
+      -
+        ins: D. Boneh
+        name: Dan Boneh
+      -
+        ins: C. Jeffrey
+        name: Christopher Jeffrey
+      -
+        ins: J. Poon
+        name: Joseph Poon
 
   TORBLINDING:
     title: Proving Security of Tor’s Hidden Service Identity Blinding Protocol
@@ -81,44 +101,75 @@ informative:
 
 --- abstract
 
-This document describes extensions to existing signature schemes
-for key blinding. This functionality guarantees that a blinded public key and
-all signatures produced using the blinded key pair are unlinkable to the
+This document describes extensions to existing digital signature schemes for key blinding.
+The core property of signing with key blinding is that a blinded public key and
+all signatures produced using the blinded key pair are independent of the
 unblinded key pair. Moreover, signatures produced using blinded key pairs
 are indistinguishable from signatures produced using unblinded key pairs.
+This functionality has a variety of applications, including Tor onion services
+and privacy-preserving airdrop for bootstrapping cryptocurrency systems.
 
 --- middle
 
 # Introduction
 
-EdDSA {{?EDDSA=DOI.10.1007/s13389-012-0027-1}} is a type of Schnorr signature algorithm
-based on Edwards curves. The specification {{!RFC8032}} describes several variants of
-EdDSA with parameter sets for the edwards25519 and edwards448 curves as described in
-{{?RFC7748}}. According to the specification, private keys are randomly generated
-seeds, which are then used to derive scalar elements and their corresponding public
-group element for signing and verifying messages, respectively.
+Digital signature schemes allow a signer to sign a message using a private signing 
+key and produce a digital signature such that anyone can verify the digital signature
+over the message with the public verification key corresponding to the signing key.
+Digital signature schemes typically consist of three functions: 
 
-Given an EdDSA private and public key pair (sk, pk), any message signed by sk is
-linkable to pk. One simply checks whether the message signature is valid under pk.
-In some settings, in is useful to produce signatures with a given key pair (sk, pk)
-such that the resulting signature is not linkable to pk without knowledge of a
-particular witness r. However, given pk corresponding to sk, witness r, and a
-message signature, one can determine if the signature was indeed produced using sk.
-In effect, the witness "blinds" the key pair associated with a message signature.
+- KeyGen: A function for generating a private signing key `skS` and the corresponding 
+  public verification key `pkS`.
+- Sign(skS, msg): A function for signing an input message `msg` using a private 
+  signing key `skS`, producing a digital signature `sig`.
+- Verify(pkS, msg, sig): A function for verifying the digital signature `sig` over 
+  input message `msg` against a public verification key `pkS`, yielding true if
+  the signature is valid and false otherwise.
 
-This functionality is also possible with other signature schemes, including
-{{ECDSA}} and some post-quantum signature schemes {{ESS21}}.
+In some applications, it's useful for a signer to produce digital signatures using
+the same long-term private signing key such that a verifier cannot link any two signatures
+to the same signer. In other words, the signature produced is independent of the
+long-term private-signing key, and the public verification key for verifying the
+signature is independent of the long-term public verification key. This type of
+functionality has a number of practical applications, including, for example, 
+in the Tor onion services protocol {{TORDIRECTORY}} and privacy-preserving airdrop
+for bootstrapping cryptocurrency systems {{AIRDROP}}. It is also necessary for
+a variant of the Privacy Pass issuance protocol {{?RATELIMITED=I-D.privacypass-rate-limit-tokens}}.
 
-This document describes a modification to the EdDSA key generation and signing
-procedures in {{RFC8032}} to support this blinding operation, referred to as key
-blinding. It also specifies an extension to {{ECDSA}} that enables the same
-functionality.
+One way to accomplish this is by signing with a private key which is a function of the 
+long-term private signing key and a freshly chosen blinding key, and similarly by producing 
+a public verification key which is a function of the long-term public verification key 
+and same blinding key. A signature scheme with this functionality is referred to as signing 
+with key blinding. A signature scheme with key blinding extends a basic digital scheme with 
+four new functions:
+
+- BlindKeyGen: A function for generating a private blind key.
+- BlindPublicKey(pkS, bk): Blind the public verification key `pkS` using the private 
+  blinding key `bk`, yielding a blinded public key `pkR`.
+- UnblindPublicKey(pkR, bk): Unblind the public verification key `pkR` using the private 
+  blinding key `bk`.
+- BlindKeySign(skS, bk, msg): Sign a message `msg` using the private signing key `skS`
+  with the private blind key `bk`.
+
+A signature scheme with key blinding aims to achieve unforgeability and unlinkability. 
+Informally, unforgeability means that one cannot produce a valid (message, signature) 
+pair for any blinding key without access to the private signing key. Similarly, 
+unlinkability means that one cannot distinguish between two signatures produced from 
+two separate key signing keys, and two signatures produced from the same signing 
+key but with different blinding keys.
+
+This document describes extensions to EdDSA {{RFC8032}} and ECDSA {{ECDSA}} to enable
+signing with key blinding. Security analysis of these extensions is currently underway;
+see {{sec-considerations}} for more details.
+
+This functionality is also possible with other signature schemes, including some post-quantum 
+signature schemes {{ESS21}}, though such extensions are not specified here.
 
 ## DISCLAIMER
 
 This document is a work in progress and is still undergoing security analysis.
-As such, it MUST NOT be used for real world applications. See
-{{sec-considerations}} for additional information.
+As such, it MUST NOT be used for real world applications. See {{sec-considerations}}
+for additional information.
 
 # Conventions and Definitions
 
@@ -144,23 +195,24 @@ by the \* operator. For example, the product of two scalars `x` and `y` is denot
 # Key Blinding
 
 At a high level, a signature scheme with key blinding allows signers to blind their
-signing key such that any signature produced under the blinded signing key is unlinkable
-from the unblinded signing key. Similar to the signing key, the blind is also a private
-key that remains secret. For example, the blind is a 32-byte or 57-byte random seed for
-Ed25519 or Ed448 variants, respectively, whereas the blind for ECDSA over P-256 is
-a random scalar in the P-256 group.
+private signing key such that any signature produced with a private signing key and blinding 
+key is independent of the private signing key. Similar to the signing key, the blinding key 
+is also a private key that remains secret. For example, the blind is a 32-byte or 57-byte 
+random seed for Ed25519 or Ed448 variants, respectively, whereas the blind for ECDSA over P-256 is
+a random scalar in the P-256 group. Key blinding introduces four new functionalities for the signature scheme:
 
-Key blinding introduces three new functionalities for the signature scheme:
+- BlindKeyGen: A function for generating a private blind key.
+- BlindPublicKey(pkS, bk): Blind the public verification key `pkS` using the private 
+  blinding key `bk`, yielding a blinded public key `pkR`.
+- UnblindPublicKey(pkR, bk): Unblind the public verification key `pkR` using the private 
+  blinding key `bk`.
+- BlindKeySign(skS, bk, msg): Sign a message `msg` using the private signing key `skS`
+  with the private blind key `bk`.
 
-- BlindPublicKey(pkS, skB): Blind the public key pkS using the private key skB.
-- UnblindPublicKey(pkM, skB): Unblind the public key pkM using the private key skB.
-- BlindKeySign(skS, skB, msg): Sign a message msg using the private key skS with the private
-  blind skB.
-
-Correctness requires the following equivalence to hold:
+For a given `bk` produced from BlindKeyGen, correctness requires the following equivalence to hold:
 
 ~~~
-UnblindPublicKey(BlindPublicKey(pkS, skB), skB) = pkS
+UnblindPublicKey(BlindPublicKey(pkS, bk), bk) = pkS
 ~~~
 
 Security requires that signatures produced using BlindKeySign are unlinkable from
@@ -170,19 +222,20 @@ private key.
 # Ed25519ph, Ed25519ctx, and Ed25519
 
 This section describes implementations of BlindPublicKey, UnblindPublicKey, and BlindKeySign as
-modifications of routines in {{RFC8032, Section 5.1}}.
+modifications of routines in {{RFC8032, Section 5.1}}. BlindKeyGen invokes the key generation
+routine specified in {{RFC8032, Section 5.1.5}} and outputs only the private key.
 
 ## BlindPublicKey and UnblindPublicKey
 
-BlindPublicKey transforms a private blind skB into a scalar for the edwards25519 group
+BlindPublicKey transforms a private blind bk into a scalar for the edwards25519 group
 and then multiplies the target key by this scalar. UnblindPublicKey performs essentially
 the same steps except that it multiplies the target public key by the multiplicative
 inverse of the scalar, where the inverse is computed using the order of the group L,
 described in {{RFC8032, Section 5.1}}.
 
-More specifically, BlindPublicKey(pk, skB) works as follows.
+More specifically, BlindPublicKey(pk, bk) works as follows.
 
-1. Hash the 32-byte private key skB using SHA-512, storing the digest in a 64-octet
+1. Hash the 32-byte private key bk using SHA-512, storing the digest in a 64-octet
    large buffer, denoted b. Interpret the lower 32 bytes buffer as a little-endian
    integer, forming a secret scalar s. Note that this explicitly skips the buffer
    pruning step in {{RFC8032, Section 5.1}}.
@@ -190,27 +243,27 @@ More specifically, BlindPublicKey(pk, skB) works as follows.
 1. Perform a scalar multiplication ScalarMult(pk, s), and output the encoding of the
    resulting point as the public key.
 
-UnblindPublicKey(pkM, skB) works as follows.
+UnblindPublicKey(pkR, bk) works as follows.
 
-1. Compute the secret scalar s from skB as in BlindPublicKey.
+1. Compute the secret scalar s from bk as in BlindPublicKey.
 1. Compute the sInv = ModInverse(s, L), where L is as defined in {{RFC8032, Section 5.1}}.
 1. Perform a scalar multiplication ScalarMult(pk, sInv), and output the encoding
    of the resulting point as the public key.
 
 ## BlindKeySign
 
-BlindKeySign transforms a private key skB into a scalar for the edwards25519 group and a
+BlindKeySign transforms a private key bk into a scalar for the edwards25519 group and a
 message prefix to blind both the signing scalar and the prefix of the message used
 in the signature generation routine.
 
-More specifically, BlindKeySign(skS, skB, msg) works as follows:
+More specifically, BlindKeySign(skS, bk, msg) works as follows:
 
 1. Hash the private key skS, 32 octets, using SHA-512.  Let h denote the
    resulting digest.  Construct the secret scalar s1 from the first
    half of the digest, and the corresponding public key A1, as
    described in {{RFC8032, Section 5.1.5}}.  Let prefix1 denote the second
    half of the hash digest, h[32],...,h[63].
-1. Hash the 32-byte private key skB using SHA-512, storing the digest in a 64-octet
+1. Hash the 32-byte private key bk using SHA-512, storing the digest in a 64-octet
    large buffer, denoted b. Interpret the lower 32 bytes buffer as a little-endian
    integer, forming a secret scalar s2. Let prefix2 denote the second half of
    the hash digest, b[32],...,b[63].
@@ -222,7 +275,8 @@ More specifically, BlindKeySign(skS, skB, msg) works as follows:
 # Ed448ph and Ed448
 
 This section describes implementations of BlindPublicKey, UnblindPublicKey, and BlindKeySign as
-modifications of routines in {{RFC8032, Section 5.2}}.
+modifications of routines in {{RFC8032, Section 5.2}}. BlindKeyGen invokes the key generation
+routine specified in {{RFC8032, Section 5.1.5}} and outputs only the private key.
 
 ## BlindPublicKey and UnblindPublicKey
 
@@ -236,14 +290,14 @@ the secret), and the order of the edwards448 group L is as defined in {{RFC8032,
 BlindKeySign for Ed448ph and Ed448 is implemented just as this routine for Ed25519ph,
 Ed25519ctx, and Ed25519, except in how the scalars (s1, s2), public keys (A1, A2),
 and message strings (prefix1, prefix2) are computed. More specifically,
-BlindKeySign(skS, skB, msg) works as follows:
+BlindKeySign(skS, bk, msg) works as follows:
 
 1. Hash the private key skS, 57 octets, using SHAKE256(skS, 117).  Let h denote the
    resulting digest. Construct the secret scalar s1 from the first
    half of the digest, and the corresponding public key A1, as
    described in {{RFC8032, Section 5.2.5}}.  Let prefix1 denote the second
    half of the hash digest, h[57],...,h[113].
-1. Perform the same routine to transform the secret blind skB into a secret
+1. Perform the same routine to transform the secret blind bk into a secret
    scalar s2, public key A2, and prefix2.
 1. Compute the signing scalar s = s1 \* s2 (mod L) and the signing public key A = ScalarMult(A1, s2).
 1. Compute the signing prefix as concat(prefix1, prefix2).
@@ -255,16 +309,17 @@ BlindKeySign(skS, skB, msg) works as follows:
 [[DISCLAIMER: Multiplicative blinding for ECDSA is known to be NOT be SUF-CMA-secure in the presence of an adversary that controls the blinding value. {{?MSMHI15=DOI.10.1007/978-3-319-30840-1_2}} describes this in the context of related-key attacks. This variant may likely be removed in followup versions of this document based on further analysis.]]
 
 This section describes implementations of BlindPublicKey, UnblindPublicKey, and BlindKeySign as
-functions implemented on top of an existing {{ECDSA}} implementation. In the descriptions below,
-let p be the order of the corresponding elliptic curve group used for ECDSA. For example, for
+functions implemented on top of an existing {{ECDSA}} implementation. BlindKeyGen invokes the
+key generation routine specified in {{ECDSA}} and outputs only the private key. In the descriptions 
+below, let p be the order of the corresponding elliptic curve group used for ECDSA. For example, for
 P-256, p = 115792089210356248762697446949407573529996955224135760342422259061068512044369.
 
 ## BlindPublicKey and UnblindPublicKey
 
-BlindPublicKey multiplies the public key pkS by an augmented private key skB yielding a
+BlindPublicKey multiplies the public key pkS by an augmented private key bk yielding a
 new public key pkR. UnblindPublicKey inverts this process by multiplying the input public
-key by the multiplicative inverse of the augmented skB. Augmentation here maps the private
-key skB to another scalar using hash_to_field as defined in {{Section 5 of ?H2C=I-D.irtf-cfrg-hash-to-curve}},
+key by the multiplicative inverse of the augmented bk. Augmentation here maps the private
+key bk to another scalar using hash_to_field as defined in {{Section 5 of ?H2C=I-D.irtf-cfrg-hash-to-curve}},
 with DST set to "ECDSA Key Blind", L set to the value corresponding to the target curve,
 e.g., 48 for P-256 and 72 for P-384, expand_message_xmd with a hash function matching
 that used for the corresponding digital signature algorithm, and prime modulus equal to
@@ -272,17 +327,19 @@ the order p of the corresponding curve. Letting HashToScalar denote this augment
 process, BlindPublicKey and UnblindPublicKey are then implemented as follows:
 
 ~~~
-BlindPublicKey(pk, skB)   = ScalarMult(pk, HashToScalar(skB))
-UnblindPublicKey(pk, skB) = ScalarMult(pk, ModInverse(HashToScalar(skB), p))
+BlindPublicKey(pk, bk)   = ScalarMult(pk, HashToScalar(bk))
+UnblindPublicKey(pk, bk) = ScalarMult(pk, ModInverse(HashToScalar(bk), p))
 ~~~
 
 ## BlindKeySign
 
-BlindKeySign transforms the signing key skS by the private key skB into a new
+BlindKeySign transforms the signing key skS by the private key bk into a new
 signing key, skR, and then invokes the existing ECDSA signing procedure. More
-specifically, skR = skS \* HashToScalar(skB) (mod p).
+specifically, skR = skS \* HashToScalar(bk) (mod p).
 
 # Security Considerations {#sec-considerations}
+
+<!-- replace these with more rigorous definitions -->
 
 The signature scheme extensions in this document aim to achieve unforgeability
 and unlinkability. Informally, unforgeability means that one cannot produce a
@@ -323,10 +380,10 @@ covered in this document.
 ## Ed25519 Test Vectors
 
 This section contains test vectors for Ed25519 as described in {{RFC8032}}.
-Each test vector lists the private key and blind seeds, denoted skS and skB
+Each test vector lists the private key and blind seeds, denoted skS and bk
 and encoded as hexadecimal strings, along with their corresponding public keys
 pkS and pkB encoded has hexadecimal strings according to {{RFC8032, Section 5.1.2}}.
-Each test vector also includes the blinded public key pkR computed from skS and skB,
+Each test vector also includes the blinded public key pkR computed from skS and bk,
 denoted pkR and encoded has a hexadecimal string. Finally, each vector includes
 the message and signature values, each encoded as hexadecimal strings.
 
@@ -334,8 +391,7 @@ the message and signature values, each encoded as hexadecimal strings.
 // Randomly generated private key and blind seed
 skS: 875532ab039b0a154161c284e19c74afa28d5bf5454e99284bbcffaa71eebf45
 pkS: 3b5983605b277cd44918410eb246bb52d83adfc806ccaa91a60b5b2011bc5973
-skB: c461e8595f0ac41d374f878613206704978115a226f60470ffd566e9e6ae73bf
-pkB: 0de25ad2fc6c8d2fdacd2feb85d4f00cbe33a63a5b0939a608aeb5450990ccf6
+bk: c461e8595f0ac41d374f878613206704978115a226f60470ffd566e9e6ae73bf
 pkR: e52bbb204e72a816854ac82c7e244e13a8fcc3217cfdeb90c8a5a927e741a20f
 message: 68656c6c6f20776f726c64
 signature: f35d2027f14250c07b3b353359362ec31e13076a547c749a981d0135fce06
@@ -346,8 +402,7 @@ signature: f35d2027f14250c07b3b353359362ec31e13076a547c749a981d0135fce06
 // Randomly generated private key seed and zero blind seed
 skS: f3348942e77a83943a6330d372e7531bb52203c2163a728038388ea110d1c871
 pkS: ada4f42be4b8fa93ddc7b41ca434239a940b4b18d314fe04d5be0b317a861ddf
-skB: 0000000000000000000000000000000000000000000000000000000000000000
-pkB: 3b6a27bcceb6a42d62a3a8d02a6f0d73653215771de243a63ac048a18b59da29
+bk: 0000000000000000000000000000000000000000000000000000000000000000
 pkR: 7b8dcabbdfce4f8ad57f38f014abc4a51ac051a4b77b345da45ee2725d9327d0
 message: 68656c6c6f20776f726c64
 signature: b38b9d67cb4182e91a86b2eb0591e04c10471c1866202dd1b3b076fb86a61
@@ -358,7 +413,7 @@ c7c4ab5d626e5c5d547a584ca85d44839c13f6c976ece0dcba53d82601e6737a400
 
 This section contains test vectors for ECDSA with P-384 and SHA-384, as
 described in {{ECDSA}}. Each test vector lists the signing and blinding keys,
-denoted skS and skB, each serialized as a big-endian integers and encoded
+denoted skS and bk, each serialized as a big-endian integers and encoded
 as hexadecimal strings. Each test vector also lists the unblinded and
 blinded public keys, denoted pkS and pkB and encoded as compressed elliptic
 curve points according to {{ECDSA}}. Finally, each vector lists message and
@@ -372,7 +427,7 @@ skS: 0e1e4fcc2726e36c5a24be3d30dc6f52d61e6614f5c57a1ec7b829d8adb7c85f456
 c30c652d9cd1653cef4ce4da9008d
 pkS: 03c66e61f5e12c35568928d9a0ffbc145ee9679e17afea3fba899ed3f878f9e82a8
 859ce784d9ff43fea2bc8e726468dd3
-skB: 865b6b7fc146d0f488854932c93128c3ab3572b7137c4682cb28a2d55f7598df467
+bk: 865b6b7fc146d0f488854932c93128c3ab3572b7137c4682cb28a2d55f7598df467
 e890984a687b22c8bc60a986f6a28
 pkB: 037a7073998ae07431a0d85876ce03670186ca8b4bbb95204affbed17d8a6e07f42
 de50df2c271a28a4a3cf6ad5c1ff7ab
