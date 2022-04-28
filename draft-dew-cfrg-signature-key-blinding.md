@@ -158,7 +158,7 @@ unlinkability means that one cannot distinguish between two signatures produced 
 two separate key signing keys, and two signatures produced from the same signing 
 key but with different blinding keys.
 
-This document describes extensions to EdDSA {{RFC8032}} and ECDSA {{ECDSA}} to enable
+This document describes extensions to EdDSA {{!RFC8032}} and ECDSA {{ECDSA}} to enable
 signing with key blinding. Security analysis of these extensions is currently underway;
 see {{sec-considerations}} for more details.
 
