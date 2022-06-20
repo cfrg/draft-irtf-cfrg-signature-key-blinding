@@ -136,8 +136,8 @@ in the Tor onion services protocol {{TORDIRECTORY}} and privacy-preserving airdr
 for bootstrapping cryptocurrency systems {{AIRDROP}}. It is also necessary for
 a variant of the Privacy Pass issuance protocol {{?RATELIMITED=I-D.privacypass-rate-limit-tokens}}.
 
-One way to accomplish this is by signing with a private key which is a function of the 
-long-term private signing key and a freshly chosen blinding key, and similarly by producing 
+One way to accomplish this is by signing with a private key which is a function of the
+long-term private signing key and a freshly chosen blinding key, and similarly by producing
 a public verification key which is a function of the long-term public verification key 
 and same blinding key. A signature scheme with this functionality is referred to as signing 
 with key blinding. A signature scheme with key blinding extends a basic digital scheme with 
