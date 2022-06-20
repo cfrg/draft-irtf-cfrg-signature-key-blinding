@@ -328,7 +328,7 @@ process, BlindPublicKey and UnblindPublicKey are then implemented as follows:
 
 ~~~
 BlindPublicKey(pk, bk)   = ScalarMult(pk, HashToScalar(bk))
-UnblindPublicKey(pk, bk) = ScalarMult(pk, ModInverse(HashToScalar(bk), p))
+UnblindPublicKey(pkR, bk) = ScalarMult(pkR, ModInverse(HashToScalar(bk), p))
 ~~~
 
 ## BlindKeySign
