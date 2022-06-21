@@ -7,6 +7,16 @@ This is the working area for the individual Internet-Draft, "Key Blinding for Si
 * [Individual Draft](https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-signature-key-blinding)
 * [Compare Editor's Copy to Individual Draft](https://cfrg.github.io/draft-irtf-cfrg-signature-key-blinding/#go.draft-irtf-cfrg-signature-key-blinding.diff)
 
+# Existing implementations
+
+| Implementation                                                           | Language | Algorithms                     | Version |
+| ------------------------------------------------------------------------ | :------- | :------------------------------| :------ |
+| [ed25519](https://github.com/cloudflare/pat-go/tree/main/ed25519)        | Go       | Ed25519                        | main    |
+| [ecdsa](https://github.com/cloudflare/pat-go/tree/main/ecdsa)            | Go       | ECDSA(P-384, SHA-384)          | main    |
+| [ed25519-compact](https://crates.io/crates/ed25519-compact)              | Rust     | Ed25519                        | main    |
+| [eddsa-key-blinding](https://github.com/jedisct1/zig-eddsa-key-blinding) | Zig      | Ed25519                        | main    |
+
+Submit a PR if you would like your implementation to be added!
 
 ## Contributing
 
