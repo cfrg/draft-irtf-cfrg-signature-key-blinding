@@ -138,9 +138,9 @@ a variant of the Privacy Pass issuance protocol {{?RATELIMITED=I-D.privacypass-r
 
 One way to accomplish this is by signing with a private key which is a function of the
 long-term private signing key and a freshly chosen blinding key, and similarly by producing
-a public verification key which is a function of the long-term public verification key 
-and same blinding key. A signature scheme with this functionality is referred to as signing 
-with key blinding. A signature scheme with key blinding extends a basic digital scheme with 
+a public verification key which is a function of the long-term public verification key
+and same blinding key. A signature scheme with this functionality is referred to as signing
+with key blinding. A signature scheme with key blinding extends a basic digital scheme with
 four new functions:
 
 - BlindKeyGen: A function for generating a private blind key.
