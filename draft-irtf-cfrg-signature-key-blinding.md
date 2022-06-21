@@ -2,7 +2,7 @@
 title: "Key Blinding for Signature Schemes"
 category: info
 
-docname: draft-dew-cfrg-signature-key-blinding-latest
+docname: draft-irtf-cfrg-signature-key-blinding-latest
 ipr: trust200902
 area: AREA
 workgroup: WG Working Group
@@ -11,8 +11,8 @@ venue:
   group: CFRG
   type: Working Group
   mail: cfrg@irtf.org
-  github: chris-wood/draft-dew-cfrg-signature-key-blinding
-  latest: https://chris-wood.github.io/draft-dew-cfrg-signature-key-blinding/draft-dew-cfrg-signature-key-blinding.html
+  github: cfrg/draft-irtf-cfrg-signature-key-blinding
+  latest: https://cfrg.github.io/draft-irtf-cfrg-signature-key-blinding/draft-irtf-cfrg-signature-key-blinding.html
 
 stand_alone: yes
 smart_quotes: no

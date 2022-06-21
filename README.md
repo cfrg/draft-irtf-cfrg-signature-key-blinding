@@ -2,10 +2,10 @@
 
 This is the working area for the Internet-Draft, "Key Blinding for Signature Schemes".
 
-* [Editor's Copy](https://chris-wood.github.io/draft-dew-cfrg-signature-key-blinding/#go.draft-dew-cfrg-signature-key-blinding.html)
-* [Datatracker Page](https://datatracker.ietf.org/doc/draft-dew-cfrg-signature-key-blinding)
-* [Individual Draft](https://datatracker.ietf.org/doc/html/draft-dew-cfrg-signature-key-blinding)
-* [Compare Editor's Copy to Individual Draft](https://chris-wood.github.io/draft-dew-cfrg-signature-key-blinding/#go.draft-dew-cfrg-signature-key-blinding.diff)
+* [Editor's Copy](https://cfrg.github.io/draft-irtf-cfrg-signature-key-blinding/#go.draft-irtf-cfrg-signature-key-blinding.html)
+* [Datatracker Page](https://datatracker.ietf.org/doc/draft-irtf-cfrg-signature-key-blinding)
+* [Individual Draft](https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-signature-key-blinding)
+* [Compare Editor's Copy to Individual Draft](https://cfrg.github.io/draft-irtf-cfrg-signature-key-blinding/#go.draft-irtf-cfrg-signature-key-blinding.diff)
 
 # Existing implementations
 
@@ -21,7 +21,7 @@ Submit a PR if you would like your implementation to be added!
 ## Contributing
 
 See the
-[guidelines for contributions](https://github.com/chris-wood/draft-dew-cfrg-signature-key-blinding/blob/main/CONTRIBUTING.md).
+[guidelines for contributions](https://github.com/cfrg/draft-irtf-cfrg-signature-key-blinding/blob/main/CONTRIBUTING.md).
 
 Contributions can be made by editing markdown through the GitHub interface.
 
