@@ -113,16 +113,16 @@ and privacy-preserving airdrop for bootstrapping cryptocurrency systems.
 
 # Introduction
 
-Digital signature schemes allow a signer to sign a message using a private signing 
+Digital signature schemes allow a signer to sign a message using a private signing
 key and produce a digital signature such that anyone can verify the digital signature
 over the message with the public verification key corresponding to the signing key.
-Digital signature schemes typically consist of three functions: 
+Digital signature schemes typically consist of three functions:
 
-- KeyGen: A function for generating a private signing key `skS` and the corresponding 
+- KeyGen: A function for generating a private signing key `skS` and the corresponding
   public verification key `pkS`.
-- Sign(skS, msg): A function for signing an input message `msg` using a private 
+- Sign(skS, msg): A function for signing an input message `msg` using a private
   signing key `skS`, producing a digital signature `sig`.
-- Verify(pkS, msg, sig): A function for verifying the digital signature `sig` over 
+- Verify(pkS, msg, sig): A function for verifying the digital signature `sig` over
   input message `msg` against a public verification key `pkS`, yielding true if
   the signature is valid and false otherwise.
 
@@ -131,7 +131,7 @@ the same long-term private signing key such that a verifier cannot link any two 
 to the same signer. In other words, the signature produced is independent of the
 long-term private-signing key, and the public verification key for verifying the
 signature is independent of the long-term public verification key. This type of
-functionality has a number of practical applications, including, for example, 
+functionality has a number of practical applications, including, for example,
 in the Tor onion services protocol {{TORDIRECTORY}} and privacy-preserving airdrop
 for bootstrapping cryptocurrency systems {{AIRDROP}}. It is also necessary for
 a variant of the Privacy Pass issuance protocol {{?RATELIMITED=I-D.privacypass-rate-limit-tokens}}.
@@ -144,25 +144,25 @@ with key blinding. A signature scheme with key blinding extends a basic digital 
 four new functions:
 
 - BlindKeyGen: A function for generating a private blind key.
-- BlindPublicKey(pkS, bk): Blind the public verification key `pkS` using the private 
+- BlindPublicKey(pkS, bk): Blind the public verification key `pkS` using the private
   blinding key `bk`, yielding a blinded public key `pkR`.
-- UnblindPublicKey(pkR, bk): Unblind the public verification key `pkR` using the private 
+- UnblindPublicKey(pkR, bk): Unblind the public verification key `pkR` using the private
   blinding key `bk`.
 - BlindKeySign(skS, bk, msg): Sign a message `msg` using the private signing key `skS`
   with the private blind key `bk`.
 
-A signature scheme with key blinding aims to achieve unforgeability and unlinkability. 
-Informally, unforgeability means that one cannot produce a valid (message, signature) 
-pair for any blinding key without access to the private signing key. Similarly, 
-unlinkability means that one cannot distinguish between two signatures produced from 
-two separate key signing keys, and two signatures produced from the same signing 
+A signature scheme with key blinding aims to achieve unforgeability and unlinkability.
+Informally, unforgeability means that one cannot produce a valid (message, signature)
+pair for any blinding key without access to the private signing key. Similarly,
+unlinkability means that one cannot distinguish between two signatures produced from
+two separate key signing keys, and two signatures produced from the same signing
 key but with different blinding keys.
 
 This document describes extensions to EdDSA {{!RFC8032}} and ECDSA {{ECDSA}} to enable
 signing with key blinding. Security analysis of these extensions is currently underway;
 see {{sec-considerations}} for more details.
 
-This functionality is also possible with other signature schemes, including some post-quantum 
+This functionality is also possible with other signature schemes, including some post-quantum
 signature schemes {{ESS21}}, though such extensions are not specified here.
 
 ## DISCLAIMER
@@ -195,16 +195,16 @@ by the \* operator. For example, the product of two scalars `x` and `y` is denot
 # Key Blinding
 
 At a high level, a signature scheme with key blinding allows signers to blind their
-private signing key such that any signature produced with a private signing key and blinding 
-key is independent of the private signing key. Similar to the signing key, the blinding key 
-is also a private key that remains secret. For example, the blind is a 32-byte or 57-byte 
+private signing key such that any signature produced with a private signing key and blinding
+key is independent of the private signing key. Similar to the signing key, the blinding key
+is also a private key that remains secret. For example, the blind is a 32-byte or 57-byte
 random seed for Ed25519 or Ed448 variants, respectively, whereas the blind for ECDSA over P-256 is
 a random scalar in the P-256 group. Key blinding introduces four new functionalities for the signature scheme:
 
 - BlindKeyGen: A function for generating a private blind key.
-- BlindPublicKey(pkS, bk): Blind the public verification key `pkS` using the private 
+- BlindPublicKey(pkS, bk): Blind the public verification key `pkS` using the private
   blinding key `bk`, yielding a blinded public key `pkR`.
-- UnblindPublicKey(pkR, bk): Unblind the public verification key `pkR` using the private 
+- UnblindPublicKey(pkR, bk): Unblind the public verification key `pkR` using the private
   blinding key `bk`.
 - BlindKeySign(skS, bk, msg): Sign a message `msg` using the private signing key `skS`
   with the private blind key `bk`.
@@ -310,7 +310,7 @@ BlindKeySign(skS, bk, msg) works as follows:
 
 This section describes implementations of BlindPublicKey, UnblindPublicKey, and BlindKeySign as
 functions implemented on top of an existing {{ECDSA}} implementation. BlindKeyGen invokes the
-key generation routine specified in {{ECDSA}} and outputs only the private key. In the descriptions 
+key generation routine specified in {{ECDSA}} and outputs only the private key. In the descriptions
 below, let p be the order of the corresponding elliptic curve group used for ECDSA. For example, for
 P-256, p = 115792089210356248762697446949407573529996955224135760342422259061068512044369.
 
@@ -362,11 +362,11 @@ for producing related keys can be abused to produce forgeries. In particular,
 if an attacker can control the private blinding key used in BlindKeySign, they
 can construct a forgery over a different message that validates under a different
 public key. One mitigation to this problem is to change BlindKeySign such that the
-signature is computed over the input message as well as the blind public key. 
+signature is computed over the input message as well as the blind public key.
 However, this would require verifiers to treat both the blind public key
 and message as input to their verification interface. The construction in
-{{ecdsa}} does not require this change. However, further analysis is needed to 
-determine whether or not this construction is safe. 
+{{ecdsa}} does not require this change. However, further analysis is needed to
+determine whether or not this construction is safe.
 
 # IANA Considerations
 
@@ -414,10 +414,10 @@ c7c4ab5d626e5c5d547a584ca85d44839c13f6c976ece0dcba53d82601e6737a400
 This section contains test vectors for ECDSA with P-384 and SHA-384, as
 described in {{ECDSA}}. Each test vector lists the signing and blinding keys,
 denoted skS and bk, each serialized as a big-endian integers and encoded
-as hexadecimal strings. Each test vector also blinded public key pkR, 
-encoded as compressed elliptic curve points according to {{ECDSA}}. Finally, 
-each vector lists message and signature values, where the message is encoded 
-as a hexadecimal string, and the signature value is serialized as the 
+as hexadecimal strings. Each test vector also blinded public key pkR,
+encoded as compressed elliptic curve points according to {{ECDSA}}. Finally,
+each vector lists message and signature values, where the message is encoded
+as a hexadecimal string, and the signature value is serialized as the
 concatenation of scalars (r, s) and encoded as a hexadecimal string.
 
 ~~~
