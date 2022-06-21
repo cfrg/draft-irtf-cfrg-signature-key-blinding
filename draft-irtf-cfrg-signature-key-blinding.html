@@ -17,29 +17,29 @@ are indistinguishable from signatures produced using unblinded key pairs.
 This functionality has a variety of applications, including Tor onion services
 and privacy-preserving airdrop for bootstrapping cryptocurrency systems. 
     " name="description">
-<meta content="xml2rfc 3.12.5" name="generator">
+<meta content="xml2rfc 3.12.10" name="generator">
 <meta content="Internet-Draft" name="keyword">
-<meta content="draft-dew-cfrg-signature-key-blinding-latest" name="ietf.draft">
+<meta content="draft-irtf-cfrg-signature-key-blinding-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.12.5
-    Python 3.9.7
+  xml2rfc 3.12.10
+    Python 3.10.4
     appdirs 1.4.4
-    ConfigArgParse 1.3
+    ConfigArgParse 1.5.3
     google-i18n-address 2.5.1
     html5lib 1.1
     intervaltree 3.1.0
     Jinja2 2.11.3
     kitchen 1.2.6
-    lxml 4.6.5
+    lxml 4.8.0
     MarkupSafe 2.0.1
     pycountry 20.7.3
-    pyflakes 2.3.1
-    PyYAML 5.4.1
-    requests 2.26.0
-    setuptools 52.0.0
+    pyflakes 2.4.0
+    PyYAML 6.0
+    requests 2.27.1
+    setuptools 59.4.0
     six 1.16.0
 -->
-<link href="draft-dew-cfrg-signature-key-blinding.xml" rel="alternate" type="application/rfc+xml">
+<link href="draft-irtf-cfrg-signature-key-blinding.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
 <style type="text/css">@font-face {
   font-family: 'Lora';
@@ -161,6 +161,14 @@ and privacy-preserving airdrop for bootstrapping cryptocurrency systems.
   font-weight: 700;
   font-display: swap;
   src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Lora SemiBold'), local('Lora-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-semibold-latin.woff2') format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
@@ -344,7 +352,7 @@ ol, ul {
   padding: 0;
   margin: 0 0 0.5em 2em;
 }
-ol ol, ul ul, ol ul, ul ol {
+:is(ol, ul) :is(ol, ul) {
   margin-left: 1em;
 }
 li {
@@ -359,8 +367,7 @@ ul.empty, .ulEmpty {
 ul.empty li, .ulEmpty li {
   margin-top: 0.5em;
 }
-ul.compact, .ulCompact,
-ol.compact, .olCompact {
+:is(ul, ol).compact, .ulCompact, .olCompact {
   line-height: 100%;
   margin: 0 0 0 2em;
 }
@@ -376,7 +383,7 @@ dl > dd {
   margin-bottom: .8em;
   min-height: 1.3em;
 }
-dl.compact > dd, .dlCompact > dd {
+:is(dl.compact, .dlCompact) > dd {
   margin-bottom: 0em;
 }
 dl > dd > dl {
@@ -418,6 +425,9 @@ tt, code {
      remove leading to avoid altering the final height of lines */
   line-height: 0;
 }
+:is(h1, h2, h3, h4, h5, h6) :is(tt, code) {
+  font-size: 84%;
+}
 pre {
   border: 1px solid var(--line-color);
   font-size: 13.5px;
@@ -442,6 +452,19 @@ figcaption, caption {
   text-align: left;
 }
 @media screen {
+  /* Auto-collapse boilerplate. */
+  :is(#status-of-memo, #copyright) p {
+    margin: -2px 0;
+    max-height: 0;
+    transition: max-height 2s ease, margin 0.5s ease 0.5s;
+    overflow: hidden;
+  }
+  :is(#status-of-memo, #copyright):hover p,
+  :is(#status-of-memo, #copyright) h2:target ~ p {
+    margin: 0.5em 0;
+    max-height: 500px;
+    overflow: auto;
+  }
   pre, svg {
     display: inline-block;
     overflow-x: auto;
@@ -457,7 +480,7 @@ figcaption, caption {
     display: block;
     width: calc(100% - 25px);
   }
-  pre + .pilcrow, svg + .pilcrow {
+  :is(pre, svg) + .pilcrow {
     display: inline-block;
     vertical-align: text-bottom;
     padding-bottom: 8px;
@@ -506,17 +529,11 @@ th, td {
 th {
   background-color: var(--line-color);
 }
-tr:nth-child(2n) > td {
+:is(tr:nth-child(2n), thead+tbody > tr:nth-child(2n+1)) > td {
   background-color: var(--background-color);
 }
-tr:nth-child(2n+1) > td {
+:is(tr:nth-child(2n+1), thead+tbody > tr:nth-child(2n)) > td {
   background-color: var(--highlight-color);
-}
-thead+tbody > tr:nth-child(2n) > td {
-  background-color: var(--highlight-color);
-}
-thead+tbody > tr:nth-child(2n+1) > td {
-  background-color: var(--background-color);
 }
 table caption {
   margin: 0;
@@ -556,8 +573,9 @@ hr {
 }
 .bcp14 {
   font-variant: small-caps;
+  font-weight: 600;
+  font-size: 14.5px;
 }
-
 .role {
   font-variant: all-small-caps;
 }
@@ -796,7 +814,7 @@ hr.addr {
     margin: 0 0 0 4px;
     font-size: var(--small-font-size);
   }
-  #toc ul p, #toc ul li {
+  #toc ul :is(p, li) {
     margin: 2px 0;
     line-height: 22px;
   }
@@ -906,13 +924,13 @@ dl.dlNewline > dt {
 }
 
 /* Provide styling for table cell text alignment */
-table .text-left, table .text-left {
+table .text-left {
   text-align: left;
 }
-table .text-center, table .text-center {
+table .text-center {
   text-align: center;
 }
-table .text-right, table .text-right {
+table .text-right {
   text-align: right;
 }
 
@@ -979,12 +997,6 @@ address div.right {
   }
 
 }
-/* Tweak the bcp14 keyword presentation */
-.bcp14 {
-  font-variant: small-caps;
-  font-weight: bold;
-  font-size: 0.9em;
-}
 
 /* Dark mode. */
 @media (prefers-color-scheme: dark) {
@@ -999,19 +1011,20 @@ address div.right {
   --pilcrow-strong: #666;
   scrollbar-color: #777 #333;
 }
-/* Trick: a prefix match works because only black and white are allowed */
-svg [stroke="black"], svg [stroke^="#000"] {
+}
+
+/* SVG Trick: a prefix match works because only black and white are allowed */
+svg :is([stroke="black"], [stroke^="#000"]) {
   stroke: var(--text-color);
 }
-svg [stroke="white"], svg [stroke^="#fff"] {
+svg :is([stroke="white"], [stroke^="#fff"]) {
   stroke: var(--background-color);
 }
-svg [fill="black"], svg [fill^="#000"], svg :not([fill]) {
+svg :is([fill="black"], [fill^="#000"], :not([fill])) {
   fill: var(--text-color);
 }
-svg [stroke="fill"], svg [fill^="#fff"] {
+svg :is([stroke="fill"], [fill^="#fff"]) {
   fill: var(--background-color);
-}
 }
 </style>
 
@@ -1021,11 +1034,11 @@ svg [stroke="fill"], svg [fill^="#fff"] {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">Key Blinding for Signature Schemes</td>
-<td class="right">May 2022</td>
+<td class="right">June 2022</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Denis, et al.</td>
-<td class="center">Expires 4 November 2022</td>
+<td class="center">Expires 23 December 2022</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1035,15 +1048,15 @@ svg [stroke="fill"], svg [fill^="#fff"] {
 <dt class="label-workgroup">Workgroup:</dt>
 <dd class="workgroup">WG Working Group</dd>
 <dt class="label-internet-draft">Internet-Draft:</dt>
-<dd class="internet-draft">draft-dew-cfrg-signature-key-blinding-latest</dd>
+<dd class="internet-draft">draft-irtf-cfrg-signature-key-blinding-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2022-05-03" class="published">3 May 2022</time>
+<time datetime="2022-06-21" class="published">21 June 2022</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2022-11-04">4 November 2022</time></dd>
+<dd class="expires"><time datetime="2022-12-23">23 December 2022</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1078,14 +1091,14 @@ and privacy-preserving airdrop for bootstrapping cryptocurrency systems.<a href=
       </h2>
 <p id="section-note.1-1">This note is to be removed before publishing as an RFC.<a href="#section-note.1-1" class="pilcrow">¶</a></p>
 <p id="section-note.1-2">
-        The latest revision of this draft can be found at <span><a href="https://chris-wood.github.io/draft-dew-cfrg-signature-key-blinding/draft-dew-cfrg-signature-key-blinding.html">https://chris-wood.github.io/draft-dew-cfrg-signature-key-blinding/draft-dew-cfrg-signature-key-blinding.html</a></span>.
-        Status information for this document may be found at <span><a href="https://datatracker.ietf.org/doc/draft-dew-cfrg-signature-key-blinding/">https://datatracker.ietf.org/doc/draft-dew-cfrg-signature-key-blinding/</a></span>.<a href="#section-note.1-2" class="pilcrow">¶</a></p>
+        The latest revision of this draft can be found at <span><a href="https://cfrg.github.io/draft-irtf-cfrg-signature-key-blinding/draft-irtf-cfrg-signature-key-blinding.html">https://cfrg.github.io/draft-irtf-cfrg-signature-key-blinding/draft-irtf-cfrg-signature-key-blinding.html</a></span>.
+        Status information for this document may be found at <span><a href="https://datatracker.ietf.org/doc/draft-irtf-cfrg-signature-key-blinding/">https://datatracker.ietf.org/doc/draft-irtf-cfrg-signature-key-blinding/</a></span>.<a href="#section-note.1-2" class="pilcrow">¶</a></p>
 <p id="section-note.1-3">
         Discussion of this document takes place on the
         CFRG Working Group mailing list (<span><a href="mailto:cfrg@irtf.org">mailto:cfrg@irtf.org</a></span>),
         which is archived at <span><a href="https://mailarchive.ietf.org/arch/browse/cfrg/">https://mailarchive.ietf.org/arch/browse/cfrg/</a></span>.<a href="#section-note.1-3" class="pilcrow">¶</a></p>
 <p id="section-note.1-4">Source for this draft and an issue tracker can be found at
-        <span><a href="https://github.com/chris-wood/draft-dew-cfrg-signature-key-blinding">https://github.com/chris-wood/draft-dew-cfrg-signature-key-blinding</a></span>.<a href="#section-note.1-4" class="pilcrow">¶</a></p>
+        <span><a href="https://github.com/cfrg/draft-irtf-cfrg-signature-key-blinding">https://github.com/cfrg/draft-irtf-cfrg-signature-key-blinding</a></span>.<a href="#section-note.1-4" class="pilcrow">¶</a></p>
 </section>
 <div id="status-of-memo">
 <section id="section-boilerplate.1">
@@ -1106,7 +1119,7 @@ and privacy-preserving airdrop for bootstrapping cryptocurrency systems.<a href=
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 4 November 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 23 December 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1225,18 +1238,18 @@ and privacy-preserving airdrop for bootstrapping cryptocurrency systems.<a href=
       <h2 id="name-introduction">
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
-<p id="section-1-1">Digital signature schemes allow a signer to sign a message using a private signing 
+<p id="section-1-1">Digital signature schemes allow a signer to sign a message using a private signing
 key and produce a digital signature such that anyone can verify the digital signature
 over the message with the public verification key corresponding to the signing key.
 Digital signature schemes typically consist of three functions:<a href="#section-1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-1-2.1">KeyGen: A function for generating a private signing key <code>skS</code> and the corresponding 
+<li class="normal" id="section-1-2.1">KeyGen: A function for generating a private signing key <code>skS</code> and the corresponding
 public verification key <code>pkS</code>.<a href="#section-1-2.1" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="section-1-2.2">Sign(skS, msg): A function for signing an input message <code>msg</code> using a private 
+        <li class="normal" id="section-1-2.2">Sign(skS, msg): A function for signing an input message <code>msg</code> using a private
 signing key <code>skS</code>, producing a digital signature <code>sig</code>.<a href="#section-1-2.2" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="section-1-2.3">Verify(pkS, msg, sig): A function for verifying the digital signature <code>sig</code> over 
+        <li class="normal" id="section-1-2.3">Verify(pkS, msg, sig): A function for verifying the digital signature <code>sig</code> over
 input message <code>msg</code> against a public verification key <code>pkS</code>, yielding true if
 the signature is valid and false otherwise.<a href="#section-1-2.3" class="pilcrow">¶</a>
 </li>
@@ -1246,39 +1259,39 @@ the same long-term private signing key such that a verifier cannot link any two 
 to the same signer. In other words, the signature produced is independent of the
 long-term private-signing key, and the public verification key for verifying the
 signature is independent of the long-term public verification key. This type of
-functionality has a number of practical applications, including, for example, 
+functionality has a number of practical applications, including, for example,
 in the Tor onion services protocol <span>[<a href="#TORDIRECTORY" class="xref">TORDIRECTORY</a>]</span> and privacy-preserving airdrop
 for bootstrapping cryptocurrency systems <span>[<a href="#AIRDROP" class="xref">AIRDROP</a>]</span>. It is also necessary for
 a variant of the Privacy Pass issuance protocol <span>[<a href="#RATELIMITED" class="xref">RATELIMITED</a>]</span>.<a href="#section-1-3" class="pilcrow">¶</a></p>
-<p id="section-1-4">One way to accomplish this is by signing with a private key which is a function of the 
-long-term private signing key and a freshly chosen blinding key, and similarly by producing 
-a public verification key which is a function of the long-term public verification key 
-and same blinding key. A signature scheme with this functionality is referred to as signing 
-with key blinding. A signature scheme with key blinding extends a basic digital scheme with 
+<p id="section-1-4">One way to accomplish this is by signing with a private key which is a function of the
+long-term private signing key and a freshly chosen blinding key, and similarly by producing
+a public verification key which is a function of the long-term public verification key
+and same blinding key. A signature scheme with this functionality is referred to as signing
+with key blinding. A signature scheme with key blinding extends a basic digital scheme with
 four new functions:<a href="#section-1-4" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-1-5.1">BlindKeyGen: A function for generating a private blind key.<a href="#section-1-5.1" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="section-1-5.2">BlindPublicKey(pkS, bk): Blind the public verification key <code>pkS</code> using the private 
+        <li class="normal" id="section-1-5.2">BlindPublicKey(pkS, bk): Blind the public verification key <code>pkS</code> using the private
 blinding key <code>bk</code>, yielding a blinded public key <code>pkR</code>.<a href="#section-1-5.2" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="section-1-5.3">UnblindPublicKey(pkR, bk): Unblind the public verification key <code>pkR</code> using the private 
+        <li class="normal" id="section-1-5.3">UnblindPublicKey(pkR, bk): Unblind the public verification key <code>pkR</code> using the private
 blinding key <code>bk</code>.<a href="#section-1-5.3" class="pilcrow">¶</a>
 </li>
         <li class="normal" id="section-1-5.4">BlindKeySign(skS, bk, msg): Sign a message <code>msg</code> using the private signing key <code>skS</code>
 with the private blind key <code>bk</code>.<a href="#section-1-5.4" class="pilcrow">¶</a>
 </li>
       </ul>
-<p id="section-1-6">A signature scheme with key blinding aims to achieve unforgeability and unlinkability. 
-Informally, unforgeability means that one cannot produce a valid (message, signature) 
-pair for any blinding key without access to the private signing key. Similarly, 
-unlinkability means that one cannot distinguish between two signatures produced from 
-two separate key signing keys, and two signatures produced from the same signing 
+<p id="section-1-6">A signature scheme with key blinding aims to achieve unforgeability and unlinkability.
+Informally, unforgeability means that one cannot produce a valid (message, signature)
+pair for any blinding key without access to the private signing key. Similarly,
+unlinkability means that one cannot distinguish between two signatures produced from
+two separate key signing keys, and two signatures produced from the same signing
 key but with different blinding keys.<a href="#section-1-6" class="pilcrow">¶</a></p>
 <p id="section-1-7">This document describes extensions to EdDSA <span>[<a href="#RFC8032" class="xref">RFC8032</a>]</span> and ECDSA <span>[<a href="#ECDSA" class="xref">ECDSA</a>]</span> to enable
 signing with key blinding. Security analysis of these extensions is currently underway;
 see <a href="#sec-considerations" class="xref">Section 7</a> for more details.<a href="#section-1-7" class="pilcrow">¶</a></p>
-<p id="section-1-8">This functionality is also possible with other signature schemes, including some post-quantum 
+<p id="section-1-8">This functionality is also possible with other signature schemes, including some post-quantum
 signature schemes <span>[<a href="#ESS21" class="xref">ESS21</a>]</span>, though such extensions are not specified here.<a href="#section-1-8" class="pilcrow">¶</a></p>
 <div id="disclaimer">
 <section id="section-1.1">
@@ -1335,18 +1348,18 @@ by the * operator. For example, the product of two scalars <code>x</code> and <c
 <a href="#section-3" class="section-number selfRef">3. </a><a href="#name-key-blinding" class="section-name selfRef">Key Blinding</a>
       </h2>
 <p id="section-3-1">At a high level, a signature scheme with key blinding allows signers to blind their
-private signing key such that any signature produced with a private signing key and blinding 
-key is independent of the private signing key. Similar to the signing key, the blinding key 
-is also a private key that remains secret. For example, the blind is a 32-byte or 57-byte 
+private signing key such that any signature produced with a private signing key and blinding
+key is independent of the private signing key. Similar to the signing key, the blinding key
+is also a private key that remains secret. For example, the blind is a 32-byte or 57-byte
 random seed for Ed25519 or Ed448 variants, respectively, whereas the blind for ECDSA over P-256 is
 a random scalar in the P-256 group. Key blinding introduces four new functionalities for the signature scheme:<a href="#section-3-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-3-2.1">BlindKeyGen: A function for generating a private blind key.<a href="#section-3-2.1" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="section-3-2.2">BlindPublicKey(pkS, bk): Blind the public verification key <code>pkS</code> using the private 
+        <li class="normal" id="section-3-2.2">BlindPublicKey(pkS, bk): Blind the public verification key <code>pkS</code> using the private
 blinding key <code>bk</code>, yielding a blinded public key <code>pkR</code>.<a href="#section-3-2.2" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="section-3-2.3">UnblindPublicKey(pkR, bk): Unblind the public verification key <code>pkR</code> using the private 
+        <li class="normal" id="section-3-2.3">UnblindPublicKey(pkR, bk): Unblind the public verification key <code>pkR</code> using the private
 blinding key <code>bk</code>.<a href="#section-3-2.3" class="pilcrow">¶</a>
 </li>
         <li class="normal" id="section-3-2.4">BlindKeySign(skS, bk, msg): Sign a message <code>msg</code> using the private signing key <code>skS</code>
@@ -1496,7 +1509,7 @@ using the modified scalar s, public key A, and string prefix.<a href="#section-5
 <p id="section-6-1">[[DISCLAIMER: Multiplicative blinding for ECDSA is known to be NOT be SUF-CMA-secure in the presence of an adversary that controls the blinding value. <span>[<a href="#MSMHI15" class="xref">MSMHI15</a>]</span> describes this in the context of related-key attacks. This variant may likely be removed in followup versions of this document based on further analysis.]]<a href="#section-6-1" class="pilcrow">¶</a></p>
 <p id="section-6-2">This section describes implementations of BlindPublicKey, UnblindPublicKey, and BlindKeySign as
 functions implemented on top of an existing <span>[<a href="#ECDSA" class="xref">ECDSA</a>]</span> implementation. BlindKeyGen invokes the
-key generation routine specified in <span>[<a href="#ECDSA" class="xref">ECDSA</a>]</span> and outputs only the private key. In the descriptions 
+key generation routine specified in <span>[<a href="#ECDSA" class="xref">ECDSA</a>]</span> and outputs only the private key. In the descriptions
 below, let p be the order of the corresponding elliptic curve group used for ECDSA. For example, for
 P-256, p = 115792089210356248762697446949407573529996955224135760342422259061068512044369.<a href="#section-6-2" class="pilcrow">¶</a></p>
 <div id="blindpublickey-and-unblindpublickey-2">
@@ -1507,7 +1520,7 @@ P-256, p = 115792089210356248762697446949407573529996955224135760342422259061068
 <p id="section-6.1-1">BlindPublicKey multiplies the public key pkS by an augmented private key bk yielding a
 new public key pkR. UnblindPublicKey inverts this process by multiplying the input public
 key by the multiplicative inverse of the augmented bk. Augmentation here maps the private
-key bk to another scalar using hash_to_field as defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-hash-to-curve-14#section-5" class="relref">Section 5</a> of [<a href="#H2C" class="xref">H2C</a>]</span>,
+key bk to another scalar using hash_to_field as defined in <span><a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-hash-to-curve-16#section-5" class="relref">Section 5</a> of [<a href="#H2C" class="xref">H2C</a>]</span>,
 with DST set to "ECDSA Key Blind", L set to the value corresponding to the target curve,
 e.g., 48 for P-256 and 72 for P-384, expand_message_xmd with a hash function matching
 that used for the corresponding digital signature algorithm, and prime modulus equal to
@@ -1516,7 +1529,7 @@ process, BlindPublicKey and UnblindPublicKey are then implemented as follows:<a 
 <div class="alignLeft art-text artwork" id="section-6.1-2">
 <pre>
 BlindPublicKey(pk, bk)   = ScalarMult(pk, HashToScalar(bk))
-UnblindPublicKey(pk, bk) = ScalarMult(pk, ModInverse(HashToScalar(bk), p))
+UnblindPublicKey(pkR, bk) = ScalarMult(pkR, ModInverse(HashToScalar(bk), p))
 </pre><a href="#section-6.1-2" class="pilcrow">¶</a>
 </div>
 </section>
@@ -1557,10 +1570,10 @@ for producing related keys can be abused to produce forgeries. In particular,
 if an attacker can control the private blinding key used in BlindKeySign, they
 can construct a forgery over a different message that validates under a different
 public key. One mitigation to this problem is to change BlindKeySign such that the
-signature is computed over the input message as well as the blind public key. 
+signature is computed over the input message as well as the blind public key.
 However, this would require verifiers to treat both the blind public key
 and message as input to their verification interface. The construction in
-<a href="#ecdsa" class="xref">Section 6</a> does not require this change. However, further analysis is needed to 
+<a href="#ecdsa" class="xref">Section 6</a> does not require this change. However, further analysis is needed to
 determine whether or not this construction is safe.<a href="#section-7-3" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1625,10 +1638,10 @@ c7c4ab5d626e5c5d547a584ca85d44839c13f6c976ece0dcba53d82601e6737a400
 <p id="section-9.2-1">This section contains test vectors for ECDSA with P-384 and SHA-384, as
 described in <span>[<a href="#ECDSA" class="xref">ECDSA</a>]</span>. Each test vector lists the signing and blinding keys,
 denoted skS and bk, each serialized as a big-endian integers and encoded
-as hexadecimal strings. Each test vector also blinded public key pkR, 
-encoded as compressed elliptic curve points according to <span>[<a href="#ECDSA" class="xref">ECDSA</a>]</span>. Finally, 
-each vector lists message and signature values, where the message is encoded 
-as a hexadecimal string, and the signature value is serialized as the 
+as hexadecimal strings. Each test vector also blinded public key pkR,
+encoded as compressed elliptic curve points according to <span>[<a href="#ECDSA" class="xref">ECDSA</a>]</span>. Finally,
+each vector lists message and signature values, where the message is encoded
+as a hexadecimal string, and the signature value is serialized as the
 concatenation of scalars (r, s) and encoded as a hexadecimal string.<a href="#section-9.2-1" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-9.2-2">
 <pre>
@@ -1693,7 +1706,7 @@ c3226b8d8194fc93df1c7f5facafc96daab7c5a0d840fbd3b9342f2ddad
 <dd class="break"></dd>
 <dt id="H2C">[H2C]</dt>
         <dd>
-<span class="refAuthor">Faz-Hernandez, A.</span>, <span class="refAuthor">Scott, S.</span>, <span class="refAuthor">Sullivan, N.</span>, <span class="refAuthor">Wahby, R. S.</span>, and <span class="refAuthor">C. A. Wood</span>, <span class="refTitle">"Hashing to Elliptic Curves"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-irtf-cfrg-hash-to-curve-14</span>, <time datetime="2022-02-18" class="refDate">18 February 2022</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-hash-to-curve-14">https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-hash-to-curve-14</a>&gt;</span>. </dd>
+<span class="refAuthor">Faz-Hernandez, A.</span>, <span class="refAuthor">Scott, S.</span>, <span class="refAuthor">Sullivan, N.</span>, <span class="refAuthor">Wahby, R. S.</span>, and <span class="refAuthor">C. A. Wood</span>, <span class="refTitle">"Hashing to Elliptic Curves"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-irtf-cfrg-hash-to-curve-16</span>, <time datetime="2022-06-15" class="refDate">15 June 2022</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-hash-to-curve-16">https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-hash-to-curve-16</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="MSMHI15">[MSMHI15]</dt>
         <dd>

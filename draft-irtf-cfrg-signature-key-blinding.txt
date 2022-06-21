@@ -5,14 +5,14 @@
 WG Working Group                                                F. Denis
 Internet-Draft                                               Fastly Inc.
 Intended status: Informational                                  E. Eaton
-Expires: 4 November 2022                          University of Waterloo
+Expires: 23 December 2022                         University of Waterloo
                                                               C. A. Wood
                                                         Cloudflare, Inc.
-                                                              3 May 2022
+                                                            21 June 2022
 
 
                    Key Blinding for Signature Schemes
-              draft-dew-cfrg-signature-key-blinding-latest
+             draft-irtf-cfrg-signature-key-blinding-latest
 
 Abstract
 
@@ -30,18 +30,18 @@ About This Document
 
    This note is to be removed before publishing as an RFC.
 
-   The latest revision of this draft can be found at https://chris-
-   wood.github.io/draft-dew-cfrg-signature-key-blinding/draft-dew-cfrg-
-   signature-key-blinding.html.  Status information for this document
-   may be found at https://datatracker.ietf.org/doc/draft-dew-cfrg-
-   signature-key-blinding/.
+   The latest revision of this draft can be found at
+   https://cfrg.github.io/draft-irtf-cfrg-signature-key-blinding/draft-
+   irtf-cfrg-signature-key-blinding.html.  Status information for this
+   document may be found at https://datatracker.ietf.org/doc/draft-irtf-
+   cfrg-signature-key-blinding/.
 
    Discussion of this document takes place on the CFRG Working Group
    mailing list (mailto:cfrg@irtf.org), which is archived at
    https://mailarchive.ietf.org/arch/browse/cfrg/.
 
    Source for this draft and an issue tracker can be found at
-   https://github.com/chris-wood/draft-dew-cfrg-signature-key-blinding.
+   https://github.com/cfrg/draft-irtf-cfrg-signature-key-blinding.
 
 Status of This Memo
 
@@ -58,7 +58,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 4 November 2022.
+   This Internet-Draft will expire on 23 December 2022.
 
 Copyright Notice
 
@@ -386,7 +386,7 @@ Table of Contents
    UnblindPublicKey are then implemented as follows:
 
 BlindPublicKey(pk, bk)   = ScalarMult(pk, HashToScalar(bk))
-UnblindPublicKey(pk, bk) = ScalarMult(pk, ModInverse(HashToScalar(bk), p))
+UnblindPublicKey(pkR, bk) = ScalarMult(pkR, ModInverse(HashToScalar(bk), p))
 
 6.2.  BlindKeySign
 
@@ -529,9 +529,8 @@ c3226b8d8194fc93df1c7f5facafc96daab7c5a0d840fbd3b9342f2ddad
    [H2C]      Faz-Hernandez, A., Scott, S., Sullivan, N., Wahby, R. S.,
               and C. A. Wood, "Hashing to Elliptic Curves", Work in
               Progress, Internet-Draft, draft-irtf-cfrg-hash-to-curve-
-              14, 18 February 2022,
-              <https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-
-              hash-to-curve-14>.
+              16, 15 June 2022, <https://datatracker.ietf.org/doc/html/
+              draft-irtf-cfrg-hash-to-curve-16>.
 
    [MSMHI15]  Morita, H., Schuldt, J., Matsuda, T., Hanaoka, G., and T.
               Iwata, "On the Security of the Schnorr Signature Scheme
