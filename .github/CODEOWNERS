@@ -1,0 +1,3 @@
+# Automatically generated CODEOWNERS
+# Regenerate with `make update-codeowners`
+draft-irtf-cfrg-signature-key-blinding.md fde@00f.net ted@eeaton.ca caw@heapingbits.net
