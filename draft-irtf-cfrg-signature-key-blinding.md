@@ -70,7 +70,7 @@ informative:
         name: Roy Stracovsky
   TORDIRECTORY:
     title: Tor directory protocol, version 3
-    target: https://gitweb.torproject.org/torspec.git/tree/dir-spec.txt
+    target: https://gitweb.torproject.org/torspec.git/tree/rend-spec-v3.txt
 
   AIRDROP:
     title: An airdrop that preserves recipient privacy
