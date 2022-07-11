@@ -1424,7 +1424,7 @@ half of the hash digest, h[32],...,h[63].<a href="#section-4.2-3.1" class="pilcr
           <li id="section-4.2-3.2">Hash the 32-byte private key bk using SHA-512, storing the digest in a 64-octet
 large buffer, denoted b. Interpret the lower 32 bytes buffer as a little-endian
 integer, forming a secret scalar s2. Note that this explicitly skips the buffer
-pruning step in <span>[<a href="#RFC8032" class="xref">RFC8032</a>], <a href="https://rfc-editor.org/rfc/rfc8032#section-5.1" class="relref">Section 5.1</a></span>. Let prefix2 denote the second half of
+pruning step in <span>[<a href="#RFC8032" class="xref">RFC8032</a>], <a href="https://rfc-editor.org/rfc/rfc8032#section-5.1.5" class="relref">Section 5.1.5</a></span>. Let prefix2 denote the second half of
 the hash digest, b[32],...,b[63].<a href="#section-4.2-3.2" class="pilcrow">¶</a>
 </li>
           <li id="section-4.2-3.3">Compute the signing scalar s = s1 * s2 (mod L) and the signing public key A = ScalarMult(G, s).<a href="#section-4.2-3.3" class="pilcrow">¶</a>
