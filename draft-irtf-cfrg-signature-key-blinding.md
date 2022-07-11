@@ -277,7 +277,7 @@ BlindPublicKey and UnblindPublicKey for Ed448ph and Ed448 are implemented just a
 routines are for Ed25519ph, Ed25519ctx, and Ed25519, except that SHAKE256 is used instead
 of SHA-512 for hashing the secret blind to a 114-byte buffer (and using the lower 57-bytes for
 the secret), and the order of the edwards448 group L is as defined in {{RFC8032, Section 5.2.1}}.
-Note that this process explicitly skips the buffer pruning step in {{RFC8032, Section 5.2}}.
+Note that this process explicitly skips the buffer pruning step in {{RFC8032, Section 5.2.5}}.
 
 ## BlindKeySign
 
