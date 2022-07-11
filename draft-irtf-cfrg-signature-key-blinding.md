@@ -140,16 +140,7 @@ One way to accomplish this is by signing with a private key which is a function 
 long-term private signing key and a freshly chosen blinding key, and similarly by producing
 a public verification key which is a function of the long-term public verification key
 and same blinding key. A signature scheme with this functionality is referred to as signing
-with key blinding. A signature scheme with key blinding extends a basic digital scheme with
-four new functions:
-
-- BlindKeyGen: A function for generating a private blind key.
-- BlindPublicKey(pkS, bk): Blind the public verification key `pkS` using the private
-  blinding key `bk`, yielding a blinded public key `pkR`.
-- UnblindPublicKey(pkR, bk): Unblind the public verification key `pkR` using the private
-  blinding key `bk`.
-- BlindKeySign(skS, bk, msg): Sign a message `msg` using the private signing key `skS`
-  with the private blind key `bk`.
+with key blinding.
 
 A signature scheme with key blinding aims to achieve unforgeability and unlinkability.
 Informally, unforgeability means that one cannot produce a valid (message, signature)
@@ -197,9 +188,10 @@ by the \* operator. For example, the product of two scalars `x` and `y` is denot
 At a high level, a signature scheme with key blinding allows signers to blind their
 private signing key such that any signature produced with a private signing key and blinding
 key is independent of the private signing key. Similar to the signing key, the blinding key
-is also a private key that remains secret. For example, the blind is a 32-byte or 57-byte
-random seed for Ed25519 or Ed448 variants, respectively, whereas the blind for ECDSA over P-256 is
-a random scalar in the P-256 group. Key blinding introduces four new functionalities for the signature scheme:
+is also a private key. For example, the blind is a 32-byte or 57-byte random seed for Ed25519
+or Ed448 variants, respectively, whereas the blind for ECDSA over P-256 is a random value in
+the scalar field for the P-256 elliptic curve group. Key blinding introduces four new
+functionalities for the signature scheme:
 
 - BlindKeyGen: A function for generating a private blind key.
 - BlindPublicKey(pkS, bk): Blind the public verification key `pkS` using the private
@@ -265,7 +257,8 @@ More specifically, BlindKeySign(skS, bk, msg) works as follows:
    half of the hash digest, h[32],...,h[63].
 1. Hash the 32-byte private key bk using SHA-512, storing the digest in a 64-octet
    large buffer, denoted b. Interpret the lower 32 bytes buffer as a little-endian
-   integer, forming a secret scalar s2. Let prefix2 denote the second half of
+   integer, forming a secret scalar s2. Note that this explicitly skips the buffer
+   pruning step in {{RFC8032, Section 5.1.5}}. Let prefix2 denote the second half of
    the hash digest, b[32],...,b[63].
 1. Compute the signing scalar s = s1 \* s2 (mod L) and the signing public key A = ScalarMult(G, s).
 1. Compute the signing prefix as concat(prefix1, prefix2).
@@ -284,6 +277,7 @@ BlindPublicKey and UnblindPublicKey for Ed448ph and Ed448 are implemented just a
 routines are for Ed25519ph, Ed25519ctx, and Ed25519, except that SHAKE256 is used instead
 of SHA-512 for hashing the secret blind to a 114-byte buffer (and using the lower 57-bytes for
 the secret), and the order of the edwards448 group L is as defined in {{RFC8032, Section 5.2.1}}.
+Note that this process explicitly skips the buffer pruning step in {{RFC8032, Section 5.2.5}}.
 
 ## BlindKeySign
 
@@ -292,13 +286,16 @@ Ed25519ctx, and Ed25519, except in how the scalars (s1, s2), public keys (A1, A2
 and message strings (prefix1, prefix2) are computed. More specifically,
 BlindKeySign(skS, bk, msg) works as follows:
 
-1. Hash the private key skS, 57 octets, using SHAKE256(skS, 117).  Let h denote the
+1. Hash the private key skS, 57 octets, using SHAKE256(skS, 117). Let h1 denote the
    resulting digest. Construct the secret scalar s1 from the first
-   half of the digest, and the corresponding public key A1, as
-   described in {{RFC8032, Section 5.2.5}}.  Let prefix1 denote the second
-   half of the hash digest, h[57],...,h[113].
-1. Perform the same routine to transform the secret blind bk into a secret
-   scalar s2, public key A2, and prefix2.
+   half of h1, and the corresponding public key A1, as described in
+   {{RFC8032, Section 5.2.5}}. Let prefix1 denote the second half of the
+   hash digest, h1[57],...,h1[113].
+1. Hash the private key bk, 57 octets, using SHAKE256(bk, 117). Let h2 denote the
+   resulting digest. Interpret the lower 57 bytes buffer as a little-endian
+   integer, forming a secret scalar s2. Note that this explicitly skips the buffer
+   pruning step in {{RFC8032, Section 5.2}}. Let prefix2 denote the second half of
+   the hash digest, h2[57],...,h2[113].
 1. Compute the signing scalar s = s1 \* s2 (mod L) and the signing public key A = ScalarMult(A1, s2).
 1. Compute the signing prefix as concat(prefix1, prefix2).
 1. Run the rest of the Sign procedure in {{RFC8032, Section 5.2.6}} from step (2) onwards
@@ -345,7 +342,7 @@ The signature scheme extensions in this document aim to achieve unforgeability
 and unlinkability. Informally, unforgeability means that one cannot produce a
 valid (message, signature) pair for any blinding key without access to the
 private signing key. Similarly, unlinkability means that one cannot distinguish
-between two signatures produced from two separate key signing keys, and two
+between two signatures produced from two independent key signing keys, and two
 signatures produced from the same signing key but with different blinds. Security
 analysis of the extensions in this document with respect to these two properties
 is currently underway.
