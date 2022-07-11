@@ -1338,30 +1338,55 @@ private signing key such that any signature produced with a private signing key 
 key is independent of the private signing key. Similar to the signing key, the blinding key
 is also a private key. For example, the blind is a 32-byte or 57-byte random seed for Ed25519
 or Ed448 variants, respectively, whereas the blind for ECDSA over P-256 is a random value in
-the scalar field for the P-256 elliptic curve group. Key blinding introduces four new
-functionalities for the signature scheme:<a href="#section-3-1" class="pilcrow">¶</a></p>
+the scalar field for the P-256 elliptic curve group.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-3-2">In more detail, consider first the basic digital signature syntax, which is a combination of
+the following functionalities:<a href="#section-3-2" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3-2.1">BlindKeyGen: A function for generating a private blind key.<a href="#section-3-2.1" class="pilcrow">¶</a>
+<li class="normal" id="section-3-3.1">KeyGen: A function for generating a private and public key pair <code>(skS, pkS)</code>.<a href="#section-3-3.1" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="section-3-2.2">BlindPublicKey(pkS, bk): Blind the public verification key <code>pkS</code> using the private
-blinding key <code>bk</code>, yielding a blinded public key <code>pkR</code>.<a href="#section-3-2.2" class="pilcrow">¶</a>
+        <li class="normal" id="section-3-3.2">Sign(skS, msg): A function for signing a message <code>msg</code> with the given private key <code>skS</code>,
+producing a signature <code>sig</code>.<a href="#section-3-3.2" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="section-3-2.3">UnblindPublicKey(pkR, bk): Unblind the public verification key <code>pkR</code> using the private
-blinding key <code>bk</code>.<a href="#section-3-2.3" class="pilcrow">¶</a>
-</li>
-        <li class="normal" id="section-3-2.4">BlindKeySign(skS, bk, msg): Sign a message <code>msg</code> using the private signing key <code>skS</code>
-with the private blind key <code>bk</code>.<a href="#section-3-2.4" class="pilcrow">¶</a>
+        <li class="normal" id="section-3-3.3">Verify(pkS, msg, sig): A function for verifying a signature <code>sig</code> over message <code>msg</code>
+against the public key <code>pkS</code>, which returns 1 upon success and 0 otherwise.<a href="#section-3-3.3" class="pilcrow">¶</a>
 </li>
       </ul>
-<p id="section-3-3">For a given <code>bk</code> produced from BlindKeyGen, correctness requires the following equivalence to hold:<a href="#section-3-3" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3-4">
+<p id="section-3-4">Key blinding introduces three new functionalities for the signature scheme syntax:<a href="#section-3-4" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3-5.1">BlindKeyGen: A function for generating a private blind key.<a href="#section-3-5.1" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-3-5.2">BlindPublicKey(pkS, bk): Blind the public verification key <code>pkS</code> using the private
+blinding key <code>bk</code>, yielding a blinded public key <code>pkR</code>.<a href="#section-3-5.2" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-3-5.3">BlindKeySign(skS, bk, msg): Sign a message <code>msg</code> using the private signing key <code>skS</code>
+with the private blind key <code>bk</code>.<a href="#section-3-5.3" class="pilcrow">¶</a>
+</li>
+      </ul>
+<p id="section-3-6">For a given <code>bk</code> produced from BlindKeyGen, key pair <code>(skS, pkS)</code> produced from
+KeyGen, and message <code>msg</code>, correctness requires the following equivalence to hold
+with overwhelming probability:<a href="#section-3-6" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3-7">
+<pre>
+Verify(BlindKeySign(skS, bk), msg, BlindPublicKey(pkS, bk)) = 1
+</pre><a href="#section-3-7" class="pilcrow">¶</a>
+</div>
+<p id="section-3-8">Security requires that signatures produced using BlindKeySign are unlinkable from
+signatures produced using the standard signature generation function with the same
+private key.<a href="#section-3-8" class="pilcrow">¶</a></p>
+<p id="section-3-9">A signature scheme with key blinding may also optionally support the ability to unblind
+public keys. This is represented with the following function.<a href="#section-3-9" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3-10.1">UnblindPublicKey(pkR, bk): Unblind the public verification key <code>pkR</code> using the private
+blinding key <code>bk</code>.<a href="#section-3-10.1" class="pilcrow">¶</a>
+</li>
+      </ul>
+<p id="section-3-11">For a given <code>bk</code> produced from BlindKeyGen and <code>(skS, pkS)</code> produced from KeyGen, correctness
+of this function requires the following equivalence to hold:<a href="#section-3-11" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3-12">
 <pre>
 UnblindPublicKey(BlindPublicKey(pkS, bk), bk) = pkS
-</pre><a href="#section-3-4" class="pilcrow">¶</a>
+</pre><a href="#section-3-12" class="pilcrow">¶</a>
 </div>
-<p id="section-3-5">Security requires that signatures produced using BlindKeySign are unlinkable from
-signatures produced using the standard signature generation function with the same
-private key.<a href="#section-3-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="ed25519ph-ed25519ctx-and-ed25519">
