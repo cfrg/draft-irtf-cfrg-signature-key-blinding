@@ -5,10 +5,10 @@
 WG Working Group                                                F. Denis
 Internet-Draft                                               Fastly Inc.
 Intended status: Informational                                  E. Eaton
-Expires: 23 December 2022                         University of Waterloo
+Expires: 12 January 2023                          University of Waterloo
                                                               C. A. Wood
                                                         Cloudflare, Inc.
-                                                            21 June 2022
+                                                            11 July 2022
 
 
                    Key Blinding for Signature Schemes
@@ -58,7 +58,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 23 December 2022.
+   This Internet-Draft will expire on 12 January 2023.
 
 Copyright Notice
 
@@ -543,9 +543,9 @@ c3226b8d8194fc93df1c7f5facafc96daab7c5a0d840fbd3b9342f2ddad
               Hendrickson, S., Iyengar, J., Pauly, T., Valdez, S., and
               C. A. Wood, "Rate-Limited Token Issuance Protocol", Work
               in Progress, Internet-Draft, draft-privacypass-rate-limit-
-              tokens-02, 2 May 2022,
+              tokens-03, 6 July 2022,
               <https://datatracker.ietf.org/doc/html/draft-privacypass-
-              rate-limit-tokens-02>.
+              rate-limit-tokens-03>.
 
    [TORBLINDING]
               Hopper, N., "Proving Security of Tor’s Hidden Service
@@ -554,8 +554,8 @@ c3226b8d8194fc93df1c7f5facafc96daab7c5a0d840fbd3b9342f2ddad
 
    [TORDIRECTORY]
               "Tor directory protocol, version 3", n.d.,
-              <https://gitweb.torproject.org/torspec.git/tree/dir-
-              spec.txt>.
+              <https://gitweb.torproject.org/torspec.git/tree/rend-spec-
+              v3.txt>.
 
 Acknowledgments
 
