@@ -258,7 +258,7 @@ More specifically, BlindKeySign(skS, bk, msg) works as follows:
 1. Hash the 32-byte private key bk using SHA-512, storing the digest in a 64-octet
    large buffer, denoted b. Interpret the lower 32 bytes buffer as a little-endian
    integer, forming a secret scalar s2. Note that this explicitly skips the buffer
-   pruning step in {{RFC8032, Section 5.1}}. Let prefix2 denote the second half of
+   pruning step in {{RFC8032, Section 5.1.5}}. Let prefix2 denote the second half of
    the hash digest, b[32],...,b[63].
 1. Compute the signing scalar s = s1 \* s2 (mod L) and the signing public key A = ScalarMult(G, s).
 1. Compute the signing prefix as concat(prefix1, prefix2).
