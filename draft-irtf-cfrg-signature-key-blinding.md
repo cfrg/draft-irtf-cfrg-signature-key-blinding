@@ -190,26 +190,49 @@ private signing key such that any signature produced with a private signing key 
 key is independent of the private signing key. Similar to the signing key, the blinding key
 is also a private key. For example, the blind is a 32-byte or 57-byte random seed for Ed25519
 or Ed448 variants, respectively, whereas the blind for ECDSA over P-256 is a random value in
-the scalar field for the P-256 elliptic curve group. Key blinding introduces four new
-functionalities for the signature scheme:
+the scalar field for the P-256 elliptic curve group.
+
+In more detail, consider first the basic digital signature syntax, which is a combination of
+the following functionalities:
+
+- KeyGen: A function for generating a private and public key pair `(skS, pkS)`.
+- Sign(skS, msg): A function for signing a message `msg` with the given private key `skS`,
+  producing a signature `sig`.
+- Verify(pkS, msg, sig): A function for verifying a signature `sig` over message `msg`
+  against the public key `pkS`, which returns 1 upon success and 0 otherwise.
+
+Key blinding introduces three new functionalities for the signature scheme syntax:
 
 - BlindKeyGen: A function for generating a private blind key.
 - BlindPublicKey(pkS, bk): Blind the public verification key `pkS` using the private
   blinding key `bk`, yielding a blinded public key `pkR`.
-- UnblindPublicKey(pkR, bk): Unblind the public verification key `pkR` using the private
-  blinding key `bk`.
 - BlindKeySign(skS, bk, msg): Sign a message `msg` using the private signing key `skS`
   with the private blind key `bk`.
 
-For a given `bk` produced from BlindKeyGen, correctness requires the following equivalence to hold:
+For a given `bk` produced from BlindKeyGen, key pair `(skS, pkS)` produced from
+KeyGen, and message `msg`, correctness requires the following equivalence to hold
+with overwhelming probability:
 
 ~~~
-UnblindPublicKey(BlindPublicKey(pkS, bk), bk) = pkS
+Verify(BlindKeySign(skS, bk), msg, BlindPublicKey(pkS, bk)) = 1
 ~~~
 
 Security requires that signatures produced using BlindKeySign are unlinkable from
 signatures produced using the standard signature generation function with the same
 private key.
+
+A signature scheme with key blinding may also optionally support the ability to unblind
+public keys. This is represented with the following function.
+
+- UnblindPublicKey(pkR, bk): Unblind the public verification key `pkR` using the private
+  blinding key `bk`.
+
+For a given `bk` produced from BlindKeyGen and `(skS, pkS)` produced from KeyGen, correctness
+of this function requires the following equivalence to hold:
+
+~~~
+UnblindPublicKey(BlindPublicKey(pkS, bk), bk) = pkS
+~~~
 
 # Ed25519ph, Ed25519ctx, and Ed25519
 
