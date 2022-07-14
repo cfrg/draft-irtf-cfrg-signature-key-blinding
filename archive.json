@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-07-12T02:25:17.980801+00:00",
+  "timestamp": "2022-07-14T02:24:52.128447+00:00",
   "repo": "cfrg/draft-irtf-cfrg-signature-key-blinding",
   "labels": [
     {
@@ -397,7 +397,7 @@
       "labels": [],
       "body": "Our definition of key-blinding includes the unblind operation such that `Unblind( Blind( pk, bk), bk) = pk`. This suits applications where `bk` is private, but their are applications where this is not the case. Notably, the use of key-blinding in Tor has `bk` being a public value, informed by the daily consensus, and unblinding is impossible, making the blinding process more one-way. \r\n\r\nShould the spec include this option, and discuss that the choice reflects whether the `bk` value is private or not? This would likely also mean that multiple security models are necessary, depending on the configuration used.",
       "createdAt": "2022-04-28T14:31:21Z",
-      "updatedAt": "2022-07-11T14:56:14Z",
+      "updatedAt": "2022-07-12T13:52:37Z",
       "closedAt": null,
       "comments": [
         {
@@ -434,6 +434,20 @@
           "body": "One construction that Ian mentioned on the list was the following:\r\n\r\n```\r\npkS = H(bk, pkR, timestamp) * pkR\r\n```\r\n\r\nThis isn't reversible unless you know all inputs to H. The constructions in the draft currently only hash `bk` into the scalar, and then choose to make that available (or not) for the purposes of inversion: \r\n\r\n```\r\npkS = H(bk) * pkR\r\n```\r\n\r\nWhat if we generalized the construction a bit to accommodate more domain separation?\r\n\r\n```\r\npkS = H(bk, dst) * pkR\r\n```\r\n\r\nOne could then set `dst = pkR`, `dst = timestamp`, `dst = pkR || timestamp`, or whatever else made sense. \r\n\r\n@jedisct1, @tlepoint, @tedeaton, @FredericJacobs: thoughts?",
           "createdAt": "2022-07-11T14:56:14Z",
           "updatedAt": "2022-07-11T14:56:14Z"
+        },
+        {
+          "author": "tedeaton",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Yes, I agree, that seems like the right generalization to me.",
+          "createdAt": "2022-07-12T02:49:32Z",
+          "updatedAt": "2022-07-12T02:49:32Z"
+        },
+        {
+          "author": "tlepoint",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I also agree that this seems like a desirable generalization. Note however that the statement \r\n\r\n> This isn't reversible unless you know all inputs to H. \r\n\r\nis a bit strong. If you know `bk, pkR` but not `timestamp`, you can still reverse it by brute-forcing the value. An argument that would claim irreversibility needs to consider the entropy of the `dst` somehow. ",
+          "createdAt": "2022-07-12T13:52:29Z",
+          "updatedAt": "2022-07-12T13:52:37Z"
         }
       ]
     },
