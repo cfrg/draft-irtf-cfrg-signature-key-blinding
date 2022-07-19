@@ -5,10 +5,12 @@
 WG Working Group                                                F. Denis
 Internet-Draft                                               Fastly Inc.
 Intended status: Informational                                  E. Eaton
-Expires: 12 January 2023                          University of Waterloo
+Expires: 20 January 2023                          University of Waterloo
+                                                              T. Lepoint
+                                                                        
                                                               C. A. Wood
                                                         Cloudflare, Inc.
-                                                            11 July 2022
+                                                            19 July 2022
 
 
                    Key Blinding for Signature Schemes
@@ -58,7 +60,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 12 January 2023.
+   This Internet-Draft will expire on 20 January 2023.
 
 Copyright Notice
 
@@ -596,6 +598,12 @@ Authors' Addresses
    Waterloo
    Canada
    Email: ted@eeaton.ca
+
+
+   Tancrède Lepoint
+   New York,
+   United States of America
+   Email: cfrg@tancre.de
 
 
    Christopher A. Wood
