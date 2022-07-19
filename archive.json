@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-07-14T02:24:52.128447+00:00",
+  "timestamp": "2022-07-19T02:28:36.667971+00:00",
   "repo": "cfrg/draft-irtf-cfrg-signature-key-blinding",
   "labels": [
     {
@@ -1597,6 +1597,32 @@
           "updatedAt": "2022-07-11T18:48:18Z"
         }
       ],
+      "reviews": []
+    },
+    {
+      "number": 37,
+      "id": "PR_kwDOGj2OAM47mLAp",
+      "title": "First cut at bliinding with a context string",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-signature-key-blinding/pull/37",
+      "state": "OPEN",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Closes #30. \r\n\r\nWe still need to do a couple of things before this lands.\r\n\r\n- [ ] Add examples for context strings based on existing applications\r\n- [ ] Update test vectors\r\n\r\ncc @tlepoint, @FredericJacobs",
+      "createdAt": "2022-07-18T19:57:51Z",
+      "updatedAt": "2022-07-18T19:58:46Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-signature-key-blinding",
+      "baseRefName": "main",
+      "baseRefOid": "8163a46489f5e9521df4a2fb5c6718f9648e06cc",
+      "headRepository": "cfrg/draft-irtf-cfrg-signature-key-blinding",
+      "headRefName": "caw/context-blinding",
+      "headRefOid": "ea83d6f04f75db34362c9bd7f7dad209d037a3f8",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
       "reviews": []
     }
   ]
