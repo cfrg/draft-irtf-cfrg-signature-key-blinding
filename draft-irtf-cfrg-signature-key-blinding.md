@@ -36,6 +36,12 @@ author:
     country: Canada
     email: ted@eeaton.ca
  -
+    ins: T. Lepoint
+    name: Tancrède Lepoint
+    city: New York
+    country: United States of America
+    email: cfrg@tancre.de
+ -
     ins: C. A. Wood
     name: Christopher A. Wood
     org: Cloudflare, Inc.
@@ -68,6 +74,7 @@ informative:
       -
         ins: R. Stracovsky
         name: Roy Stracovsky
+
   TORDIRECTORY:
     title: Tor directory protocol, version 3
     target: https://gitweb.torproject.org/torspec.git/tree/rend-spec-v3.txt
