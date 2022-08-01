@@ -234,6 +234,8 @@ value `ctx`, correctness of this function requires the following equivalence to 
 UnblindPublicKey(BlindPublicKey(pkS, bk, ctx), bk, ctx) = pkS
 ~~~
 
+Considerations for choosing context strings are discussed in {{context-considerations}}.
+
 # Ed25519ph, Ed25519ctx, and Ed25519
 
 This section describes implementations of BlindPublicKey, UnblindPublicKey, and BlindKeySign as
@@ -366,6 +368,19 @@ BlindKeySign transforms the signing key skS by the private key bk along with
 context ctx into a new signing key, skR, and then invokes the existing ECDSA
 signing procedure. More specifically, skR = skS \* HashToScalar(blind_ctx) (mod p),
 where blind_ctx = concat(bk, 0x00, ctx).
+
+# Application Considerations {#context-considerations}
+
+Choice of the context string `ctx` is application-specific. For example, in Tor {{TORDIRECTORY}},
+the context string is set to the concatenation of the long-term signer public key and an
+integer epoch. This makes it so that unblinding a blinded public key requires knowledge of
+the long-term public key as well as the blinding key. Similarly, in a rate-limited version
+of Privacy Pass {{RATELIMITED}}, the context is empty, thereby allowing unblinding by anyone
+in possession of the blinding key.
+
+Applications are RECOMMENDED to choose context strings that are distinct from other protocols
+as a way of enforcing domain separation. See {{Section 2.2.5 of !HASH-TO-CURVE=I-D.irtf-cfrg-hash-to-curve}}
+for additional discussion around the construction of suitable domain separation values.
 
 # Security Considerations {#sec-considerations}
 
