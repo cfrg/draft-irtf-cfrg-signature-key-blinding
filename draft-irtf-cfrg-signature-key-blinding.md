@@ -211,41 +211,44 @@ the following functionalities:
 Key blinding introduces three new functionalities for the signature scheme syntax:
 
 - BlindKeyGen: A function for generating a private blind key.
-- BlindPublicKey(pkS, bk): Blind the public verification key `pkS` using the private
-  blinding key `bk`, yielding a blinded public key `pkR`.
-- BlindKeySign(skS, bk, msg): Sign a message `msg` using the private signing key `skS`
-  with the private blind key `bk`.
+- BlindPublicKey(pkS, bk, ctx): Blind the public verification key `pkS` using the private
+  blinding key `bk` and context `ctx`, yielding a blinded public key `pkR`.
+- BlindKeySign(skS, bk, ctx, msg): Sign a message `msg` using the private signing key `skS`
+  with the private blind key `bk` and context `ctx`.
 
 For a given `bk` produced from BlindKeyGen, key pair `(skS, pkS)` produced from
-KeyGen, and message `msg`, correctness requires the following equivalence to hold
-with overwhelming probability:
+KeyGen, a context value `ctx`, and message `msg`, correctness requires the following
+equivalence to hold with overwhelming probability:
 
 ~~~
-Verify(BlindKeySign(skS, bk), msg, BlindPublicKey(pkS, bk)) = 1
+Verify(BlindKeySign(skS, bk, ctx), msg, BlindPublicKey(pkS, bk, ctx)) = 1
 ~~~
 
 Security requires that signatures produced using BlindKeySign are unlinkable from
 signatures produced using the standard signature generation function with the same
 private key.
 
-A signature scheme with key blinding may also optionally support the ability to unblind
-public keys. This is represented with the following function.
+When the context value is known, a signature scheme with key blinding may also support
+the ability to unblind public keys. This is represented with the following function.
 
-- UnblindPublicKey(pkR, bk): Unblind the public verification key `pkR` using the private
-  blinding key `bk`.
+- UnblindPublicKey(pkR, bk, ctx): Unblind the public verification key `pkR` using the private
+  blinding key `bk` and context `ctx`.
 
-For a given `bk` produced from BlindKeyGen and `(skS, pkS)` produced from KeyGen, correctness
-of this function requires the following equivalence to hold:
+For a given `bk` produced from BlindKeyGen, `(skS, pkS)` produced from KeyGen, and context
+value `ctx`, correctness of this function requires the following equivalence to hold:
 
 ~~~
-UnblindPublicKey(BlindPublicKey(pkS, bk), bk) = pkS
+UnblindPublicKey(BlindPublicKey(pkS, bk, ctx), bk, ctx) = pkS
 ~~~
+
+Considerations for choosing context strings are discussed in {{context-considerations}}.
 
 # Ed25519ph, Ed25519ctx, and Ed25519
 
 This section describes implementations of BlindPublicKey, UnblindPublicKey, and BlindKeySign as
 modifications of routines in {{RFC8032, Section 5.1}}. BlindKeyGen invokes the key generation
-routine specified in {{RFC8032, Section 5.1.5}} and outputs only the private key.
+routine specified in {{RFC8032, Section 5.1.5}} and outputs only the private key. This section
+assumes a context value `ctx` has been configured or otherwise chosen by the application.
 
 ## BlindPublicKey and UnblindPublicKey
 
@@ -255,9 +258,10 @@ the same steps except that it multiplies the target public key by the multiplica
 inverse of the scalar, where the inverse is computed using the order of the group L,
 described in {{RFC8032, Section 5.1}}.
 
-More specifically, BlindPublicKey(pk, bk) works as follows.
+More specifically, BlindPublicKey(pk, bk, ctx) works as follows.
 
-1. Hash the 32-byte private key bk using SHA-512, storing the digest in a 64-octet
+1. Construct the blind_ctx as concat(bk, 0x00, ctx), where bk is a 32-byte octet
+   string, hash the result using SHA-512(blind_ctx), and store the digest in a 64-octet
    large buffer, denoted b. Interpret the lower 32 bytes buffer as a little-endian
    integer, forming a secret scalar s. Note that this explicitly skips the buffer
    pruning step in {{RFC8032, Section 5.1}}.
@@ -265,9 +269,9 @@ More specifically, BlindPublicKey(pk, bk) works as follows.
 1. Perform a scalar multiplication ScalarMult(pk, s), and output the encoding of the
    resulting point as the public key.
 
-UnblindPublicKey(pkR, bk) works as follows.
+UnblindPublicKey(pkR, bk, ctx) works as follows.
 
-1. Compute the secret scalar s from bk as in BlindPublicKey.
+1. Compute the secret scalar s from bk and ctx as in BlindPublicKey.
 1. Compute the sInv = ModInverse(s, L), where L is as defined in {{RFC8032, Section 5.1}}.
 1. Perform a scalar multiplication ScalarMult(pk, sInv), and output the encoding
    of the resulting point as the public key.
@@ -285,7 +289,8 @@ More specifically, BlindKeySign(skS, bk, msg) works as follows:
    half of the digest, and the corresponding public key A1, as
    described in {{RFC8032, Section 5.1.5}}.  Let prefix1 denote the second
    half of the hash digest, h[32],...,h[63].
-1. Hash the 32-byte private key bk using SHA-512, storing the digest in a 64-octet
+1. Construct the blind_ctx as concat(bk, 0x00, ctx), where bk is a 32-byte octet
+   string, hash the result using SHA-512(blind_ctx), and store the digest in a 64-octet
    large buffer, denoted b. Interpret the lower 32 bytes buffer as a little-endian
    integer, forming a secret scalar s2. Note that this explicitly skips the buffer
    pruning step in {{RFC8032, Section 5.1.5}}. Let prefix2 denote the second half of
@@ -299,15 +304,17 @@ More specifically, BlindKeySign(skS, bk, msg) works as follows:
 
 This section describes implementations of BlindPublicKey, UnblindPublicKey, and BlindKeySign as
 modifications of routines in {{RFC8032, Section 5.2}}. BlindKeyGen invokes the key generation
-routine specified in {{RFC8032, Section 5.1.5}} and outputs only the private key.
+routine specified in {{RFC8032, Section 5.1.5}} and outputs only the private key. This section
+assumes a context value `ctx` has been configured or otherwise chosen by the application.
 
 ## BlindPublicKey and UnblindPublicKey
 
 BlindPublicKey and UnblindPublicKey for Ed448ph and Ed448 are implemented just as these
 routines are for Ed25519ph, Ed25519ctx, and Ed25519, except that SHAKE256 is used instead
-of SHA-512 for hashing the secret blind to a 114-byte buffer (and using the lower 57-bytes for
-the secret), and the order of the edwards448 group L is as defined in {{RFC8032, Section 5.2.1}}.
-Note that this process explicitly skips the buffer pruning step in {{RFC8032, Section 5.2.5}}.
+of SHA-512 for hashing the secret blind context, i.e., the concatenation of blind key bk
+and context ctx, to a 114-byte buffer (and using the lower 57-bytes for the secret), and
+the order of the edwards448 group L is as defined in {{RFC8032, Section 5.2.1}}. Note that
+this process explicitly skips the buffer pruning step in {{RFC8032, Section 5.2.5}}.
 
 ## BlindKeySign
 
@@ -321,8 +328,9 @@ BlindKeySign(skS, bk, msg) works as follows:
    half of h1, and the corresponding public key A1, as described in
    {{RFC8032, Section 5.2.5}}. Let prefix1 denote the second half of the
    hash digest, h1[57],...,h1[113].
-1. Hash the private key bk, 57 octets, using SHAKE256(bk, 117). Let h2 denote the
-   resulting digest. Interpret the lower 57 bytes buffer as a little-endian
+1. Construct the blind_ctx as concat(bk, 0x00, ctx), where bk is a 57-byte octet
+   string, hash the result using SHAKE256(blind_ctx, 117), and store the digest in a 117-octet
+   digest, denoted h2. Interpret the lower 57 bytes buffer as a little-endian
    integer, forming a secret scalar s2. Note that this explicitly skips the buffer
    pruning step in {{RFC8032, Section 5.2}}. Let prefix2 denote the second half of
    the hash digest, h2[57],...,h2[113].
@@ -341,6 +349,8 @@ key generation routine specified in {{ECDSA}} and outputs only the private key. 
 below, let p be the order of the corresponding elliptic curve group used for ECDSA. For example, for
 P-256, p = 115792089210356248762697446949407573529996955224135760342422259061068512044369.
 
+This section assumes a context value `ctx` has been configured or otherwise chosen by the application.
+
 ## BlindPublicKey and UnblindPublicKey
 
 BlindPublicKey multiplies the public key pkS by an augmented private key bk yielding a
@@ -351,18 +361,33 @@ with DST set to "ECDSA Key Blind", L set to the value corresponding to the targe
 e.g., 48 for P-256 and 72 for P-384, expand_message_xmd with a hash function matching
 that used for the corresponding digital signature algorithm, and prime modulus equal to
 the order p of the corresponding curve. Letting HashToScalar denote this augmentation
-process, BlindPublicKey and UnblindPublicKey are then implemented as follows:
+process, and blind_ctx = concat(bk, 0x00, ctx), BlindPublicKey and UnblindPublicKey are
+then implemented as follows:
 
 ~~~
-BlindPublicKey(pk, bk)   = ScalarMult(pk, HashToScalar(bk))
-UnblindPublicKey(pkR, bk) = ScalarMult(pkR, ModInverse(HashToScalar(bk), p))
+BlindPublicKey(pk, bk, ctx)   = ScalarMult(pk, HashToScalar(blind_ctx))
+UnblindPublicKey(pkR, bk, ctx) = ScalarMult(pkR, ModInverse(HashToScalar(blind_ctx), p))
 ~~~
 
 ## BlindKeySign
 
-BlindKeySign transforms the signing key skS by the private key bk into a new
-signing key, skR, and then invokes the existing ECDSA signing procedure. More
-specifically, skR = skS \* HashToScalar(bk) (mod p).
+BlindKeySign transforms the signing key skS by the private key bk along with
+context ctx into a new signing key, skR, and then invokes the existing ECDSA
+signing procedure. More specifically, skR = skS \* HashToScalar(blind_ctx) (mod p),
+where blind_ctx = concat(bk, 0x00, ctx).
+
+# Application Considerations {#context-considerations}
+
+Choice of the context string `ctx` is application-specific. For example, in Tor {{TORDIRECTORY}},
+the context string is set to the concatenation of the long-term signer public key and an
+integer epoch. This makes it so that unblinding a blinded public key requires knowledge of
+the long-term public key as well as the blinding key. Similarly, in a rate-limited version
+of Privacy Pass {{RATELIMITED}}, the context is empty, thereby allowing unblinding by anyone
+in possession of the blinding key.
+
+Applications are RECOMMENDED to choose context strings that are distinct from other protocols
+as a way of enforcing domain separation. See {{Section 2.2.5 of !HASH-TO-CURVE=I-D.irtf-cfrg-hash-to-curve}}
+for additional discussion around the construction of suitable domain separation values.
 
 # Security Considerations {#sec-considerations}
 
@@ -415,25 +440,49 @@ denoted pkR and encoded has a hexadecimal string. Finally, each vector includes
 the message and signature values, each encoded as hexadecimal strings.
 
 ~~~
-// Randomly generated private key and blind seed
-skS: 875532ab039b0a154161c284e19c74afa28d5bf5454e99284bbcffaa71eebf45
-pkS: 3b5983605b277cd44918410eb246bb52d83adfc806ccaa91a60b5b2011bc5973
-bk: c461e8595f0ac41d374f878613206704978115a226f60470ffd566e9e6ae73bf
-pkR: e52bbb204e72a816854ac82c7e244e13a8fcc3217cfdeb90c8a5a927e741a20f
+// Randomly generated private key and blind seed, empty context
+skS: 63ac6c411cf72d9006b853db3458940fb1b5d690747abd8b1ccb73f0f5269837
+pkS: 963d13e180030cfcf1891c10d3143b5cd3613780b943dfd9100f7d9bb31af2cd
+pkR: 4ed06c22a58ef8e65d280f0970fd02f839083026b6116b0d65c2cbf3f519368c
 message: 68656c6c6f20776f726c64
-signature: f35d2027f14250c07b3b353359362ec31e13076a547c749a981d0135fce06
-7a361ad6522849e6ed9f61d93b0f76428129b9eb3f9c3cd0bfa1bc2a086a5eebd09
+context:
+signature: 3a2ada316be0e7162ae8cdcc6b35dda7ab4159296fd1b060cc809fdb55e56
+23cf0af5550140eaff2bb99516986d270bbb6737e5c8661731e016923e998315e04
 ~~~
 
 ~~~
-// Randomly generated private key seed and zero blind seed
-skS: f3348942e77a83943a6330d372e7531bb52203c2163a728038388ea110d1c871
-pkS: ada4f42be4b8fa93ddc7b41ca434239a940b4b18d314fe04d5be0b317a861ddf
-bk: 0000000000000000000000000000000000000000000000000000000000000000
-pkR: 7b8dcabbdfce4f8ad57f38f014abc4a51ac051a4b77b345da45ee2725d9327d0
+// Randomly generated private key seed and zero blind seed, empty context
+skS: 056f2668895cda2f89e8ddc3138910979982ab3135ee22d358e80c85cec4cdc7
+pkS: e211f518d9361dc1e39ca572a10e45c7372ac990465b17d62fde42247c367fb7
+pkR: d73a40d8806f08936ef0c425482d2fdf6424242f008854db74c6230eeb44e19c
 message: 68656c6c6f20776f726c64
-signature: b38b9d67cb4182e91a86b2eb0591e04c10471c1866202dd1b3b076fb86a61
-c7c4ab5d626e5c5d547a584ca85d44839c13f6c976ece0dcba53d82601e6737a400
+context:
+signature: 89d007f1215595b14612217ace71d3ce28688ebf55e5151e97861eceb5b60
+6a32d37c15afc31a9ad7ad7101d15b9228edfe9b9b25ddd42f442475f4317f47405
+~~~
+
+~~~
+// Randomly generated private key and blind seed, non-empty context
+skS: d9fecb86876468c4c244e567662b4ad061c795ad03cbfdcf95fd67d1cba836d3
+pkS: d018ed0a1c47f8d530c58afc30bcf141c0d4766429fd53a1b69287867e169827
+pkR: cfd1458e1f81ba8c59446180cea170f5f2ecd721d68d02c625449c8ce4a8ab28
+message: 68656c6c6f20776f726c64
+context:
+2b79c03dd60967c954d3263ac32834692d6938c75fbc9a089ec855ca3a15ad40
+signature: 27afdabf12ebc768863df1ee10db0408362132b56fe7a7fa84cc8b191200d
+8cd8d8cd39f3698798f1a7e1a89c477699e2450c65edfbf65bf354ae7de45aa6e0e
+~~~
+
+~~~
+// Randomly generated private key seed and zero blind seed, non-empty context
+skS: d5c4c2f3fc43b8cceb6083b1db97c4dd0b9fca0773b14ed73066ad64d7d276df
+pkS: 8552d8d4ffe3c7f94ee0cdc1e52598de3425439ed6161f8037bcce99d84c7953
+pkR: aa148c1e6ceb8557aa89d85fb8d71e24cd4d0bc958f6526f3336e357679b77df
+message: 68656c6c6f20776f726c64
+context:
+a9df0f21630248d1753e4a21ee2edcaa78609386134548a22696dd409cf1c2ac
+signature: fe138ac61c020db62bfcdf70d181a4c6ee7d8015d4d577e55868bd86676bd
+ecccea8db0da501e877ab58ab17fe043979eec7e467c68a1e690932dd5552ae4705
 ~~~
 
 ## ECDSA(P-384, SHA-384) Test Vectors
@@ -448,19 +497,38 @@ as a hexadecimal string, and the signature value is serialized as the
 concatenation of scalars (r, s) and encoded as a hexadecimal string.
 
 ~~~
-// Randomly generated signing and blind private keys
-skS: 0e1e4fcc2726e36c5a24be3d30dc6f52d61e6614f5c57a1ec7b829d8adb7c85f456
-c30c652d9cd1653cef4ce4da9008d
-pkS: 03c66e61f5e12c35568928d9a0ffbc145ee9679e17afea3fba899ed3f878f9e82a8
-859ce784d9ff43fea2bc8e726468dd3
-bk: 865b6b7fc146d0f488854932c93128c3ab3572b7137c4682cb28a2d55f7598df467
-e890984a687b22c8bc60a986f6a28
-pkR: 038defb9b698b91ee7f3985e54b57b519be237ced2f6f79408558ff7485bf2d60a2
-4dc986b9145e422ea765b56de7c5956
+// Randomly generated signing and blind private keys, empty context
+skS: cc09c66952c416956f78b73c8fd984f8bd69fa894fb08dd197be0a97dae1d781083
+d8bcc4cca0aa906450c6b5e1b5cf3
+pkS: 02091444dfde7de0623d8b94ba9ef8010756baf982b12db755d130c16fda97c4f95
+6dd0f7b346fc3ef7245dfc76e1cacc4
+bk: e49afba496c06344afa224480f823457863ac71e5f67c359ca1fbc42411754cc893c
+c0bc10ff6d95363ab2e1c4154092
+pkR: 03ae6ef617427a15bdc9dcba8a482f5f25aa45af6916edc8b51254304f393ee18b7
+2fab54aae380426984ebfb7ef4045c8
 message: 68656c6c6f20776f726c64
-signature: 5e5643a8c22b274ec5f776e63ed23ff182c8c87642e35bd5a5f7455ae1a19
-a9956795df33e2f8b30150904ef6ba5e7ee4f18cef026f594b4d21fc157552ce3cf6d7ef
-c3226b8d8194fc93df1c7f5facafc96daab7c5a0d840fbd3b9342f2ddad
+context:
+signature: 6e31a96d811b0a271640e5dead87c8a5a0e9aaece4145464818bfcaa0ee9e
+ea09c9178a59a4003800ae0a88cf2d3ae2811303f0acb0f77ce14ed8a2ad82d612af0ebe
+b87c23047b7129ffcae4c2dd0f187e671e2e05a85972cd7e53de1529c45
+~~~
+
+~~~
+// Randomly generated signing and blind private keys, non-empty context
+skS: 90792d09edfc4afcb3a770b1d8582ed4bf3f3b3f751b90e5c8ac8ce1671c60475ee
+0d390d0505e4b5bfb678ba9e665c9
+pkS: 0275741cc339a46fc7ce24a0553eb3c2f2e83cf50dbb856ff3ae445d3a511f42749
+c2f8510b0de9ac1b5deca9161ded522
+bk: 9ff66325364badbef3d29bf4c955dbbe2be8cdaa2cc777f8badc066e171fb7b2df53
+349278028da700eeabb745c045ef
+pkR: 03782eed6bd50a9554989998850f88d91279ee865153d4be922488df39d614588df
+94c70ed3494a7fcbd3fc057ea6ccf29
+message: 68656c6c6f20776f726c64
+context:
+ff47734c8ccb40a369fdd2bdc34749e1d06feee27170b6452048594365e1c853
+signature: fdc8e03668cbe9ed0146d0e2fbdcc5d494860f8017217c5044a0ff773af72
+205eb4a20ffa5bbc9076cd5a43fd99d9b42a79a483a6be3a1b9f85b3180fd0e6c371ef06
+6e2557ea5cf752eecc1f2a0ff67777eb01604039a92fe3d48d6991ebdc6
 ~~~
 
 --- back
