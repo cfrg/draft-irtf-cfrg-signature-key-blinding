@@ -441,6 +441,7 @@ the message and signature values, each encoded as hexadecimal strings.
 
 ~~~
 // Randomly generated private key and blind seed, empty context
+
 skS: d142b3b1d532b0a516353a0746a6d43a86cee8efaf6b14ae85c2199072f47d93
 pkS: cd875d3f46a8e8742cf4a6a9f9645d4153a394a5a0a8028c9041cd455d093cd5
 bk: bb58c768d9b16571f553efd48207e64391e16439b79fe9409e70b38040c81302
@@ -453,6 +454,7 @@ signature: 5458111c708ce05cb0a1608b08dc649937dc22cf1da045eb866f2face50be
 
 ~~~
 // Randomly generated private key seed and zero blind seed, empty context
+
 skS: aa69e9cb50abf39b05ebc823242c4fd13ccadd0dadc1b45f6fcbf7be4f30db5d
 pkS: 5c9a9e271f204c931646aa079e2e66f0783ab3d29946eff37bd3b569e9c8e009
 bk: 0000000000000000000000000000000000000000000000000000000000000000
@@ -465,6 +467,7 @@ signature: 4e9f3ad2b14cf2f9bbf4b88a8832358a568bd69368b471dfabac594e8a8b3
 
 ~~~
 // Randomly generated private key and blind seed, non-empty context
+
 skS: d1e5a0f806eb3c491566cef6d2d195e6bbf0a54c9de0e291a7ced050c63ea91c
 pkS: 8b37c949d39cddf4d2a0fc0da781ea7f85c7bfbdfeb94a3c9ecb5e8a3c24d65f
 bk: 05b235297dff87c492835d562c6e03c0f36b9c306f2dcb3b5038c2744d4e8a70
@@ -478,6 +481,7 @@ bb508f4a5007e3c96be6402074ec843d40358a281ff969c66c1724016208650dd09
 
 ~~~
 // Randomly generated private key seed and zero blind seed, non-empty context
+
 skS: 89e3e3acef6a6c2d9b7c062199bf996f9ae96b662c73e2b445636f9f22d5012e
 pkS: 3f667a2305a8baf328a1d8e9ed726f278229607d28fb32d9933da7379947ac44
 bk: 0000000000000000000000000000000000000000000000000000000000000000
@@ -502,6 +506,7 @@ concatenation of scalars (r, s) and encoded as a hexadecimal string.
 
 ~~~
 // Randomly generated signing and blind private keys, empty context
+
 skS: fcc8217ec4c89862d069a6679026c8042a74a513ba5b4a63da58488643132afaf35
 9c3645dcc99c11862d9606370b9b7
 pkS: 02582e4108018f9657f8bb55192838ff057442c8f7dc265f195dc1e4aa2cff2ec10
@@ -519,6 +524,7 @@ a0993591b34e84f954149a478408abc685cb88ca32e482ffb9ea2f377ac949cb37468f18
 
 ~~~
 // Randomly generated signing and blind private keys, non-empty context
+
 skS: 5f9ed9f16ac74cb510689321cbd6a0a9602f50a96cb17ff479ec46fff130afcd9fe
 d3766c6d98fe4b4f1c2fa275f58ed
 pkS: 03e690b68b39c0bfb0be6a7f7f0ab49a930437b427dbf588c7acbf3fc8e3e221c83
