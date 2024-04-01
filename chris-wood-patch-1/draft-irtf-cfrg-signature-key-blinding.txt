@@ -5,12 +5,12 @@
 WG Working Group                                                F. Denis
 Internet-Draft                                               Fastly Inc.
 Intended status: Informational                                  E. Eaton
-Expires: 25 July 2024                             University of Waterloo
+Expires: 3 October 2024                           University of Waterloo
                                                               T. Lepoint
                                                                         
                                                               C. A. Wood
                                                         Cloudflare, Inc.
-                                                         22 January 2024
+                                                            1 April 2024
 
 
                    Key Blinding for Signature Schemes
@@ -61,7 +61,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 25 July 2024.
+   This Internet-Draft will expire on 3 October 2024.
 
 Copyright Notice
 
@@ -460,28 +460,31 @@ UnblindPublicKey(pkR, bk, ctx) = ScalarMult(pkR, ModInverse(HashToScalar(blind_c
    signatures produced from two independent key signing keys, and two
    signatures produced from the same signing key but with different
    blinds.  Security analysis of the extensions in this document with
-   respect to these two properties is currently underway.
+   respect to these two properties is currently underway.  See [CGHKS23]
+   for more detailed discussion of signature extensions with these
+   properties.
 
    Preliminary analysis has been done for a variant of these extensions
    used for identity key blinding routine used in Tor's Hidden Service
-   feature [TORBLINDING].  For EdDSA, further analysis is needed to
-   ensure this is compliant with the signature algorithm described in
-   [RFC8032].
+   feature [TORBLINDING].  Further analysis exists in [ELW23], which
+   demonstrates that the extensions in this specification for EdDSA and
+   ECDSA both achieve the desired security properties.
 
-   The constructions in this document assume that both the signing and
-   blinding keys are private, and, as such, not controlled by an
-   attacker.  [MSMHI15] demonstrate that ECDSA with attacker-controlled
-   multiplicative blinding for producing related keys can be abused to
-   produce forgeries.  In particular, if an attacker can control the
-   private blinding key used in BlindKeySign, they can construct a
-   forgery over a different message that validates under a different
-   public key.  One mitigation to this problem is to change BlindKeySign
-   such that the signature is computed over the input message as well as
-   the blind public key.  However, this would require verifiers to treat
-   both the blind public key and message as input to their verification
-   interface.  The construction in Section 6 does not require this
-   change.  However, further analysis is needed to determine whether or
-   not this construction is safe.
+   The constructions in this document, as well as the analysis in
+   [ELW23], assume that both the signing and blinding keys are private,
+   and, as such, not controlled by an attacker.  [MSMHI15] demonstrate
+   that ECDSA with attacker-controlled multiplicative blinding for
+   producing related keys can be abused to produce forgeries.  In
+   particular, if an attacker can control the private blinding key used
+   in BlindKeySign, they can construct a forgery over a different
+   message that validates under a different public key.  One mitigation
+   to this problem is to change BlindKeySign such that the signature is
+   computed over the input message as well as the blind public key.
+   However, this would require verifiers to treat both the blind public
+   key and message as input to their verification interface.  The
+   construction in Section 6 does not require this change.  However,
+   further analysis is needed to determine whether or not this
+   construction is safe.
 
 9.  IANA Considerations
 
@@ -495,14 +498,16 @@ UnblindPublicKey(pkR, bk, ctx) = ScalarMult(pkR, ModInverse(HashToScalar(blind_c
 10.1.  Ed25519 Test Vectors
 
    This section contains test vectors for Ed25519 as described in
-   [RFC8032].  Each test vector lists the private key and blind seeds,
-   denoted skS and bk and encoded as hexadecimal strings, along with the
-   public key pkS corresponding to skS encoded has hexadecimal strings
-   according to [RFC8032], Section 5.1.2.  Each test vector also
-   includes the blinded public key pkR computed from skS and bk, denoted
-   pkR and encoded has a hexadecimal string.  Finally, each vector
-   includes the message and signature values, each encoded as
-   hexadecimal strings.
+   [RFC8032].  Each test vector lists the serialized signing key (skS),
+   blind key (bk), and public key (pkS) encoded has hexadecimal strings;
+   skS and bk are serialized as little-endian 32-byte encoding of the
+   scalar value with the top three bits set to zero, whereas pkS is
+   serialized as described in Section 5.1.2 of [RFC8032].  Each test
+   vector also includes the blinded public key (pkR) computed from skS
+   and bk, serialized similarly to pkS and encoded as a hexadecimal
+   string.  Finally, each vector includes the message and signature
+   values, each encoded as hexadecimal strings.  The signature is
+   encoded as specified in Section 5.1.6 of [RFC8032].
 
 // Randomly generated private key and blind seed, empty context
 
@@ -553,14 +558,18 @@ signature: ce305a0f40a3270a84d2d9403617cdb89b7b4edf779b4de27f9acaadf1716
 10.2.  ECDSA(P-384, SHA-384) Test Vectors
 
    This section contains test vectors for ECDSA with P-384 and SHA-384,
-   as described in [ECDSA].  Each test vector lists the signing and
-   blinding keys, denoted skS and bk, each serialized as a big-endian
-   integers and encoded as hexadecimal strings.  Each test vector also
-   blinded public key pkR, encoded as compressed elliptic curve points
-   according to [ECDSA].  Finally, each vector lists message and
-   signature values, where the message is encoded as a hexadecimal
-   string, and the signature value is serialized as the concatenation of
-   scalars (r, s) and encoded as a hexadecimal string.
+   as described in [ECDSA].  Each test vector lists the serialized
+   signing key (skS), blind key (bk), and public key (pkS) encoded has
+   hexadecimal strings; skS and bk are serialized using the Field-
+   Element-to-Octet-String conversion according to [SEC1], whereas pkS
+   is serialized using the compressed Elliptic-Curve-Point-to-Octet-
+   String method according to [SEC1].  Each test vector also includes
+   the blinded public key (pkR) computed from skS and bk, serialized
+   similarly to pkS and encoded as a hexadecimal string.  Finally, each
+   vector includes the message and signature values, each encoded as
+   hexadecimal strings.  The signature value is serialized as the
+   concatenation of scalars (r, s), each serialized as skS and bk, and
+   encoded as a hexadecimal string.
 
 // Randomly generated signing and blind private keys, empty context
 
@@ -631,6 +640,14 @@ debca8af590ebb0fd7f1dd58a51a63aa45e5991fda32da0e7e9bb56b9374be6fed60c672
               airdrop that preserves recipient privacy", n.d.,
               <https://eprint.iacr.org/2020/676.pdf>.
 
+   [CGHKS23]  Celi, S., Griffy, S., Hanzlik, L., Perez Kempner, O., and
+              D. Slamanig, "SoK: Signatures With Randomizable Keys",
+              <https://eprint.iacr.org/2023/1524>.
+
+   [ELW23]    Eaton, E., Lepoint, T., and C. A. Wood, "Security Analysis
+              of Signature Schemes with Key Blinding",
+              <https://eprint.iacr.org/2023/380>.
+
    [ESS21]    Eaton, E., Stebila, D., and R. Stracovsky, "Post-Quantum
               Key-Blinding for Authentication in Anonymity Networks",
               2021, <https://eprint.iacr.org/2021/963>.
@@ -658,6 +675,10 @@ debca8af590ebb0fd7f1dd58a51a63aa45e5991fda32da0e7e9bb56b9374be6fed60c672
               <https://datatracker.ietf.org/doc/html/draft-privacypass-
               rate-limit-tokens-03>.
 
+   [SEC1]     Standards for Efficient Cryptography Group (SECG), "SEC 1:
+              Elliptic Curve Cryptography",
+              <https://www.secg.org/sec1-v2.pdf>.
+
    [TORBLINDING]
               Hopper, N., "Proving Security of Tor’s Hidden Service
               Identity Blinding Protocol", 2013,
@@ -670,8 +691,9 @@ debca8af590ebb0fd7f1dd58a51a63aa45e5991fda32da0e7e9bb56b9374be6fed60c672
 
 Acknowledgments
 
-   The authors would like to thank Dennis Jackson for helpful
-   discussions that informed the development of this draft.
+   The authors would like to thank Dennis Jackson and Cathie Yun for
+   helpful discussions and input that informed and improved the
+   development of this draft.
 
 Authors' Addresses
 
