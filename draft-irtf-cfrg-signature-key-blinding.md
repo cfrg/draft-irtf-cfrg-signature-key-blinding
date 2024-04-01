@@ -60,6 +60,42 @@ normative:
       org: American National Standards Institute
 
 informative:
+  CGHKS23:
+    title: "SoK: Signatures With Randomizable Keys"
+    target: https://eprint.iacr.org/2023/1524
+    date: false
+    author:
+      -
+        ins: S. Celi
+        org: Brave Software
+      -
+        ins: S. Griffy
+        org: Brown University
+      -
+        ins: L. Hanzlik
+        org: CISPA Helmholtz Center for Information Security
+      -
+        ins: O. Perez Kempner
+        org: NTT Social Informatics Laboratories
+      -
+        ins: D. Slamanig
+        org: AIT Austrian Institute of Technology
+
+  ELW23:
+    title: Security Analysis of Signature Schemes with Key Blinding
+    target: https://eprint.iacr.org/2023/380
+    date: false
+    author:
+      -
+        ins: E. Eaton
+        org: National Research Council Canada
+      -
+        ins: T. Lepoint
+        org: Amazon Web Services
+      -
+        ins: C. A. Wood
+        org: Cloudflare, Inc.
+        
   ESS21:
     title: Post-Quantum Key-Blinding for Authentication in Anonymity Networks
     target: https://eprint.iacr.org/2021/963
@@ -104,6 +140,14 @@ informative:
       -
         ins: N. Hopper
         name: Nicholas Hopper
+
+  SEC1:
+    title: "SEC 1: Elliptic Curve Cryptography"
+    target: https://www.secg.org/sec1-v2.pdf
+    date: false
+    author:
+      -
+        ins: Standards for Efficient Cryptography Group (SECG)
 
 
 --- abstract
@@ -400,15 +444,16 @@ private signing key. Similarly, unlinkability means that one cannot distinguish
 between two signatures produced from two independent key signing keys, and two
 signatures produced from the same signing key but with different blinds. Security
 analysis of the extensions in this document with respect to these two properties
-is currently underway.
+is currently underway. See {{CGHKS23}} for more detailed discussion of signature
+extensions with these properties.
 
 Preliminary analysis has been done for a variant of these extensions used for
 identity key blinding routine used in Tor's Hidden Service feature {{TORBLINDING}}.
-For EdDSA, further analysis is needed to ensure this is compliant with the signature
-algorithm described in {{RFC8032}}.
+Further analysis exists in {{ELW23}}, which demonstrates that the extensions in this
+specification for EdDSA and ECDSA both achieve the desired security properties.
 
-The constructions in this document assume that both the signing and blinding keys
-are private, and, as such, not controlled by an attacker.
+The constructions in this document, as well as the analysis in {{ELW23}}, assume that
+both the signing and blinding keys are private, and, as such, not controlled by an attacker.
 {{MSMHI15}} demonstrate that ECDSA with attacker-controlled multiplicative blinding
 for producing related keys can be abused to produce forgeries. In particular,
 if an attacker can control the private blinding key used in BlindKeySign, they
@@ -432,12 +477,14 @@ covered in this document.
 ## Ed25519 Test Vectors
 
 This section contains test vectors for Ed25519 as described in {{RFC8032}}.
-Each test vector lists the private key and blind seeds, denoted skS and bk
-and encoded as hexadecimal strings, along with the public key pkS corresponding
-to skS encoded has hexadecimal strings according to {{RFC8032, Section 5.1.2}}.
-Each test vector also includes the blinded public key pkR computed from skS and bk,
-denoted pkR and encoded has a hexadecimal string. Finally, each vector includes
-the message and signature values, each encoded as hexadecimal strings.
+Each test vector lists the serialized signing key (skS), blind key (bk), and
+public key (pkS) encoded has hexadecimal strings; skS and bk are serialized
+as little-endian 32-byte encoding of the scalar value with the top three bits
+set to zero, whereas pkS is serialized as described in {{Section 5.1.2 of RFC8032}}.
+Each test vector also includes the blinded public key (pkR) computed from skS and
+bk, serialized similarly to pkS and encoded as a hexadecimal string. Finally, each vector
+includes the message and signature values, each encoded as hexadecimal strings.
+The signature is encoded as specified in {{Section 5.1.6 of RFC8032}}.
 
 ~~~
 // Randomly generated private key and blind seed, empty context
@@ -495,14 +542,16 @@ signature: ce305a0f40a3270a84d2d9403617cdb89b7b4edf779b4de27f9acaadf1716
 
 ## ECDSA(P-384, SHA-384) Test Vectors
 
-This section contains test vectors for ECDSA with P-384 and SHA-384, as
-described in {{ECDSA}}. Each test vector lists the signing and blinding keys,
-denoted skS and bk, each serialized as a big-endian integers and encoded
-as hexadecimal strings. Each test vector also blinded public key pkR,
-encoded as compressed elliptic curve points according to {{ECDSA}}. Finally,
-each vector lists message and signature values, where the message is encoded
-as a hexadecimal string, and the signature value is serialized as the
-concatenation of scalars (r, s) and encoded as a hexadecimal string.
+This section contains test vectors for ECDSA with P-384 and SHA-384, as described in {{ECDSA}}.
+Each test vector lists the serialized signing key (skS), blind key (bk), and
+public key (pkS) encoded has hexadecimal strings; skS and bk are serialized
+using the Field-Element-to-Octet-String conversion according to {{SEC1}}, whereas
+pkS is serialized using the compressed Elliptic-Curve-Point-to-Octet-String
+method according to {{SEC1}}. Each test vector also includes the blinded public key
+(pkR) computed from skS and bk, serialized similarly to pkS and encoded as a hexadecimal
+string. Finally, each vector includes the message and signature values, each encoded
+as hexadecimal strings. The signature value is serialized as the concatenation of
+scalars (r, s), each serialized as skS and bk, and encoded as a hexadecimal string.
 
 ~~~
 // Randomly generated signing and blind private keys, empty context
@@ -546,5 +595,5 @@ debca8af590ebb0fd7f1dd58a51a63aa45e5991fda32da0e7e9bb56b9374be6fed60c672
 # Acknowledgments
 {:numbered="false"}
 
-The authors would like to thank Dennis Jackson for helpful discussions
-that informed the development of this draft.
+The authors would like to thank Dennis Jackson and Cathie Yun for helpful
+discussions and input that informed and improved the development of this draft.
