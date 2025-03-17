@@ -5,12 +5,12 @@
 WG Working Group                                                F. Denis
 Internet-Draft                                               Fastly Inc.
 Intended status: Informational                                  E. Eaton
-Expires: 27 March 2025                            University of Waterloo
+Expires: 18 September 2025                        University of Waterloo
                                                               T. Lepoint
                                                                         
                                                               C. A. Wood
                                                         Cloudflare, Inc.
-                                                       23 September 2024
+                                                           17 March 2025
 
 
                    Key Blinding for Signature Schemes
@@ -61,11 +61,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 27 March 2025.
+   This Internet-Draft will expire on 18 September 2025.
 
 Copyright Notice
 
-   Copyright (c) 2024 IETF Trust and the persons identified as the
+   Copyright (c) 2025 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
