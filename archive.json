@@ -1,0 +1,1887 @@
+{
+  "magic": "E!vIA5L86J2I",
+  "timestamp": "2025-06-10T00:55:48.670748+00:00",
+  "repo": "cfrg/draft-irtf-cfrg-signature-key-blinding",
+  "labels": [
+    {
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+    },
+    {
+      "name": "documentation",
+      "description": "Improvements or additions to documentation",
+      "color": "0075ca"
+    },
+    {
+      "name": "duplicate",
+      "description": "This issue or pull request already exists",
+      "color": "cfd3d7"
+    },
+    {
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+    },
+    {
+      "name": "good first issue",
+      "description": "Good for newcomers",
+      "color": "7057ff"
+    },
+    {
+      "name": "help wanted",
+      "description": "Extra attention is needed",
+      "color": "008672"
+    },
+    {
+      "name": "invalid",
+      "description": "This doesn't seem right",
+      "color": "e4e669"
+    },
+    {
+      "name": "question",
+      "description": "Further information is requested",
+      "color": "d876e3"
+    },
+    {
+      "name": "wontfix",
+      "description": "This will not be worked on",
+      "color": "ffffff"
+    }
+  ],
+  "issues": [
+    {
+      "number": 1,
+      "id": "I_kwDOGj2OAM5B3b_l",
+      "title": "Key derivation",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-signature-key-blinding/issues/1",
+      "state": "CLOSED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Key derivation and blinding are sometimes used interchangeably, especially in the context of BIP32, but they seem to be different functionalities. In particular, key derivation works like so. Assume the key pair `x` and `xG`, for scalar `x` and generator `G`. Deriving a key with index `j` from `(x, xG)` can be done by computing a new private key `x_j = Hash(xG || j) + x` and the corresponding public key as `xG + x_jG`. This computation is deterministic and allows the public key to be derived based on _public_ information only, a property referred to in the literature as [public derivation](https://eprint.iacr.org/2019/704.pdf). In contrast, one could generate `x_j` as `x_j = Hash(x || j) + x`. ",
+      "createdAt": "2022-01-16T13:24:03Z",
+      "updatedAt": "2022-01-31T15:51:31Z",
+      "closedAt": "2022-01-31T15:51:31Z",
+      "comments": []
+    },
+    {
+      "number": 2,
+      "id": "I_kwDOGj2OAM5B3cLj",
+      "title": "Additive and multiplicative blinding",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-signature-key-blinding/issues/2",
+      "state": "CLOSED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The current draft supports multiplicative blinding, which means that blinding and unblinding requires knowledge of the _private_ blind value. Additive blinding may also be feasible, especially for other signature algorithms [like ECDSA](https://eprint.iacr.org/2021/1330.pdf). It generally works like so. Assume a private key `x` and public key `xG`, for generator `G`. Additive blinding generates secret key `x+b`, for random scalar `b`, and corresponding public key `xG + bG`. Note that these line up since `(x+b)G = xG + bG`.\r\n\r\nThis has some useful properties, like being able to blind and unblind using only the _public_ key. However, that may not be appropriate for all applications.",
+      "createdAt": "2022-01-16T13:27:27Z",
+      "updatedAt": "2022-04-12T15:06:14Z",
+      "closedAt": "2022-04-12T15:06:14Z",
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Closing this for now. We can always revisit adding this functionality in the future.",
+          "createdAt": "2022-04-12T15:06:14Z",
+          "updatedAt": "2022-04-12T15:06:14Z"
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "id": "I_kwDOGj2OAM5B3cge",
+      "title": "Other signature schemes",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-signature-key-blinding/issues/3",
+      "state": "CLOSED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The draft currently focuses on EdDSA as specified in RFC8032. We might want to consider widening scope and targeting other signature schemes and curves, e.g., ECDSA over secp256k1.",
+      "createdAt": "2022-01-16T13:33:29Z",
+      "updatedAt": "2022-01-24T13:57:48Z",
+      "closedAt": "2022-01-24T13:57:48Z",
+      "comments": []
+    },
+    {
+      "number": 4,
+      "id": "I_kwDOGj2OAM5B3dt8",
+      "title": "Abstraction properties",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-signature-key-blinding/issues/4",
+      "state": "CLOSED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "[This paper](https://eprint.iacr.org/2019/704.pdf) captures some properties we might want quite nicely, including deterministic secret generation and public derivation (deriving public values without private information). Should the abstraction support both derivation based on public and private information? That is, deriving a key with a private value, and deriving a key with a public value.",
+      "createdAt": "2022-01-16T13:55:06Z",
+      "updatedAt": "2022-04-28T10:49:32Z",
+      "closedAt": "2022-04-28T10:49:32Z",
+      "comments": []
+    },
+    {
+      "number": 5,
+      "id": "I_kwDOGj2OAM5B3d0r",
+      "title": "Rename BlindSign",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-signature-key-blinding/issues/5",
+      "state": "CLOSED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This isn't a blind signature. It's rather \"sign using a blinded private key.\" There's probably a better way to describe this operation.",
+      "createdAt": "2022-01-16T13:56:53Z",
+      "updatedAt": "2022-01-21T14:11:53Z",
+      "closedAt": "2022-01-21T14:11:53Z",
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@jedisct1, any thoughts?",
+          "createdAt": "2022-01-19T17:29:16Z",
+          "updatedAt": "2022-01-19T17:29:16Z"
+        },
+        {
+          "author": "jedisct1",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Indeed, calling it a blind signature would be confusing.\r\n\r\n`BlindKeySign` maybe?",
+          "createdAt": "2022-01-19T20:30:31Z",
+          "updatedAt": "2022-01-19T20:30:31Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Yeah, that's better! Do you want to send a PR? =)",
+          "createdAt": "2022-01-19T20:32:05Z",
+          "updatedAt": "2022-01-19T20:32:05Z"
+        }
+      ]
+    },
+    {
+      "number": 12,
+      "id": "I_kwDOGj2OAM5Cu_6w",
+      "title": "Revisit clamping for EdDSA variant",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-signature-key-blinding/issues/12",
+      "state": "CLOSED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "@tedeaton correctly observes that clamping the high-order bit in the EdDSA variants has the effect of making the resulting blind scalar distinguishable from a truly random scalar. Importantly, clamping that bit splits the set of blinded public keys in half -- one half where the bit is 0, which might be in the image set of the blind function, and the other half where the bit is 1, which definitely won't be in the image set of the blind function due to the clamp. This means that every blinded public key basically leaks one bit.\r\n\r\nThis leak could be exploited to recover the pre-image of the blind function. See [this gist](https://gist.github.com/chris-wood/a68c18aedf0914d13b8966f45f2d1ae7) for a toy example where we can recover the pre-image of blind given (a) sufficiently many random blind samples and (b) enough pre-computation work done by an attacker. The amount of work is substantial, i.e., on the order of O(group order), but we should probably acknowledge that this can be improved in practice with more sophisticated pre-computation or targeted attacks. \r\n\r\nIn any case, I think we ought to remove the clamping step for the blind scalar to ensure that it's a truly random scalar each time. For ed25519, this is as simple as changing the whole clamping step from:\r\n\r\n```\r\nbytes[0] &= 248 // clear cofactor\r\nbytes[31] &= 63\r\nbytes[31] |= 64\r\n```\r\n\r\nto \r\n\r\n```\r\nbytes[0] &= 248 // clear cofactor\r\n```",
+      "createdAt": "2022-01-31T15:59:59Z",
+      "updatedAt": "2022-02-01T15:35:14Z",
+      "closedAt": "2022-02-01T15:35:14Z",
+      "comments": [
+        {
+          "author": "jedisct1",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Do we even need to clear the low bits at all?\r\n\r\nWe only perform a scalar multiplication of the base point with the blind scalar, so why would the cofactor be an issue?",
+          "createdAt": "2022-01-31T19:13:54Z",
+          "updatedAt": "2022-01-31T19:13:54Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Great question! I think you're right in that we don't need to clear anything here. The generator will have prime order (by definition), and multiplying it by any scalar value won't change that order. So we can simplify further and just interpret the unclamped byte array as a little-endian integer. =) ",
+          "createdAt": "2022-02-01T14:39:18Z",
+          "updatedAt": "2022-02-01T14:39:18Z"
+        }
+      ]
+    },
+    {
+      "number": 14,
+      "id": "I_kwDOGj2OAM5C4sqZ",
+      "title": "Evaluate impact of Related-Key Attacks against ECDSA-BlindKeySign",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-signature-key-blinding/issues/14",
+      "state": "CLOSED",
+      "author": "FredericJacobs",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "We need more security analysis on ECDSA-BlindKeySign and related functions. There might be some risks related to the blinding we need to dig deeper into.\r\n\r\n[This paper](https://eprint.iacr.org/2015/1135.pdf) Sec 4.2 doesn't directly translate to our scheme but it could be that similar attacks apply.",
+      "createdAt": "2022-02-02T16:47:54Z",
+      "updatedAt": "2024-04-01T16:08:59Z",
+      "closedAt": "2024-04-01T16:08:59Z",
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> We need more security analysis on ECDSA-BlindKeySign and related functions. There might be some risks related to the blinding we need to dig deeper into.\r\n\r\nHmm, can you elaborate on this? A blinded signing key is indistinguishable and independently distributed from the unblinded signing key, so I'm not sure I see a problem here. In particular, I don't think there is a relation between the blinded and unblinded keys, by construction. Perhaps I'm missing something.",
+          "createdAt": "2022-02-02T20:35:34Z",
+          "updatedAt": "2022-02-02T20:36:39Z"
+        },
+        {
+          "author": "tedeaton",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I think this paper (in particular section 4.1) does point out a potential avenue of attack, especially on additive blinding (as mentioned in #2 ). The attack would allow an adversary (who knows the blinding factor) to take a message-signature pair issued under a blinded public key blpk, and transform it into a valid message-signature pair under the identity public key (or possibly under another blinded public key?).\r\n\r\nThis came up in a construction of a lattice based blinding scheme [I worked on](https://eprint.iacr.org/2021/963.pdf), which also used an 'additive' blinding method. The solution we used there should also here, which is to include the public key in the hash function when generating the challenge. Thankfully, EdDSA already does this, which should make signatures significantly more immune to this kind of malleability.",
+          "createdAt": "2022-02-02T21:02:05Z",
+          "updatedAt": "2022-02-02T21:02:05Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> I think this paper (in particular section 4.1) does point out a potential avenue of attack, especially on additive blinding (as mentioned in https://github.com/chris-wood/draft-wood-cfrg-eddsa-blinding/issues/2 ). The attack would allow an adversary (who knows the blinding factor) to take a message-signature pair issued under a blinded public key blpk, and transform it into a valid message-signature pair under the identity public key (or possibly under another blinded public key?).\r\n\r\nThis is only for additive blinding, correct? The draft here currently only discusses multiplicative blinding. ",
+          "createdAt": "2022-02-02T21:07:01Z",
+          "updatedAt": "2022-02-02T21:09:06Z"
+        },
+        {
+          "author": "tedeaton",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Yes, the attack as described there would only be for additive blinding, and it isn't obvious (to me) how it could be adapted for multiplicative.",
+          "createdAt": "2022-02-02T21:53:57Z",
+          "updatedAt": "2022-02-02T21:53:57Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@tlepoint do you think we can close this?",
+          "createdAt": "2022-08-02T18:38:50Z",
+          "updatedAt": "2022-08-02T18:38:50Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Closing.",
+          "createdAt": "2024-04-01T16:08:59Z",
+          "updatedAt": "2024-04-01T16:08:59Z"
+        }
+      ]
+    },
+    {
+      "number": 16,
+      "id": "I_kwDOGj2OAM5C6Ebg",
+      "title": "Update repo name",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-signature-key-blinding/issues/16",
+      "state": "CLOSED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Since we're targeting more than EdDSA, we should update the repo name and README.",
+      "createdAt": "2022-02-03T00:16:46Z",
+      "updatedAt": "2022-02-03T01:54:14Z",
+      "closedAt": "2022-02-03T01:54:13Z",
+      "comments": [
+        {
+          "author": "jedisct1",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Shall we just go for \"Signature key blinding\"?",
+          "createdAt": "2022-02-03T00:27:00Z",
+          "updatedAt": "2022-02-03T00:27:00Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Yeah, that sounds reasonable to me. It captures what we're doing here. @tedeaton what do you think?",
+          "createdAt": "2022-02-03T00:30:32Z",
+          "updatedAt": "2022-02-03T00:30:32Z"
+        },
+        {
+          "author": "tedeaton",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Sounds like a good name to me as well",
+          "createdAt": "2022-02-03T00:56:29Z",
+          "updatedAt": "2022-02-03T00:56:29Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Fixed directly on `main`.",
+          "createdAt": "2022-02-03T01:54:13Z",
+          "updatedAt": "2022-02-03T01:54:13Z"
+        }
+      ]
+    },
+    {
+      "number": 22,
+      "id": "I_kwDOGj2OAM5Fedfi",
+      "title": "Mention public key signing as related-key attack mitigation",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-signature-key-blinding/issues/22",
+      "state": "CLOSED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "One standard mitigation to the related-key forgery attack is to sign the public key alongside the message. This then requires the verifier to include the public key as part of the input message, which changes the verification interface. Nevertheless, it seems useful to note. \r\n\r\ncc @kwantam for separately noting this! \ud83d\ude4f ",
+      "createdAt": "2022-03-10T19:07:39Z",
+      "updatedAt": "2022-04-27T21:30:13Z",
+      "closedAt": "2022-04-27T21:30:13Z",
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Fixed directly on `main`.",
+          "createdAt": "2022-04-27T21:30:13Z",
+          "updatedAt": "2022-04-27T21:30:13Z"
+        }
+      ]
+    },
+    {
+      "number": 23,
+      "id": "I_kwDOGj2OAM5Fed3f",
+      "title": "Add private airdrop as another application",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-signature-key-blinding/issues/23",
+      "state": "CLOSED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": " It was used [in this work](https://eprint.iacr.org/2020/676.pdf). Section 3 discusses the construction for ECDSA, for example. \r\n\r\nThanks to @kwantam for pointing this out! ",
+      "createdAt": "2022-03-10T19:09:18Z",
+      "updatedAt": "2022-04-28T21:24:50Z",
+      "closedAt": "2022-04-28T21:24:50Z",
+      "comments": []
+    },
+    {
+      "number": 24,
+      "id": "I_kwDOGj2OAM5FfUNR",
+      "title": "Add more motivation",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-signature-key-blinding/issues/24",
+      "state": "CLOSED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "It's been observed by several people that the motivation for this primitive is not particularly clear. We should motivate with additional applications (like #23), including at least one concrete use case. We could use a simplified version of the rate-limited draft for that.",
+      "createdAt": "2022-03-10T23:29:42Z",
+      "updatedAt": "2022-04-28T21:24:50Z",
+      "closedAt": "2022-04-28T21:24:50Z",
+      "comments": []
+    },
+    {
+      "number": 25,
+      "id": "I_kwDOGj2OAM5Hi4ca",
+      "title": "Reword functionality in Introduction.",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-signature-key-blinding/issues/25",
+      "state": "CLOSED",
+      "author": "dvorak42",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Currently the flow between the two sentences below seems slightly off.\r\n\r\n> In some settings, in is useful to produce signatures with a given key pair (sk, pk) such that the resulting signature is not linkable to pk without knowledge of a particular witness r. That is, given pk corresponding to sk, witness r, and a message signature, one can determine if the signature was indeed produced using sk.",
+      "createdAt": "2022-04-11T17:50:35Z",
+      "updatedAt": "2022-04-12T15:38:12Z",
+      "closedAt": "2022-04-12T15:38:11Z",
+      "comments": []
+    },
+    {
+      "number": 26,
+      "id": "I_kwDOGj2OAM5Hi4on",
+      "title": "Clarify construction of blinding buffers.",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-signature-key-blinding/issues/26",
+      "state": "CLOSED",
+      "author": "dvorak42",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "In section 4.1, the wording around \"only the lower 32 bytes are used for generating the public key\" but still saying to \"interpret the buffer as a little-endian integer\" is slightly ambiguous. Maybe just copy the wording from 4.2?\r\n\r\nIn section 5.1, maybe explicitly call out halfing to a 57-byte buffer?\r\n",
+      "createdAt": "2022-04-11T17:51:13Z",
+      "updatedAt": "2022-04-12T15:38:28Z",
+      "closedAt": "2022-04-12T15:38:28Z",
+      "comments": []
+    },
+    {
+      "number": 27,
+      "id": "I_kwDOGj2OAM5Hi42v",
+      "title": "Add Privacy Pass Rate-Limiting motivation.",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-signature-key-blinding/issues/27",
+      "state": "CLOSED",
+      "author": "dvorak42",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Linking to either the current ID or draft when/if adopted by the Privacy Pass WG.(https://datatracker.ietf.org/doc/draft-privacypass-rate-limit-tokens/)",
+      "createdAt": "2022-04-11T17:51:55Z",
+      "updatedAt": "2022-04-28T21:24:50Z",
+      "closedAt": "2022-04-28T21:24:50Z",
+      "comments": []
+    },
+    {
+      "number": 30,
+      "id": "I_kwDOGj2OAM5Ipb_M",
+      "title": "Make 'unblind' optional?",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-signature-key-blinding/issues/30",
+      "state": "CLOSED",
+      "author": "tedeaton",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Our definition of key-blinding includes the unblind operation such that `Unblind( Blind( pk, bk), bk) = pk`. This suits applications where `bk` is private, but their are applications where this is not the case. Notably, the use of key-blinding in Tor has `bk` being a public value, informed by the daily consensus, and unblinding is impossible, making the blinding process more one-way. \r\n\r\nShould the spec include this option, and discuss that the choice reflects whether the `bk` value is private or not? This would likely also mean that multiple security models are necessary, depending on the configuration used.",
+      "createdAt": "2022-04-28T14:31:21Z",
+      "updatedAt": "2022-08-02T18:38:41Z",
+      "closedAt": "2022-08-02T18:38:41Z",
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Rather than say it's an optional function, I think we could simply say that one needs `bk` to invoke `UnblindPublicKey`. If an application keeps it private, then this can't be done.\r\n\r\nOn the Tor point, it sounds like this functionality doesn't really line up with what's presented here. In particular, the constructions we provide allow one to invoke `UnblindPublicKey` provided they have `bk`. How does Tor prevent this from happening?",
+          "createdAt": "2022-04-28T16:24:34Z",
+          "updatedAt": "2022-04-28T16:24:34Z"
+        },
+        {
+          "author": "tedeaton",
+          "authorAssociation": "COLLABORATOR",
+          "body": "In Tor's version of key-blinding, the scalar is generated from the hash of `bk` and the identity public key `pk`, so that both are needed to blind / unblind.",
+          "createdAt": "2022-04-28T16:48:00Z",
+          "updatedAt": "2022-04-28T16:48:00Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Got it \ud83d\udc4d I think we could update the constructions here to do something similar without any functional change to the Privacy Pass protocol. @kwantam, would this be compatible with the airdrop application?",
+          "createdAt": "2022-04-28T16:53:43Z",
+          "updatedAt": "2022-04-28T16:53:43Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "This was also raised in Ian's review, so we'll use this issue to track its resolution.",
+          "createdAt": "2022-06-20T13:44:06Z",
+          "updatedAt": "2022-06-20T13:44:06Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "One construction that Ian mentioned on the list was the following:\r\n\r\n```\r\npkS = H(bk, pkR, timestamp) * pkR\r\n```\r\n\r\nThis isn't reversible unless you know all inputs to H. The constructions in the draft currently only hash `bk` into the scalar, and then choose to make that available (or not) for the purposes of inversion: \r\n\r\n```\r\npkS = H(bk) * pkR\r\n```\r\n\r\nWhat if we generalized the construction a bit to accommodate more domain separation?\r\n\r\n```\r\npkS = H(bk, dst) * pkR\r\n```\r\n\r\nOne could then set `dst = pkR`, `dst = timestamp`, `dst = pkR || timestamp`, or whatever else made sense. \r\n\r\n@jedisct1, @tlepoint, @tedeaton, @FredericJacobs: thoughts?",
+          "createdAt": "2022-07-11T14:56:14Z",
+          "updatedAt": "2022-07-11T14:56:14Z"
+        },
+        {
+          "author": "tedeaton",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Yes, I agree, that seems like the right generalization to me.",
+          "createdAt": "2022-07-12T02:49:32Z",
+          "updatedAt": "2022-07-12T02:49:32Z"
+        },
+        {
+          "author": "tlepoint",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I also agree that this seems like a desirable generalization. Note however that the statement \r\n\r\n> This isn't reversible unless you know all inputs to H. \r\n\r\nis a bit strong. If you know `bk, pkR` but not `timestamp`, you can still reverse it by brute-forcing the value. An argument that would claim irreversibility needs to consider the entropy of the `dst` somehow. ",
+          "createdAt": "2022-07-12T13:52:29Z",
+          "updatedAt": "2022-07-12T13:52:37Z"
+        }
+      ]
+    },
+    {
+      "number": 31,
+      "id": "I_kwDOGj2OAM5MHGbH",
+      "title": "Fix TOR reference",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-signature-key-blinding/issues/31",
+      "state": "CLOSED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "> You cite [TORDIRECTORY] for \"the Tor onion services protocol\", but it should be [TORONION] https://gitweb.torproject.org/torspec.git/tree/rend-spec-v3.txt instead.",
+      "createdAt": "2022-06-20T13:27:14Z",
+      "updatedAt": "2022-07-11T14:21:25Z",
+      "closedAt": "2022-07-11T14:21:25Z",
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Fixed directly on `main`.",
+          "createdAt": "2022-07-11T14:21:25Z",
+          "updatedAt": "2022-07-11T14:21:25Z"
+        }
+      ]
+    },
+    {
+      "number": 32,
+      "id": "I_kwDOGj2OAM5MHIEe",
+      "title": "Correctness conditions",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-signature-key-blinding/issues/32",
+      "state": "CLOSED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "> Again in 3, the correctness condition requires the existence of UnblindPublicKey, which may not exist.\r\n\r\n> Aren't you missing another correctness condition at the end of Section 3?  Namely, that public keys produced with BlindPublicKey will correctly verify signatures produced with BlindKeySign (using the standard signature verification function)?",
+      "createdAt": "2022-06-20T13:31:36Z",
+      "updatedAt": "2022-07-11T19:09:08Z",
+      "closedAt": "2022-07-11T19:09:08Z",
+      "comments": []
+    },
+    {
+      "number": 33,
+      "id": "I_kwDOGj2OAM5MHLs1",
+      "title": "Editorial improvements from Ian's review",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-signature-key-blinding/issues/33",
+      "state": "CLOSED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "> At the start of 3, now you _insist_ that bk is secret: \"Similar to the signing key, the blinding key is also a private key that remains\r\nsecret.\"  But then what of the critical property above that distinguishes key blinding from \"generate a fresh key\"?  If no one other than the key holder can blind or unblind public keys on their own, so that the key holder has to actually deliver the new public key each time, then why _not_ use one of the two trivial constructions above?\r\n\r\n- [ ] Drop \"remains secret\" since `bk` is used for unblinding keys.\r\n\r\n> \"two separate key signing keys\": you don't have key signing keys; presumably you meant \"two independent signing keys\", or something like that?\r\n\r\n- [ ] Use \"independent\" instead of \"separate\".\r\n\r\n> Nit: \"a random scalar in the P-256 group\": in my mind, \"the P-256 group\" is the group of elliptic curve points, not the scalar field.  But hopefully no one will get confused by this wording.\r\n\r\n- [ ] Clarify P-256 group wording.\r\n\r\n> It's a little jarring that the list of four new functionalities is repeated in Section 3, just a page or so after it first appears in Section 1.\r\n\r\n- [ ] Only include list once.\r\n\r\n> In Section 4.2, in which of steps 1 and 2 do you or don't you do buffer pruning?  It sounds like you do in step 1 but not in step 2?\r\n\r\n- [ ] Make clear what steps prune and which don't.\r\n\r\n> In Section 5.2, it seems more explicit that step 1 and step 2 both *do* do buffer pruning.  (Except that contradicts Section 5.1, which suggests it does *not*?)  Is Ed448 intended to be different from Ed25519 here?\r\n\r\n- [ ] Make language consistent with ed25519 variant.",
+      "createdAt": "2022-06-20T13:42:08Z",
+      "updatedAt": "2022-07-11T15:55:47Z",
+      "closedAt": "2022-07-11T15:55:47Z",
+      "comments": []
+    },
+    {
+      "number": 40,
+      "id": "I_kwDOGj2OAM5dQF1M",
+      "title": "Draft is about to expire",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-signature-key-blinding/issues/40",
+      "state": "CLOSED",
+      "author": "jedisct1",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The draft is about to expire.\r\n\r\nWe should tag a new version soon in order to keep it alive.",
+      "createdAt": "2023-01-31T15:10:10Z",
+      "updatedAt": "2023-01-31T15:23:34Z",
+      "closedAt": "2023-01-31T15:23:33Z",
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Done.",
+          "createdAt": "2023-01-31T15:23:33Z",
+          "updatedAt": "2023-01-31T15:23:33Z"
+        }
+      ]
+    },
+    {
+      "number": 41,
+      "id": "I_kwDOGj2OAM58s68H",
+      "title": "Draft is expiring soon",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-signature-key-blinding/issues/41",
+      "state": "CLOSED",
+      "author": "jedisct1",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The draft is expiring soon. We should at least bump the tag.",
+      "createdAt": "2024-01-20T16:44:55Z",
+      "updatedAt": "2024-01-22T22:10:00Z",
+      "closedAt": "2024-01-22T22:10:00Z",
+      "comments": [
+        {
+          "author": "jedisct1",
+          "authorAssociation": "COLLABORATOR",
+          "body": "There were only a couple minutes left before the draft would have expired.\r\n\r\nSo I went ahead and tagged version -05.",
+          "createdAt": "2024-01-22T22:09:59Z",
+          "updatedAt": "2024-01-22T22:09:59Z"
+        }
+      ]
+    },
+    {
+      "number": 42,
+      "id": "I_kwDOGj2OAM5-lOoV",
+      "title": "Key blinding spec should specify serialization scheme",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-signature-key-blinding/issues/42",
+      "state": "CLOSED",
+      "author": "cathieyun",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "Currently, there is no serialization scheme specified for the messages being sent, or the test vectors. Specifying a serialization scheme is important for interoperability and correctness (eg using a constant-length serialization scheme if concatenating multiple serialized elements).\r\n\r\nThe OPRFs spec has a good example of serialization specifications, eg:\r\nhttps://cfrg.github.io/draft-irtf-cfrg-voprf/draft-irtf-cfrg-voprf.html#name-oprfp-384-sha-384\r\n",
+      "createdAt": "2024-02-07T19:06:47Z",
+      "updatedAt": "2024-04-01T20:29:21Z",
+      "closedAt": "2024-04-01T20:29:21Z",
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Fixed by #43.",
+          "createdAt": "2024-04-01T20:29:21Z",
+          "updatedAt": "2024-04-01T20:29:21Z"
+        }
+      ]
+    }
+  ],
+  "pulls": [
+    {
+      "number": 6,
+      "id": "PR_kwDOGj2OAM4xST5A",
+      "title": "Rename the BlindSign to to BlindKeySign",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-signature-key-blinding/pull/6",
+      "state": "MERGED",
+      "author": "jedisct1",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "and fix a typo by the way (`BlindPublciKey`).",
+      "createdAt": "2022-01-19T20:43:46Z",
+      "updatedAt": "2022-01-20T16:42:08Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-signature-key-blinding",
+      "baseRefName": "main",
+      "baseRefOid": "2548d8c75cec807bbe745cf9348fb08d22417468",
+      "headRepository": "jedisct1/draft-wood-cfrg-eddsa-blinding",
+      "headRefName": "blindkeysign",
+      "headRefOid": "737276e91b4fc35aa586826819b86b717bd94f8e",
+      "closedAt": "2022-01-20T16:22:30Z",
+      "mergedAt": "2022-01-20T16:22:30Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "5a8afe19fc0da4494a8a59d5153881053e2cc3f7"
+      },
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Looks good! Do you want to also add yourself as an author? \ud83d\ude01",
+          "createdAt": "2022-01-19T22:44:44Z",
+          "updatedAt": "2022-01-19T22:44:44Z"
+        },
+        {
+          "author": "jedisct1",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Let's do this! I'd be happy to work with on on that document.\r\n\r\nThe [ed25519-compact](https://crates.io/crates/ed25519-compact) crate now has a compile-time feature to support blind keys, btw.",
+          "createdAt": "2022-01-20T14:03:53Z",
+          "updatedAt": "2022-01-20T14:03:53Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Awesome! I'll put our implementations in the README.",
+          "createdAt": "2022-01-20T16:22:08Z",
+          "updatedAt": "2022-01-20T16:22:08Z"
+        }
+      ],
+      "reviews": []
+    },
+    {
+      "number": 7,
+      "id": "PR_kwDOGj2OAM4xUqR7",
+      "title": "Use fixed base multiplication to compute blind public keys",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-signature-key-blinding/pull/7",
+      "state": "MERGED",
+      "author": "jedisct1",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This is usually faster as it allows for precomputations.",
+      "createdAt": "2022-01-20T12:50:24Z",
+      "updatedAt": "2022-01-20T13:08:26Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-signature-key-blinding",
+      "baseRefName": "main",
+      "baseRefOid": "2548d8c75cec807bbe745cf9348fb08d22417468",
+      "headRepository": "jedisct1/draft-wood-cfrg-eddsa-blinding",
+      "headRefName": "fixed-base",
+      "headRefOid": "a32d5875d5e7e976dabb3d7896b5ae1303593ea9",
+      "closedAt": "2022-01-20T13:04:20Z",
+      "mergedAt": "2022-01-20T13:04:20Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "3e8e99cde917505dc21ab060c8581a43f71de4c1"
+      },
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Yep, good addition =) ",
+          "createdAt": "2022-01-20T13:03:35Z",
+          "updatedAt": "2022-01-20T13:03:35Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOGj2OAM4zJ1BP",
+          "commit": {
+            "abbreviatedOid": "a32d587"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-01-20T13:03:19Z",
+          "updatedAt": "2022-01-20T13:03:19Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 8,
+      "id": "PR_kwDOGj2OAM4xU748",
+      "title": "Add myself as an author",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-signature-key-blinding/pull/8",
+      "state": "MERGED",
+      "author": "jedisct1",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-01-20T14:11:08Z",
+      "updatedAt": "2022-01-20T16:21:43Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-signature-key-blinding",
+      "baseRefName": "main",
+      "baseRefOid": "3e8e99cde917505dc21ab060c8581a43f71de4c1",
+      "headRepository": "jedisct1/draft-wood-cfrg-eddsa-blinding",
+      "headRefName": "fdadd",
+      "headRefOid": "e033a17e428b08e4c5a2618d3a807f87e8272656",
+      "closedAt": "2022-01-20T16:21:43Z",
+      "mergedAt": "2022-01-20T16:21:43Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "2e6f1973dd282d768e480384edefe0fdf216de06"
+      },
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "\ud83d\udc4b :) ",
+          "createdAt": "2022-01-20T16:21:10Z",
+          "updatedAt": "2022-01-20T16:21:10Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOGj2OAM4zK4fC",
+          "commit": {
+            "abbreviatedOid": "e033a17"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "I'll sort these alphabetically in a followup PR.",
+          "createdAt": "2022-01-20T16:21:35Z",
+          "updatedAt": "2022-01-20T16:21:35Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 9,
+      "id": "PR_kwDOGj2OAM4xVdpq",
+      "title": "Add implementations",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-signature-key-blinding/pull/9",
+      "state": "MERGED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "cc @jedisct1 ",
+      "createdAt": "2022-01-20T16:26:04Z",
+      "updatedAt": "2022-06-21T14:47:59Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-signature-key-blinding",
+      "baseRefName": "main",
+      "baseRefOid": "5a8afe19fc0da4494a8a59d5153881053e2cc3f7",
+      "headRepository": "cfrg/draft-irtf-cfrg-signature-key-blinding",
+      "headRefName": "chris-wood-patch-1",
+      "headRefOid": "42eaf22c819ec761df097b876a1d3e8e55749fb6",
+      "closedAt": "2022-01-20T16:41:23Z",
+      "mergedAt": "2022-01-20T16:41:23Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "8e713d1a09ce3fe7bb997bd2ed40877b5ee6b29f"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOGj2OAM4zK9o-",
+          "commit": {
+            "abbreviatedOid": "42eaf22"
+          },
+          "author": "jedisct1",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-01-20T16:35:51Z",
+          "updatedAt": "2022-01-20T16:35:51Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 10,
+      "id": "PR_kwDOGj2OAM4xWbB1",
+      "title": "Add a Zig implementation",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-signature-key-blinding/pull/10",
+      "state": "MERGED",
+      "author": "jedisct1",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Pretty straightforward as everything we need is right in the standard library.",
+      "createdAt": "2022-01-20T22:00:53Z",
+      "updatedAt": "2022-01-21T14:17:43Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-signature-key-blinding",
+      "baseRefName": "main",
+      "baseRefOid": "8e713d1a09ce3fe7bb997bd2ed40877b5ee6b29f",
+      "headRepository": "cfrg/draft-irtf-cfrg-signature-key-blinding",
+      "headRefName": "zig-impl",
+      "headRefOid": "ba02a605476ba2bebb6618175dc841bb00a262a7",
+      "closedAt": "2022-01-21T14:11:47Z",
+      "mergedAt": "2022-01-21T14:11:47Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "cf8af96cd1797f7d6b65475e4ba9ddbd7061e58a"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOGj2OAM4zPExZ",
+          "commit": {
+            "abbreviatedOid": "ba02a60"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-01-21T14:11:42Z",
+          "updatedAt": "2022-01-21T14:11:42Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 11,
+      "id": "PR_kwDOGj2OAM4xdU0M",
+      "title": "Generalize draft and add mechanisms for ECDSA, along with test vectors",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-signature-key-blinding/pull/11",
+      "state": "MERGED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This generalizes the draft and adds support for ECDSA. (We should rename the draft file at some point if we land this, but that can happen in a separate PR.)\r\n\r\nCloses #3.",
+      "createdAt": "2022-01-23T15:21:18Z",
+      "updatedAt": "2022-06-21T14:48:00Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-signature-key-blinding",
+      "baseRefName": "main",
+      "baseRefOid": "cf8af96cd1797f7d6b65475e4ba9ddbd7061e58a",
+      "headRepository": "cfrg/draft-irtf-cfrg-signature-key-blinding",
+      "headRefName": "caw/ecdsa",
+      "headRefOid": "e34339d192bcbc0599416c232292b2fc775703b2",
+      "closedAt": "2022-01-24T13:57:48Z",
+      "mergedAt": "2022-01-24T13:57:48Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "39ce6d4f5b248980b44f9385da0ffe7c6fbca21f"
+      },
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Thanks @jedisct1 -- squashed and will merge after the build finishes.",
+          "createdAt": "2022-01-24T13:53:39Z",
+          "updatedAt": "2022-01-24T13:53:39Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOGj2OAM4zSEup",
+          "commit": {
+            "abbreviatedOid": "9d086af"
+          },
+          "author": "jedisct1",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-01-23T21:49:33Z",
+          "updatedAt": "2022-01-23T21:49:34Z",
+          "comments": [
+            {
+              "originalPosition": 128,
+              "body": "Maybe \"the blind must also remain secret\"?\r\n\r\nCalling two different things \"private key\" may be a little big confusing, especially since the blind doesn't have a public counterpart.",
+              "createdAt": "2022-01-23T21:49:33Z",
+              "updatedAt": "2022-01-23T21:49:34Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOGj2OAM4zUYgR",
+          "commit": {
+            "abbreviatedOid": "9d086af"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-01-24T13:47:40Z",
+          "updatedAt": "2022-01-24T13:47:40Z",
+          "comments": [
+            {
+              "originalPosition": 128,
+              "body": "The point I was trying to convey is that the blind is a secret generated just like any other private signing key. Let me try to reformulate somewhat differently.",
+              "createdAt": "2022-01-24T13:47:40Z",
+              "updatedAt": "2022-01-24T13:47:40Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOGj2OAM4zUZ1P",
+          "commit": {
+            "abbreviatedOid": "fccb9cd"
+          },
+          "author": "jedisct1",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-01-24T13:52:15Z",
+          "updatedAt": "2022-01-24T13:52:15Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 13,
+      "id": "PR_kwDOGj2OAM4x6HhB",
+      "title": "Drop clamping step for the blind scalar",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-signature-key-blinding/pull/13",
+      "state": "MERGED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Closes #12.\r\n\r\n[Implemented here](https://github.com/cloudflare/pat-go/pull/1).",
+      "createdAt": "2022-02-01T14:54:39Z",
+      "updatedAt": "2022-06-21T14:48:01Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-signature-key-blinding",
+      "baseRefName": "main",
+      "baseRefOid": "39ce6d4f5b248980b44f9385da0ffe7c6fbca21f",
+      "headRepository": "cfrg/draft-irtf-cfrg-signature-key-blinding",
+      "headRefName": "caw/drop-clamping",
+      "headRefOid": "cc29ddcff9bc400cf54d3bf2cc05e2dd6a1371e0",
+      "closedAt": "2022-02-01T15:35:14Z",
+      "mergedAt": "2022-02-01T15:35:14Z",
+      "mergedBy": "jedisct1",
+      "mergeCommit": {
+        "oid": "ebdb12d5d63e7236ba8b31097e40aaa832ebffd3"
+      },
+      "comments": [
+        {
+          "author": "jedisct1",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Looking good! And that simplifies things.\r\n\r\nI didn't verify the test vectors, but I'm going to update my implementations accordingly.",
+          "createdAt": "2022-02-01T15:23:51Z",
+          "updatedAt": "2022-02-01T15:23:51Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "ACK, thanks! I'll hold the PR here until you're able to verify the vectors. Please let me know if they work for you. Then we can merge.",
+          "createdAt": "2022-02-01T15:24:59Z",
+          "updatedAt": "2022-02-01T15:24:59Z"
+        },
+        {
+          "author": "jedisct1",
+          "authorAssociation": "COLLABORATOR",
+          "body": "The test vectors verify :)",
+          "createdAt": "2022-02-01T15:35:07Z",
+          "updatedAt": "2022-02-01T15:35:07Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOGj2OAM4z0FBV",
+          "commit": {
+            "abbreviatedOid": "cc29ddc"
+          },
+          "author": "jedisct1",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-02-01T15:24:05Z",
+          "updatedAt": "2022-02-01T15:24:05Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 15,
+      "id": "PR_kwDOGj2OAM4x_ylg",
+      "title": "Adding my name as a co-author",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-signature-key-blinding/pull/15",
+      "state": "MERGED",
+      "author": "tedeaton",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-02-03T00:01:16Z",
+      "updatedAt": "2022-02-03T00:25:26Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-signature-key-blinding",
+      "baseRefName": "main",
+      "baseRefOid": "ebdb12d5d63e7236ba8b31097e40aaa832ebffd3",
+      "headRepository": "cfrg/draft-irtf-cfrg-signature-key-blinding",
+      "headRefName": "ted-name-add",
+      "headRefOid": "ae57fdaf70065e36a81ce9da39f25d57bebe7620",
+      "closedAt": "2022-02-03T00:15:42Z",
+      "mergedAt": "2022-02-03T00:15:42Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "12d0ed0e804cf632ea9b1a3168805d9fced342d8"
+      },
+      "comments": [
+        {
+          "author": "jedisct1",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Hi Ted!\r\n\r\nI think author names have to be lexically sorted. Would you mind moving your information up?",
+          "createdAt": "2022-02-03T00:09:16Z",
+          "updatedAt": "2022-02-03T00:09:16Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Welcome, @tedeaton!",
+          "createdAt": "2022-02-03T00:15:51Z",
+          "updatedAt": "2022-02-03T00:15:51Z"
+        },
+        {
+          "author": "jedisct1",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Welcome Ted! \ud83c\udf89",
+          "createdAt": "2022-02-03T00:25:18Z",
+          "updatedAt": "2022-02-03T00:25:18Z"
+        }
+      ],
+      "reviews": []
+    },
+    {
+      "number": 18,
+      "id": "PR_kwDOGj2OAM40A3BG",
+      "title": "Add massive ECDSA disclaimer",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-signature-key-blinding/pull/18",
+      "state": "MERGED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This acknowledges the related key issue and notes that it is still subject to further analysis. See #14.\r\n\r\ncc @tlepoint, @FredericJacobs",
+      "createdAt": "2022-03-07T03:01:33Z",
+      "updatedAt": "2022-06-21T14:48:03Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-signature-key-blinding",
+      "baseRefName": "main",
+      "baseRefOid": "db71cca73d473a8ce2a63182f0ea86a64d41c073",
+      "headRepository": "cfrg/draft-irtf-cfrg-signature-key-blinding",
+      "headRefName": "caw/ecdsa-disclaimer",
+      "headRefOid": "d687f4bc39894d4575cc1b702c4736dd55b3bcba",
+      "closedAt": "2022-03-07T14:57:44Z",
+      "mergedAt": "2022-03-07T14:57:44Z",
+      "mergedBy": "jedisct1",
+      "mergeCommit": {
+        "oid": "96b12f796d1ba204185a57ae2cf160246011156d"
+      },
+      "comments": [
+        {
+          "author": "tlepoint",
+          "authorAssociation": "COLLABORATOR",
+          "body": "LGTM, thanks!",
+          "createdAt": "2022-03-07T14:49:11Z",
+          "updatedAt": "2022-03-07T14:49:11Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOGj2OAM41uXkZ",
+          "commit": {
+            "abbreviatedOid": "d687f4b"
+          },
+          "author": "jedisct1",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-03-07T08:08:20Z",
+          "updatedAt": "2022-03-07T08:08:20Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 19,
+      "id": "PR_kwDOGj2OAM40Dxfu",
+      "title": "Use tweaked ECDSA blinding",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-signature-key-blinding/pull/19",
+      "state": "MERGED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "See the [corresponding PR](https://github.com/cloudflare/pat-go/pull/6).\r\n\r\ncc @tlepoint, @FredericJacobs",
+      "createdAt": "2022-03-07T18:02:09Z",
+      "updatedAt": "2022-06-21T14:47:56Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-signature-key-blinding",
+      "baseRefName": "main",
+      "baseRefOid": "96b12f796d1ba204185a57ae2cf160246011156d",
+      "headRepository": "cfrg/draft-irtf-cfrg-signature-key-blinding",
+      "headRefName": "caw/different-ecdsa-blinding",
+      "headRefOid": "ca15e2b1f1ce3ec269c4c38516de3d7f9a3a4d5d",
+      "closedAt": "2022-03-07T21:32:29Z",
+      "mergedAt": "2022-03-07T21:32:29Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "13bd6e90401ba1ea0024e8273561ae0b8ccd2cfb"
+      },
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@jedisct1 please let me know what you think!",
+          "createdAt": "2022-03-07T18:34:29Z",
+          "updatedAt": "2022-03-07T18:34:29Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOGj2OAM41xKFb",
+          "commit": {
+            "abbreviatedOid": "ecbe553"
+          },
+          "author": "tlepoint",
+          "authorAssociation": "COLLABORATOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2022-03-07T18:18:53Z",
+          "updatedAt": "2022-03-07T18:22:54Z",
+          "comments": [
+            {
+              "originalPosition": 7,
+              "body": "This value is the prime modulus `p` of the curve, not its order `n`. (Cf. Section 4.2.1.3 https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-186-draft.pdf)",
+              "createdAt": "2022-03-07T18:18:53Z",
+              "updatedAt": "2022-03-07T18:22:54Z"
+            },
+            {
+              "originalPosition": 37,
+              "body": "```suggestion\r\nspecifically, skR = skS \\* HashToScalar(skB) (mod p).\r\n```",
+              "createdAt": "2022-03-07T18:21:01Z",
+              "updatedAt": "2022-03-07T18:22:54Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOGj2OAM41xLjZ",
+          "commit": {
+            "abbreviatedOid": "ecbe553"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-03-07T18:24:26Z",
+          "updatedAt": "2022-03-07T18:24:26Z",
+          "comments": [
+            {
+              "originalPosition": 7,
+              "body": "Oops, existing bug. Thanks for flagging! (Also, do you have these memorized? \ud83d\ude06 )",
+              "createdAt": "2022-03-07T18:24:26Z",
+              "updatedAt": "2022-03-07T18:24:26Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOGj2OAM41xLwc",
+          "commit": {
+            "abbreviatedOid": "96904ac"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-03-07T18:25:10Z",
+          "updatedAt": "2022-03-07T18:25:11Z",
+          "comments": [
+            {
+              "originalPosition": 7,
+              "body": "```suggestion\r\nP-256, p = 115792089210356248762697446949407573529996955224135760342422259061068512044369.\r\n```",
+              "createdAt": "2022-03-07T18:25:10Z",
+              "updatedAt": "2022-03-07T18:25:11Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOGj2OAM41xOMB",
+          "commit": {
+            "abbreviatedOid": "ecbe553"
+          },
+          "author": "tedeaton",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-03-07T18:33:46Z",
+          "updatedAt": "2022-03-07T18:33:46Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOGj2OAM41xX2V",
+          "commit": {
+            "abbreviatedOid": "ca15e2b"
+          },
+          "author": "tlepoint",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-03-07T19:10:08Z",
+          "updatedAt": "2022-03-07T19:10:08Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 20,
+      "id": "PR_kwDOGj2OAM40DziG",
+      "title": "Informally define goals and note ongoing analysis",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-signature-key-blinding/pull/20",
+      "state": "MERGED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "We can expand on this when we have more results.\r\n\r\ncc @tlepoint, @FredericJacobs",
+      "createdAt": "2022-03-07T18:10:59Z",
+      "updatedAt": "2022-06-21T14:47:55Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-signature-key-blinding",
+      "baseRefName": "main",
+      "baseRefOid": "96b12f796d1ba204185a57ae2cf160246011156d",
+      "headRepository": "cfrg/draft-irtf-cfrg-signature-key-blinding",
+      "headRefName": "caw/goals",
+      "headRefOid": "e704980c44b969b056c87d252fceb82153a210fe",
+      "closedAt": "2022-03-07T18:57:18Z",
+      "mergedAt": "2022-03-07T18:57:18Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "cc7b06ab01b02465ef120ab390507a071c68a2e8"
+      },
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@tedeaton I'd be OK with that improvement. @tlepoint, what do you think?",
+          "createdAt": "2022-03-07T18:33:26Z",
+          "updatedAt": "2022-03-07T18:33:26Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOGj2OAM41xJNP",
+          "commit": {
+            "abbreviatedOid": "62272ec"
+          },
+          "author": "tlepoint",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-03-07T18:15:33Z",
+          "updatedAt": "2022-03-07T18:15:33Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOGj2OAM41xN1f",
+          "commit": {
+            "abbreviatedOid": "62272ec"
+          },
+          "author": "tedeaton",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "Should we change the informal definition of unforgeability to emphasize the more general powers an adversary has? Something like \"Informally, unforgeability means that one cannot produce a valid (message, signature) pair for __any__ blinding key without access to the private signing key.\"",
+          "createdAt": "2022-03-07T18:32:25Z",
+          "updatedAt": "2022-03-07T18:32:25Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOGj2OAM41xQC4",
+          "commit": {
+            "abbreviatedOid": "62272ec"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-03-07T18:40:56Z",
+          "updatedAt": "2022-03-07T18:40:57Z",
+          "comments": [
+            {
+              "originalPosition": 11,
+              "body": "```suggestion\r\nand unlinkability. Informally, unforgeability means that one cannot produce a \r\nvalid (message, signature) pair for any blinding key without access to the \r\nprivate signing key. Similarly, unlinkability means that one cannot distinguish\r\n```",
+              "createdAt": "2022-03-07T18:40:57Z",
+              "updatedAt": "2022-03-07T18:40:57Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOGj2OAM41xUBD",
+          "commit": {
+            "abbreviatedOid": "62272ec"
+          },
+          "author": "tlepoint",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-03-07T18:56:02Z",
+          "updatedAt": "2022-03-07T18:56:02Z",
+          "comments": [
+            {
+              "originalPosition": 11,
+              "body": "LGTM!",
+              "createdAt": "2022-03-07T18:56:02Z",
+              "updatedAt": "2022-03-07T18:56:02Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 21,
+      "id": "PR_kwDOGj2OAM40M4yA",
+      "title": "Fix test vector parameters",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-signature-key-blinding/pull/21",
+      "state": "MERGED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-03-09T22:31:02Z",
+      "updatedAt": "2022-06-21T14:47:55Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-signature-key-blinding",
+      "baseRefName": "main",
+      "baseRefOid": "e9a9fb05463919814f651e498d5fcc14e89d219b",
+      "headRepository": "cfrg/draft-irtf-cfrg-signature-key-blinding",
+      "headRefName": "chris-wood-patch-2",
+      "headRefOid": "005dfdd439475cb9d9d73eddee8cb7897f747eb7",
+      "closedAt": "2022-03-09T22:47:40Z",
+      "mergedAt": "2022-03-09T22:47:40Z",
+      "mergedBy": "jedisct1",
+      "mergeCommit": {
+        "oid": "4da09488759f720c6f0405a948fbcb7535894872"
+      },
+      "comments": [
+        {
+          "author": "jedisct1",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Errrr, yeah. Good catch :) ",
+          "createdAt": "2022-03-09T22:47:12Z",
+          "updatedAt": "2022-03-09T22:47:12Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOGj2OAM418nRF",
+          "commit": {
+            "abbreviatedOid": "005dfdd"
+          },
+          "author": "jedisct1",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-03-09T22:47:20Z",
+          "updatedAt": "2022-03-09T22:47:20Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 28,
+      "id": "PR_kwDOGj2OAM42BRZa",
+      "title": "Minor clarifications/nits from reviewing.",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-signature-key-blinding/pull/28",
+      "state": "MERGED",
+      "author": "dvorak42",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Fixes #25 and #26.",
+      "createdAt": "2022-04-11T17:53:13Z",
+      "updatedAt": "2022-04-12T15:38:12Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-signature-key-blinding",
+      "baseRefName": "main",
+      "baseRefOid": "55774eef10fdd1974834e0cbf88b636334364e54",
+      "headRepository": "dvorak42/draft-dew-cfrg-signature-key-blinding",
+      "headRefName": "main",
+      "headRefOid": "58a55862ef10723586abcb65e8bec99b042236dd",
+      "closedAt": "2022-04-12T15:38:12Z",
+      "mergedAt": "2022-04-12T15:38:11Z",
+      "mergedBy": "jedisct1",
+      "mergeCommit": {
+        "oid": "d860b7e22aaa12188a872d8dae26ddbf0fb04be2"
+      },
+      "comments": [
+        {
+          "author": "jedisct1",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Thank you!",
+          "createdAt": "2022-04-12T15:37:58Z",
+          "updatedAt": "2022-04-12T15:37:58Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOGj2OAM44Asw1",
+          "commit": {
+            "abbreviatedOid": "58a5586"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-04-12T15:03:50Z",
+          "updatedAt": "2022-04-12T15:03:50Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOGj2OAM44A520",
+          "commit": {
+            "abbreviatedOid": "58a5586"
+          },
+          "author": "jedisct1",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-04-12T15:37:51Z",
+          "updatedAt": "2022-04-12T15:37:51Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 29,
+      "id": "PR_kwDOGj2OAM427-Fz",
+      "title": "Fix intro and syntax, add more motivations",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-signature-key-blinding/pull/29",
+      "state": "MERGED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Hopefully this motivates the functionality as an extension to the basic digital signature scheme. Please offer suggestions for fixes if you see them!\r\n\r\nCloses #23 \r\nCloses #24 \r\nCloses #27",
+      "createdAt": "2022-04-28T10:50:27Z",
+      "updatedAt": "2022-06-21T14:47:53Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-signature-key-blinding",
+      "baseRefName": "main",
+      "baseRefOid": "55238c022ea44834eb7cb445043c61eacde6b847",
+      "headRepository": "cfrg/draft-irtf-cfrg-signature-key-blinding",
+      "headRefName": "caw/update-intro-and-syntax",
+      "headRefOid": "7317c554ae3ab37ad7292828317e4ac5b47c5331",
+      "closedAt": "2022-04-28T21:24:50Z",
+      "mergedAt": "2022-04-28T21:24:50Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "c1de9c947fd50d8004fe0f632ee1bbc474179716"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOGj2OAM45A4dk",
+          "commit": {
+            "abbreviatedOid": "ebd62d8"
+          },
+          "author": "tedeaton",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-04-28T14:24:19Z",
+          "updatedAt": "2022-04-28T14:24:19Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 34,
+      "id": "PR_kwDOGj2OAM459II4",
+      "title": "Fix whitespace",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-signature-key-blinding/pull/34",
+      "state": "MERGED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-06-20T14:42:04Z",
+      "updatedAt": "2022-06-21T14:47:52Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-signature-key-blinding",
+      "baseRefName": "main",
+      "baseRefOid": "7d6bae8da7a528029334ab5b60a31145d1e387cd",
+      "headRepository": "cfrg/draft-irtf-cfrg-signature-key-blinding",
+      "headRefName": "caw/whitespace",
+      "headRefOid": "5f90eb76c9422efe1b85c9c6a9a79e416b8a3ac0",
+      "closedAt": "2022-06-20T14:43:40Z",
+      "mergedAt": "2022-06-20T14:43:40Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "9d2afd5207f4cca7b5c35b338a695ed280b9cb41"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 35,
+      "id": "PR_kwDOGj2OAM47Mspz",
+      "title": "Fixes from Ian's review",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-signature-key-blinding/pull/35",
+      "state": "MERGED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Closes #33.",
+      "createdAt": "2022-07-11T14:33:20Z",
+      "updatedAt": "2022-07-11T15:55:54Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-signature-key-blinding",
+      "baseRefName": "main",
+      "baseRefOid": "897c29c65e6d3714e1e100afa4cc71afa5587158",
+      "headRepository": "cfrg/draft-irtf-cfrg-signature-key-blinding",
+      "headRefName": "caw/edits-and-fixes",
+      "headRefOid": "89e92be965232b853e49a4f986c8617188c8a939",
+      "closedAt": "2022-07-11T15:55:47Z",
+      "mergedAt": "2022-07-11T15:55:47Z",
+      "mergedBy": "jedisct1",
+      "mergeCommit": {
+        "oid": "9601242fce56bcc3021e1ab6686e9ca62f3a1c7b"
+      },
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@jedisct1 can you please have another look?",
+          "createdAt": "2022-07-11T15:20:02Z",
+          "updatedAt": "2022-07-11T15:20:02Z"
+        },
+        {
+          "author": "jedisct1",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Looks good!\r\n\r\nThank you for addressing this, Chris!",
+          "createdAt": "2022-07-11T15:55:42Z",
+          "updatedAt": "2022-07-11T15:55:42Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOGj2OAM49qIox",
+          "commit": {
+            "abbreviatedOid": "1528110"
+          },
+          "author": "jedisct1",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-07-11T14:37:47Z",
+          "updatedAt": "2022-07-11T14:37:47Z",
+          "comments": [
+            {
+              "originalPosition": 46,
+              "body": "Section 5.2.5?",
+              "createdAt": "2022-07-11T14:37:47Z",
+              "updatedAt": "2022-07-11T14:37:47Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOGj2OAM49qI2Z",
+          "commit": {
+            "abbreviatedOid": "1528110"
+          },
+          "author": "jedisct1",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-07-11T14:38:20Z",
+          "updatedAt": "2022-07-11T14:38:21Z",
+          "comments": [
+            {
+              "originalPosition": 38,
+              "body": "pruning step in {{RFC8032, Section 5.1.5}} ?",
+              "createdAt": "2022-07-11T14:38:21Z",
+              "updatedAt": "2022-07-11T14:38:21Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOGj2OAM49qLTl",
+          "commit": {
+            "abbreviatedOid": "1528110"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-07-11T14:44:11Z",
+          "updatedAt": "2022-07-11T14:44:11Z",
+          "comments": [
+            {
+              "originalPosition": 46,
+              "body": "We could be more specific, yeah.",
+              "createdAt": "2022-07-11T14:44:11Z",
+              "updatedAt": "2022-07-11T14:44:12Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOGj2OAM49qLYn",
+          "commit": {
+            "abbreviatedOid": "1528110"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-07-11T14:44:22Z",
+          "updatedAt": "2022-07-11T14:44:22Z",
+          "comments": [
+            {
+              "originalPosition": 38,
+              "body": "```suggestion\r\n   pruning step in {{RFC8032, Section 5.1.5}}. Let prefix2 denote the second half of\r\n```",
+              "createdAt": "2022-07-11T14:44:22Z",
+              "updatedAt": "2022-07-11T14:44:22Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOGj2OAM49qLcU",
+          "commit": {
+            "abbreviatedOid": "1528110"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-07-11T14:44:30Z",
+          "updatedAt": "2022-07-11T14:44:30Z",
+          "comments": [
+            {
+              "originalPosition": 46,
+              "body": "```suggestion\r\nNote that this process explicitly skips the buffer pruning step in {{RFC8032, Section 5.2.5}}.\r\n```",
+              "createdAt": "2022-07-11T14:44:30Z",
+              "updatedAt": "2022-07-11T14:44:30Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 36,
+      "id": "PR_kwDOGj2OAM47MwZr",
+      "title": "Note that UnblindPublicKey is optional",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-signature-key-blinding/pull/36",
+      "state": "MERGED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "We don't have any optional constructions in the draft (yet). Let's use the CFRG time at 114 to discuss those options.",
+      "createdAt": "2022-07-11T14:45:51Z",
+      "updatedAt": "2022-07-11T19:09:02Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-signature-key-blinding",
+      "baseRefName": "main",
+      "baseRefOid": "9601242fce56bcc3021e1ab6686e9ca62f3a1c7b",
+      "headRepository": "cfrg/draft-irtf-cfrg-signature-key-blinding",
+      "headRefName": "caw/optional-unblind",
+      "headRefOid": "1a41bd89d28f06be961986c2bd1c1038169d727b",
+      "closedAt": "2022-07-11T19:09:01Z",
+      "mergedAt": "2022-07-11T19:09:01Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "8163a46489f5e9521df4a2fb5c6718f9648e06cc"
+      },
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@jedisct1 are we OK to merge? If so, I'll cut a new version with this change.",
+          "createdAt": "2022-07-11T18:45:38Z",
+          "updatedAt": "2022-07-11T18:45:38Z"
+        },
+        {
+          "author": "jedisct1",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Yep, go ahead!",
+          "createdAt": "2022-07-11T18:48:18Z",
+          "updatedAt": "2022-07-11T18:48:18Z"
+        }
+      ],
+      "reviews": []
+    },
+    {
+      "number": 37,
+      "id": "PR_kwDOGj2OAM47mLAp",
+      "title": "First cut at blinding with a context string",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-signature-key-blinding/pull/37",
+      "state": "MERGED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Closes #30. \r\n\r\nWe still need to do a couple of things before this lands.\r\n\r\n- [x] Add examples for context strings based on existing applications\r\n- [x] Update test vectors\r\n\r\ncc @tlepoint, @FredericJacobs",
+      "createdAt": "2022-07-18T19:57:51Z",
+      "updatedAt": "2022-08-03T13:25:42Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-signature-key-blinding",
+      "baseRefName": "main",
+      "baseRefOid": "8163a46489f5e9521df4a2fb5c6718f9648e06cc",
+      "headRepository": "cfrg/draft-irtf-cfrg-signature-key-blinding",
+      "headRefName": "caw/context-blinding",
+      "headRefOid": "c8998bf76556280a7d14725441d3af7e972e7f77",
+      "closedAt": "2022-08-02T18:38:40Z",
+      "mergedAt": "2022-08-02T18:38:40Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "78c21fbe5023995ec03169a34f053f6a904d1882"
+      },
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "OK, test vectors updated. @jedisct1, could you please confirm interop?",
+          "createdAt": "2022-08-01T19:02:42Z",
+          "updatedAt": "2022-08-01T19:02:42Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@tlepoint could you please review the new text on application considerations?",
+          "createdAt": "2022-08-01T20:59:56Z",
+          "updatedAt": "2022-08-01T20:59:56Z"
+        },
+        {
+          "author": "jedisct1",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Interop:\r\n\r\n\u2705 Zig\r\n\u2705 Rust\r\n",
+          "createdAt": "2022-08-01T21:17:35Z",
+          "updatedAt": "2022-08-01T21:17:35Z"
+        },
+        {
+          "author": "tlepoint",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> @tlepoint could you please review the new text on application considerations?\r\n\r\nLooks good, thanks for the change.",
+          "createdAt": "2022-08-02T13:51:19Z",
+          "updatedAt": "2022-08-02T13:51:19Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOGj2OAM4-PRxu",
+          "commit": {
+            "abbreviatedOid": "ea83d6f"
+          },
+          "author": "tlepoint",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "LGTM!",
+          "createdAt": "2022-07-19T23:04:54Z",
+          "updatedAt": "2022-07-19T23:04:54Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 38,
+      "id": "PR_kwDOGj2OAM47qDrz",
+      "title": "Add tlepoint as author",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-signature-key-blinding/pull/38",
+      "state": "MERGED",
+      "author": "tlepoint",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Thank you @chris-wood for the invite!",
+      "createdAt": "2022-07-19T14:47:07Z",
+      "updatedAt": "2022-07-20T11:16:03Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-signature-key-blinding",
+      "baseRefName": "main",
+      "baseRefOid": "8163a46489f5e9521df4a2fb5c6718f9648e06cc",
+      "headRepository": "cfrg/draft-irtf-cfrg-signature-key-blinding",
+      "headRefName": "tlepoint/add-author",
+      "headRefOid": "4d47f2231e838db88bfe387f99001f73b9974a7e",
+      "closedAt": "2022-07-19T14:48:04Z",
+      "mergedAt": "2022-07-19T14:48:04Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "c4b4f4aee2a83110324e7dacc250ac94ae78b846"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOGj2OAM4-M67u",
+          "commit": {
+            "abbreviatedOid": "4d47f22"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "\ud83d\udc4b :-)",
+          "createdAt": "2022-07-19T14:47:58Z",
+          "updatedAt": "2022-07-19T14:47:58Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 39,
+      "id": "PR_kwDOGj2OAM4_uR4D",
+      "title": "Fix ed25519 test vectors",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-signature-key-blinding/pull/39",
+      "state": "MERGED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Looks like we forgot to update the ed25519 ones to match the ECDSA ones (using `bk` instead of `skR`).",
+      "createdAt": "2022-09-27T20:05:07Z",
+      "updatedAt": "2022-09-28T13:01:57Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-signature-key-blinding",
+      "baseRefName": "main",
+      "baseRefOid": "78c21fbe5023995ec03169a34f053f6a904d1882",
+      "headRepository": "cfrg/draft-irtf-cfrg-signature-key-blinding",
+      "headRefName": "caw/update-vectors",
+      "headRefOid": "67fe6ca15a28e7f38be99e172121bec602fe4c5b",
+      "closedAt": "2022-09-28T13:01:57Z",
+      "mergedAt": "2022-09-28T13:01:57Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "64c974102ecb0434e2edd5e918322277ec107f5a"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOGj2OAM5C63lS",
+          "commit": {
+            "abbreviatedOid": "67fe6ca"
+          },
+          "author": "jedisct1",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-09-27T21:37:29Z",
+          "updatedAt": "2022-09-27T21:37:29Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 43,
+      "id": "PR_kwDOGj2OAM5rVg7D",
+      "title": "Add serialization details and update some references",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-signature-key-blinding/pull/43",
+      "state": "MERGED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "cc @cathieyun for :eyes:",
+      "createdAt": "2024-04-01T16:30:43Z",
+      "updatedAt": "2024-04-01T20:28:54Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-signature-key-blinding",
+      "baseRefName": "main",
+      "baseRefOid": "fcc2a3f1951eccecc56f80997e04f6cab3e10cc7",
+      "headRepository": "cfrg/draft-irtf-cfrg-signature-key-blinding",
+      "headRefName": "chris-wood-patch-1",
+      "headRefOid": "3258b9641e8dc949bdeff0579d1d2a2b46fbc391",
+      "closedAt": "2024-04-01T20:28:53Z",
+      "mergedAt": "2024-04-01T20:28:53Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "c0ed609e2c8b3b8fdbd5edbdd960a768ff9cfeea"
+      },
+      "comments": [
+        {
+          "author": "cathieyun",
+          "authorAssociation": "NONE",
+          "body": "Thanks for adding more details on the serialization format, that should help avoid serialization inconsistencies going forward. LGTM",
+          "createdAt": "2024-04-01T18:07:58Z",
+          "updatedAt": "2024-04-01T18:07:58Z"
+        },
+        {
+          "author": "jedisct1",
+          "authorAssociation": "COLLABORATOR",
+          "body": "LGTM! These clarifications are useful.",
+          "createdAt": "2024-04-01T19:59:19Z",
+          "updatedAt": "2024-04-01T19:59:19Z"
+        }
+      ],
+      "reviews": []
+    }
+  ]
+}
