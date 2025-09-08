@@ -5,12 +5,12 @@
 WG Working Group                                                F. Denis
 Internet-Draft                                               Fastly Inc.
 Intended status: Informational                                  E. Eaton
-Expires: 18 September 2025                        University of Waterloo
+Expires: 12 March 2026                            University of Waterloo
                                                               T. Lepoint
                                                                         
                                                               C. A. Wood
                                                         Cloudflare, Inc.
-                                                           17 March 2025
+                                                        8 September 2025
 
 
                    Key Blinding for Signature Schemes
@@ -61,7 +61,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 18 September 2025.
+   This Internet-Draft will expire on 12 March 2026.
 
 Copyright Notice
 
@@ -178,9 +178,9 @@ Table of Contents
 
    *  G: The standard base point.
 
-   *  sk: A signature scheme private key.  For EdDSA, this is a a
-      randomly generated private seed of length 32 bytes or 57 bytes
-      according to [RFC8032], Section 5.1.5 or [RFC8032], Section 5.2.5,
+   *  sk: A signature scheme private key.  For EdDSA, this is a randomly
+      generated private seed of length 32 bytes or 57 bytes according to
+      [RFC8032], Section 5.1.5 or [RFC8032], Section 5.2.5,
       respectively.  For [ECDSA], sk is a random scalar in the prime-
       order elliptic curve group.
 
@@ -499,7 +499,7 @@ UnblindPublicKey(pkR, bk, ctx) = ScalarMult(pkR, ModInverse(HashToScalar(blind_c
 
    This section contains test vectors for Ed25519 as described in
    [RFC8032].  Each test vector lists the serialized signing key (skS),
-   blind key (bk), and public key (pkS) encoded has hexadecimal strings;
+   blind key (bk), and public key (pkS) encoded as hexadecimal strings;
    skS and bk are serialized as little-endian 32-byte encoding of the
    scalar value with the top three bits set to zero, whereas pkS is
    serialized as described in Section 5.1.2 of [RFC8032].  Each test
@@ -559,7 +559,7 @@ signature: ce305a0f40a3270a84d2d9403617cdb89b7b4edf779b4de27f9acaadf1716
 
    This section contains test vectors for ECDSA with P-384 and SHA-384,
    as described in [ECDSA].  Each test vector lists the serialized
-   signing key (skS), blind key (bk), and public key (pkS) encoded has
+   signing key (skS), blind key (bk), and public key (pkS) encoded as
    hexadecimal strings; skS and bk are serialized using the Field-
    Element-to-Octet-String conversion according to [SEC1], whereas pkS
    is serialized using the compressed Elliptic-Curve-Point-to-Octet-
@@ -614,8 +614,8 @@ debca8af590ebb0fd7f1dd58a51a63aa45e5991fda32da0e7e9bb56b9374be6fed60c672
               ANSI ANS X9.62-2005, November 2005.
 
    [HASH-TO-CURVE]
-              Faz-Hernandez, A., Scott, S., Sullivan, N., Wahby, R. S.,
-              and C. A. Wood, "Hashing to Elliptic Curves", Work in
+              Faz-Hernandez, A. F., Scott, S., Sullivan, N., Wahby, R.
+              S., and C. A. Wood, "Hashing to Elliptic Curves", Work in
               Progress, Internet-Draft, draft-irtf-cfrg-hash-to-curve-
               16, 15 June 2022, <https://datatracker.ietf.org/doc/html/
               draft-irtf-cfrg-hash-to-curve-16>.
@@ -652,8 +652,8 @@ debca8af590ebb0fd7f1dd58a51a63aa45e5991fda32da0e7e9bb56b9374be6fed60c672
               Key-Blinding for Authentication in Anonymity Networks",
               2021, <https://eprint.iacr.org/2021/963>.
 
-   [H2C]      Faz-Hernandez, A., Scott, S., Sullivan, N., Wahby, R. S.,
-              and C. A. Wood, "Hashing to Elliptic Curves", Work in
+   [H2C]      Faz-Hernandez, A. F., Scott, S., Sullivan, N., Wahby, R.
+              S., and C. A. Wood, "Hashing to Elliptic Curves", Work in
               Progress, Internet-Draft, draft-irtf-cfrg-hash-to-curve-
               16, 15 June 2022, <https://datatracker.ietf.org/doc/html/
               draft-irtf-cfrg-hash-to-curve-16>.
