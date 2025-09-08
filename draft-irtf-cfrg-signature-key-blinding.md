@@ -220,7 +220,7 @@ for additional information.
 The following terms are used throughout this document to describe the blinding modification.
 
 - `G`: The standard base point.
-- `sk`: A signature scheme private key. For EdDSA, this is a a randomly generated
+- `sk`: A signature scheme private key. For EdDSA, this is a randomly generated
   private seed of length 32 bytes or 57 bytes according to {{RFC8032, Section 5.1.5}}
   or {{RFC8032, Section 5.2.5}}, respectively. For {{ECDSA}}, `sk` is a random scalar
   in the prime-order elliptic curve group.
@@ -478,7 +478,7 @@ covered in this document.
 
 This section contains test vectors for Ed25519 as described in {{RFC8032}}.
 Each test vector lists the serialized signing key (skS), blind key (bk), and
-public key (pkS) encoded has hexadecimal strings; skS and bk are serialized
+public key (pkS) encoded as hexadecimal strings; skS and bk are serialized
 as little-endian 32-byte encoding of the scalar value with the top three bits
 set to zero, whereas pkS is serialized as described in {{Section 5.1.2 of RFC8032}}.
 Each test vector also includes the blinded public key (pkR) computed from skS and
@@ -544,7 +544,7 @@ signature: ce305a0f40a3270a84d2d9403617cdb89b7b4edf779b4de27f9acaadf1716
 
 This section contains test vectors for ECDSA with P-384 and SHA-384, as described in {{ECDSA}}.
 Each test vector lists the serialized signing key (skS), blind key (bk), and
-public key (pkS) encoded has hexadecimal strings; skS and bk are serialized
+public key (pkS) encoded as hexadecimal strings; skS and bk are serialized
 using the Field-Element-to-Octet-String conversion according to {{SEC1}}, whereas
 pkS is serialized using the compressed Elliptic-Curve-Point-to-Octet-String
 method according to {{SEC1}}. Each test vector also includes the blinded public key
