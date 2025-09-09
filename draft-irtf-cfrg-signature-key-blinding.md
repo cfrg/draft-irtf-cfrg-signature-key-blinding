@@ -385,7 +385,7 @@ BlindKeySign(skS, bk, msg) works as follows:
 
 # ECDSA {#ecdsa}
 
-[[DISCLAIMER: Multiplicative blinding for ECDSA is known to be NOT be SUF-CMA-secure in the presence of an adversary that controls the blinding value. {{?MSMHI15=DOI.10.1007/978-3-319-30840-1_2}} describes this in the context of related-key attacks. This variant may likely be removed in followup versions of this document based on further analysis.]]
+[[DISCLAIMER: Multiplicative blinding for ECDSA is known to NOT be SUF-CMA-secure in the presence of an adversary that controls the blinding value. {{?MSMHI15=DOI.10.1007/978-3-319-30840-1_2}} describes this in the context of related-key attacks. This variant may likely be removed in followup versions of this document based on further analysis.]]
 
 This section describes implementations of BlindPublicKey, UnblindPublicKey, and BlindKeySign as
 functions implemented on top of an existing {{ECDSA}} implementation. BlindKeyGen invokes the
