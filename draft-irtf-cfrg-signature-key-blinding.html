@@ -1384,7 +1384,7 @@ KeyGen, a context value <code>ctx</code>, and message <code>msg</code>, correctn
 equivalence to hold with overwhelming probability:<a href="#section-3-6" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-3-7">
 <pre>
-Verify(BlindKeySign(skS, bk, ctx), msg, BlindPublicKey(pkS, bk, ctx)) = 1
+Verify(BlindPublicKey(pkS, bk, ctx), msg, BlindKeySign(skS, bk, ctx, msg)) = 1
 </pre><a href="#section-3-7" class="pilcrow">¶</a>
 </div>
 <p id="section-3-8">Security requires that signatures produced using BlindKeySign are unlinkable from
