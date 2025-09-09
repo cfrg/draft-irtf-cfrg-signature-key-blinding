@@ -5,12 +5,12 @@
 WG Working Group                                                F. Denis
 Internet-Draft                                               Fastly Inc.
 Intended status: Informational                                  E. Eaton
-Expires: 12 March 2026                            University of Waterloo
+Expires: 13 March 2026                            University of Waterloo
                                                               T. Lepoint
                                                                         
                                                               C. A. Wood
                                                         Cloudflare, Inc.
-                                                        8 September 2025
+                                                        9 September 2025
 
 
                    Key Blinding for Signature Schemes
@@ -61,7 +61,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 12 March 2026.
+   This Internet-Draft will expire on 13 March 2026.
 
 Copyright Notice
 
@@ -388,7 +388,7 @@ Verify(BlindKeySign(skS, bk, ctx), msg, BlindPublicKey(pkS, bk, ctx)) = 1
 
 6.  ECDSA
 
-   [[DISCLAIMER: Multiplicative blinding for ECDSA is known to be NOT be
+   [[DISCLAIMER: Multiplicative blinding for ECDSA is known to NOT be
    SUF-CMA-secure in the presence of an adversary that controls the
    blinding value.  [MSMHI15] describes this in the context of related-
    key attacks.  This variant may likely be removed in followup versions

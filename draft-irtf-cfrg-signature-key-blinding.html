@@ -1037,7 +1037,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Denis, et al.</td>
-<td class="center">Expires 12 March 2026</td>
+<td class="center">Expires 13 March 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1050,12 +1050,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-irtf-cfrg-signature-key-blinding-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-09-08" class="published">8 September 2025</time>
+<time datetime="2025-09-09" class="published">9 September 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-03-12">12 March 2026</time></dd>
+<dd class="expires"><time datetime="2026-03-13">13 March 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1122,7 +1122,7 @@ and privacy-preserving airdrop for bootstrapping cryptocurrency systems.<a href=
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 12 March 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 13 March 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1563,7 +1563,7 @@ using the modified scalar s, public key A, and string prefix.<a href="#section-5
       <h2 id="name-ecdsa">
 <a href="#section-6" class="section-number selfRef">6. </a><a href="#name-ecdsa" class="section-name selfRef">ECDSA</a>
       </h2>
-<p id="section-6-1">[[DISCLAIMER: Multiplicative blinding for ECDSA is known to be NOT be SUF-CMA-secure in the presence of an adversary that controls the blinding value. <span>[<a href="#MSMHI15" class="cite xref">MSMHI15</a>]</span> describes this in the context of related-key attacks. This variant may likely be removed in followup versions of this document based on further analysis.]]<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-1">[[DISCLAIMER: Multiplicative blinding for ECDSA is known to NOT be SUF-CMA-secure in the presence of an adversary that controls the blinding value. <span>[<a href="#MSMHI15" class="cite xref">MSMHI15</a>]</span> describes this in the context of related-key attacks. This variant may likely be removed in followup versions of this document based on further analysis.]]<a href="#section-6-1" class="pilcrow">¶</a></p>
 <p id="section-6-2">This section describes implementations of BlindPublicKey, UnblindPublicKey, and BlindKeySign as
 functions implemented on top of an existing <span>[<a href="#ECDSA" class="cite xref">ECDSA</a>]</span> implementation. BlindKeyGen invokes the
 key generation routine specified in <span>[<a href="#ECDSA" class="cite xref">ECDSA</a>]</span> and outputs only the private key. In the descriptions
