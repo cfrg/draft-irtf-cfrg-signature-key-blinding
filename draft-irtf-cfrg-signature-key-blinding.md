@@ -265,7 +265,7 @@ KeyGen, a context value `ctx`, and message `msg`, correctness requires the follo
 equivalence to hold with overwhelming probability:
 
 ~~~
-Verify(BlindKeySign(skS, bk, ctx), msg, BlindPublicKey(pkS, bk, ctx)) = 1
+Verify(BlindPublicKey(pkS, bk, ctx), msg, BlindKeySign(skS, bk, ctx, msg)) = 1
 ~~~
 
 Security requires that signatures produced using BlindKeySign are unlinkable from
