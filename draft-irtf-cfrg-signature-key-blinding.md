@@ -190,14 +190,14 @@ a variant of the Privacy Pass issuance protocol {{?RATELIMITED=I-D.privacypass-r
 One way to accomplish this is by signing with a private key which is a function of the
 long-term private signing key and a freshly chosen blinding key, and similarly by producing
 a public verification key which is a function of the long-term public verification key
-and same blinding key. A signature scheme with this functionality is referred to as signing
+and the same blinding key. A signature scheme with this functionality is referred to as signing
 with key blinding.
 
 A signature scheme with key blinding aims to achieve unforgeability and unlinkability.
 Informally, unforgeability means that one cannot produce a valid (message, signature)
 pair for any blinding key without access to the private signing key. Similarly,
 unlinkability means that one cannot distinguish between two signatures produced from
-two separate key signing keys, and two signatures produced from the same signing
+two separate signing keys, and two signatures produced from the same signing
 key but with different blinding keys.
 
 This document describes extensions to EdDSA {{!RFC8032}} and ECDSA {{ECDSA}} to enable
@@ -326,7 +326,7 @@ BlindKeySign transforms a private key bk into a scalar for the edwards25519 grou
 message prefix to blind both the signing scalar and the prefix of the message used
 in the signature generation routine.
 
-More specifically, BlindKeySign(skS, bk, msg) works as follows:
+More specifically, BlindKeySign(skS, bk, ctx, msg) works as follows:
 
 1. Hash the private key skS, 32 octets, using SHA-512.  Let h denote the
    resulting digest.  Construct the secret scalar s1 from the first
@@ -348,7 +348,7 @@ More specifically, BlindKeySign(skS, bk, msg) works as follows:
 
 This section describes implementations of BlindPublicKey, UnblindPublicKey, and BlindKeySign as
 modifications of routines in {{RFC8032, Section 5.2}}. BlindKeyGen invokes the key generation
-routine specified in {{RFC8032, Section 5.1.5}} and outputs only the private key. This section
+routine specified in {{RFC8032, Section 5.2.5}} and outputs only the private key. This section
 assumes a context value `ctx` has been configured or otherwise chosen by the application.
 
 ## BlindPublicKey and UnblindPublicKey
@@ -365,7 +365,7 @@ this process explicitly skips the buffer pruning step in {{RFC8032, Section 5.2.
 BlindKeySign for Ed448ph and Ed448 is implemented just as this routine for Ed25519ph,
 Ed25519ctx, and Ed25519, except in how the scalars (s1, s2), public keys (A1, A2),
 and message strings (prefix1, prefix2) are computed. More specifically,
-BlindKeySign(skS, bk, msg) works as follows:
+BlindKeySign(skS, bk, ctx, msg) works as follows:
 
 1. Hash the private key skS, 57 octets, using SHAKE256(skS, 117). Let h1 denote the
    resulting digest. Construct the secret scalar s1 from the first
@@ -441,14 +441,14 @@ The signature scheme extensions in this document aim to achieve unforgeability
 and unlinkability. Informally, unforgeability means that one cannot produce a
 valid (message, signature) pair for any blinding key without access to the
 private signing key. Similarly, unlinkability means that one cannot distinguish
-between two signatures produced from two independent key signing keys, and two
+between two signatures produced from two independent signing keys, and two
 signatures produced from the same signing key but with different blinds. Security
 analysis of the extensions in this document with respect to these two properties
 is currently underway. See {{CGHKS23}} for more detailed discussion of signature
 extensions with these properties.
 
 Preliminary analysis has been done for a variant of these extensions used for
-identity key blinding routine used in Tor's Hidden Service feature {{TORBLINDING}}.
+the identity key blinding routine used in Tor's Hidden Service feature {{TORBLINDING}}.
 Further analysis exists in {{ELW23}}, which demonstrates that the extensions in this
 specification for EdDSA and ECDSA both achieve the desired security properties.
 
