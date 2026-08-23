@@ -5,12 +5,12 @@
 WG Working Group                                                F. Denis
 Internet-Draft                                               Fastly Inc.
 Intended status: Informational                                  E. Eaton
-Expires: 2 September 2026                         University of Waterloo
+Expires: 24 February 2027                         University of Waterloo
                                                               T. Lepoint
                                                                         
                                                               C. A. Wood
                                                         Cloudflare, Inc.
-                                                            1 March 2026
+                                                          23 August 2026
 
 
                    Key Blinding for Signature Schemes
@@ -61,7 +61,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 2 September 2026.
+   This Internet-Draft will expire on 24 February 2027.
 
 Copyright Notice
 
@@ -400,8 +400,8 @@ Verify(BlindPublicKey(pkS, bk, ctx), msg, BlindKeySign(skS, bk, ctx, msg)) = 1
    generation routine specified in [ECDSA] and outputs only the private
    key.  In the descriptions below, let p be the order of the
    corresponding elliptic curve group used for ECDSA.  For example, for
-   P-256, p = 1157920892103562487626974469494075735299969552241357603424
-   22259061068512044369.
+   P-256, p =
+   115792089210356248762697446949407573529996955224135760342422259061068512044369.
 
    This section assumes a context value ctx has been configured or
    otherwise chosen by the application.
