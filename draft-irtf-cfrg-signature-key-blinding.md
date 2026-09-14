@@ -221,8 +221,8 @@ The following terms are used throughout this document to describe the blinding m
 
 - `G`: The standard base point.
 - `sk`: A signature scheme private key. For EdDSA, this is a randomly generated
-  private seed of length 32 bytes or 57 bytes according to {{RFC8032, Section 5.1.5}}
-  or {{RFC8032, Section 5.2.5}}, respectively. For {{ECDSA}}, `sk` is a random scalar
+  private seed of length 32 bytes or 57 bytes according to {{Section 5.1.5 of RFC8032}}
+  or {{Section 5.2.5 of RFC8032}}, respectively. For {{ECDSA}}, `sk` is a random scalar
   in the prime-order elliptic curve group.
 - `pk(sk)`: The public key corresponding to the private key `sk`.
 - `concat(x0, ..., xN)`: Concatenation of byte strings.
@@ -264,7 +264,7 @@ For a given `bk` produced from BlindKeyGen, key pair `(skS, pkS)` produced from
 KeyGen, a context value `ctx`, and message `msg`, correctness requires the following
 equivalence to hold with overwhelming probability:
 
-~~~
+~~~ pseudocode
 Verify(BlindPublicKey(pkS, bk, ctx), msg, BlindKeySign(skS, bk, ctx, msg)) = 1
 ~~~
 
@@ -281,7 +281,7 @@ the ability to unblind public keys. This is represented with the following funct
 For a given `bk` produced from BlindKeyGen, `(skS, pkS)` produced from KeyGen, and context
 value `ctx`, correctness of this function requires the following equivalence to hold:
 
-~~~
+~~~ pseudocode
 UnblindPublicKey(BlindPublicKey(pkS, bk, ctx), bk, ctx) = pkS
 ~~~
 
@@ -290,8 +290,8 @@ Considerations for choosing context strings are discussed in {{context-considera
 # Ed25519ph, Ed25519ctx, and Ed25519
 
 This section describes implementations of BlindPublicKey, UnblindPublicKey, and BlindKeySign as
-modifications of routines in {{RFC8032, Section 5.1}}. BlindKeyGen invokes the key generation
-routine specified in {{RFC8032, Section 5.1.5}} and outputs only the private key. This section
+modifications of routines in {{Section 5.1 of RFC8032}}. BlindKeyGen invokes the key generation
+routine specified in {{Section 5.1.5 of RFC8032}} and outputs only the private key. This section
 assumes a context value `ctx` has been configured or otherwise chosen by the application.
 
 ## BlindPublicKey and UnblindPublicKey
@@ -300,7 +300,7 @@ BlindPublicKey transforms a private blind bk into a scalar for the edwards25519 
 and then multiplies the target key by this scalar. UnblindPublicKey performs essentially
 the same steps except that it multiplies the target public key by the multiplicative
 inverse of the scalar, where the inverse is computed using the order of the group L,
-described in {{RFC8032, Section 5.1}}.
+described in {{Section 5.1 of RFC8032}}.
 
 More specifically, BlindPublicKey(pk, bk, ctx) works as follows.
 
@@ -308,7 +308,7 @@ More specifically, BlindPublicKey(pk, bk, ctx) works as follows.
    string, hash the result using SHA-512(blind_ctx), and store the digest in a 64-octet
    large buffer, denoted b. Interpret the lower 32 bytes buffer as a little-endian
    integer, forming a secret scalar s. Note that this explicitly skips the buffer
-   pruning step in {{RFC8032, Section 5.1}}.
+   pruning step in {{Section 5.1 of RFC8032}}.
 
 1. Perform a scalar multiplication ScalarMult(pk, s), and output the encoding of the
    resulting point as the public key.
@@ -316,7 +316,7 @@ More specifically, BlindPublicKey(pk, bk, ctx) works as follows.
 UnblindPublicKey(pkR, bk, ctx) works as follows.
 
 1. Compute the secret scalar s from bk and ctx as in BlindPublicKey.
-1. Compute the sInv = ModInverse(s, L), where L is as defined in {{RFC8032, Section 5.1}}.
+1. Compute the sInv = ModInverse(s, L), where L is as defined in {{Section 5.1 of RFC8032}}.
 1. Perform a scalar multiplication ScalarMult(pk, sInv), and output the encoding
    of the resulting point as the public key.
 
@@ -331,24 +331,24 @@ More specifically, BlindKeySign(skS, bk, ctx, msg) works as follows:
 1. Hash the private key skS, 32 octets, using SHA-512.  Let h denote the
    resulting digest.  Construct the secret scalar s1 from the first
    half of the digest, and the corresponding public key A1, as
-   described in {{RFC8032, Section 5.1.5}}.  Let prefix1 denote the second
+   described in {{Section 5.1.5 of RFC8032}}.  Let prefix1 denote the second
    half of the hash digest, h[32],...,h[63].
 1. Construct the blind_ctx as concat(bk, 0x00, ctx), where bk is a 32-byte octet
    string, hash the result using SHA-512(blind_ctx), and store the digest in a 64-octet
    large buffer, denoted b. Interpret the lower 32 bytes buffer as a little-endian
    integer, forming a secret scalar s2. Note that this explicitly skips the buffer
-   pruning step in {{RFC8032, Section 5.1.5}}. Let prefix2 denote the second half of
+   pruning step in {{Section 5.1.5 of RFC8032}}. Let prefix2 denote the second half of
    the hash digest, b[32],...,b[63].
 1. Compute the signing scalar s = s1 \* s2 (mod L) and the signing public key A = ScalarMult(G, s).
 1. Compute the signing prefix as concat(prefix1, prefix2).
-1. Run the rest of the Sign procedure in {{RFC8032, Section 5.1.6}} from step (2) onwards
+1. Run the rest of the Sign procedure in {{Section 5.1.6 of RFC8032}} from step (2) onwards
    using the modified scalar s, public key A, and string prefix.
 
 # Ed448ph and Ed448
 
 This section describes implementations of BlindPublicKey, UnblindPublicKey, and BlindKeySign as
-modifications of routines in {{RFC8032, Section 5.2}}. BlindKeyGen invokes the key generation
-routine specified in {{RFC8032, Section 5.2.5}} and outputs only the private key. This section
+modifications of routines in {{Section 5.2 of RFC8032}}. BlindKeyGen invokes the key generation
+routine specified in {{Section 5.2.5 of RFC8032}} and outputs only the private key. This section
 assumes a context value `ctx` has been configured or otherwise chosen by the application.
 
 ## BlindPublicKey and UnblindPublicKey
@@ -357,8 +357,8 @@ BlindPublicKey and UnblindPublicKey for Ed448ph and Ed448 are implemented just a
 routines are for Ed25519ph, Ed25519ctx, and Ed25519, except that SHAKE256 is used instead
 of SHA-512 for hashing the secret blind context, i.e., the concatenation of blind key bk
 and context ctx, to a 114-byte buffer (and using the lower 57-bytes for the secret), and
-the order of the edwards448 group L is as defined in {{RFC8032, Section 5.2.1}}. Note that
-this process explicitly skips the buffer pruning step in {{RFC8032, Section 5.2.5}}.
+the order of the edwards448 group L is as defined in {{Section 5.2.1 of RFC8032}}. Note that
+this process explicitly skips the buffer pruning step in {{Section 5.2.5 of RFC8032}}.
 
 ## BlindKeySign
 
@@ -370,17 +370,17 @@ BlindKeySign(skS, bk, ctx, msg) works as follows:
 1. Hash the private key skS, 57 octets, using SHAKE256(skS, 117). Let h1 denote the
    resulting digest. Construct the secret scalar s1 from the first
    half of h1, and the corresponding public key A1, as described in
-   {{RFC8032, Section 5.2.5}}. Let prefix1 denote the second half of the
+   {{Section 5.2.5 of RFC8032}}. Let prefix1 denote the second half of the
    hash digest, h1[57],...,h1[113].
 1. Construct the blind_ctx as concat(bk, 0x00, ctx), where bk is a 57-byte octet
    string, hash the result using SHAKE256(blind_ctx, 117), and store the digest in a 117-octet
    digest, denoted h2. Interpret the lower 57 bytes buffer as a little-endian
    integer, forming a secret scalar s2. Note that this explicitly skips the buffer
-   pruning step in {{RFC8032, Section 5.2}}. Let prefix2 denote the second half of
+   pruning step in {{Section 5.2 of RFC8032}}. Let prefix2 denote the second half of
    the hash digest, h2[57],...,h2[113].
 1. Compute the signing scalar s = s1 \* s2 (mod L) and the signing public key A = ScalarMult(A1, s2).
 1. Compute the signing prefix as concat(prefix1, prefix2).
-1. Run the rest of the Sign procedure in {{RFC8032, Section 5.2.6}} from step (2) onwards
+1. Run the rest of the Sign procedure in {{Section 5.2.6 of RFC8032}} from step (2) onwards
    using the modified scalar s, public key A, and string prefix.
 
 # ECDSA {#ecdsa}
@@ -408,7 +408,7 @@ the order p of the corresponding curve. Letting HashToScalar denote this augment
 process, and blind_ctx = concat(bk, 0x00, ctx), BlindPublicKey and UnblindPublicKey are
 then implemented as follows:
 
-~~~
+~~~ pseudocode
 BlindPublicKey(pk, bk, ctx)   = ScalarMult(pk, HashToScalar(blind_ctx))
 UnblindPublicKey(pkR, bk, ctx) = ScalarMult(pkR, ModInverse(HashToScalar(blind_ctx), p))
 ~~~
